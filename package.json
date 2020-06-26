@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/dma-programs/cakeshop-app/issues"
   },
-  "homepage": "https://github.com/dma-programs/cakeshop-app#readme"
+  "homepage": "https://github.com/dma-programs/cakeshop-app#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }
