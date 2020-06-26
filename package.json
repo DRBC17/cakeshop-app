@@ -31,7 +31,9 @@
     "express": "^4.17.1",
     "express-handlebars": "^4.0.4",
     "handlebars": "^4.7.6",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "mysql2": "^2.1.0",
+    "sequelize": "^6.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
