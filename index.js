@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const path = require("path");
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
 //handlebars
 const Handlebars = require("handlebars");
 const exphbs = require("express-handlebars");
@@ -9,9 +9,17 @@ const {
   allowInsecurePrototypeAccess,
 } = require("@handlebars/allow-prototype-access");
 //End handlebars
-require('dotenv').config();
+require("dotenv").config();
 
-const router = require('./routers/index.router');
+const router = require("./routers/index.router");
+
+// Crear la conexión con la base de datos
+const db = require("./config/db");
+
+//Realizar  Conexion a la base de datos
+db.sync()
+  .then(() => console.log("Conectado con el servidor de BD"))
+  .catch((error) => console.log(error));
 
 const app = express();
 
@@ -36,14 +44,14 @@ app.set("view engine", ".hbs");
 // >Middleware
 
 // Configuracion de morgan
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 // Configuracion de body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // >Routes
 
-app.use('/',router());
+app.use("/", router());
 // >Static files
 
 // Configuracion de la carpeta publica
@@ -52,6 +60,6 @@ app.use(express.static(path.join(__dirname, "public")));
 // >Global variable
 
 // Inizialiazar el server
-app.listen(app.get('port'), () => {
-    console.log(`Server started on port ${app.get('port')}`);
+app.listen(app.get("port"), () => {
+  console.log(`Server started on port ${app.get("port")}`);
 });
