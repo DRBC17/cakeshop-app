@@ -11,6 +11,8 @@ const {
 //End handlebars
 require('dotenv').config();
 
+const router = require('./routers/index.router');
+
 const app = express();
 
 // >Settings
@@ -41,14 +43,15 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // >Routes
 
+app.use('/',router());
 // >Static files
 
 // Configuracion de la carpeta publica
-app.use(app.use(express.static(path.join(__dirname, "public"))));
+app.use(express.static(path.join(__dirname, "public")));
 
 // >Global variable
 
 // Inizialiazar el server
-app.listen(3000, () => {
-    console.log(`Server started on port`);
+app.listen(app.get('port'), () => {
+    console.log(`Server started on port ${app.get('port')}`);
 });
