@@ -1,0 +1,28 @@
+{
+  "name": "cakeshop-app",
+  "version": "1.0.0",
+  "description": "Aplicación web para para la repostería Globo Fiesta Cake's   ## DMA-Programs 2020",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js",
+    "start": "node ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dma-programs/cakeshop-app.git"
+  },
+  "keywords": [],
+  "author": "DMA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dma-programs/cakeshop-app/issues"
+  },
+  "homepage": "https://github.com/dma-programs/cakeshop-app#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
