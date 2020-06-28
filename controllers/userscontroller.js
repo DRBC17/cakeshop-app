@@ -36,6 +36,8 @@ exports.CrearCuenta = async (req, res, next) => {
         error,
         type: "alert-danger",
       });
+      console.log(mensajes);
+      
       res.render("user/register", { mensajes });
     }
   } else {
@@ -45,4 +47,5 @@ exports.CrearCuenta = async (req, res, next) => {
       });
     res.render("user/register", { mensajes });
   }
+
 };
