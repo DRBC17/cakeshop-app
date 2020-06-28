@@ -1,16 +1,6 @@
 {{!-- Formulario de registro --}}
 
-{{!-- Mostrar los mensajes en caso de existir --}}
-{{#if mensajes}}
-{{#each mensajes}}
-<div class="alert {{type}} alert-dismissible fade show" role="alert">
-    {{error}}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-{{/each}}
-{{/if}}
+{{>messages}}
 
 <form action="/registrate" method="post">
     <div class="container p-4">
