@@ -37,15 +37,14 @@ exports.CrearCuenta = async (req, res, next) => {
         type: "alert-danger",
       });
       console.log(mensajes);
-      
+
       res.render("user/register", { mensajes });
     }
   } else {
     mensajes.push({
-        error: "Las contraseñas deben coincidir.",
-        type: "alert-danger",
-      });
+      error: "Las contraseñas deben coincidir.",
+      type: "alert-danger",
+    });
     res.render("user/register", { mensajes });
   }
-
 };

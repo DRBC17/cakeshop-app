@@ -66,7 +66,7 @@ const User = db.define(
     },
     auth: {
       type: Sequelize.BOOLEAN,
-      defaultValue: 0
+      defaultValue: 0,
     },
     createAt: {
       type: Sequelize.DATE,
