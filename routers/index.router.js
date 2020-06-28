@@ -1,7 +1,9 @@
 const { Router } = require("express");
 const routes = Router();
 
-const usersController = require("../controllers/userscontroller");
+//Controladores
+const usersController = require("../controllers/usersController");
+const authController = require("../controllers/authController");
 
 module.exports = function () {
   routes.get("/registrate", usersController.formularioCrearCuenta);

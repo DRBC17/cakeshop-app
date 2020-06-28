@@ -54,3 +54,11 @@ exports.CrearCuenta = async (req, res, next) => {
     });
   }
 };
+
+
+exports.formularioIniciarSesion = (req, res, next) => {
+  // Verificar si existe algún mensaje
+  const messages = res.locals.messages;
+
+  res.render("iniciar_sesion", { layout: "auth", messages });
+};
