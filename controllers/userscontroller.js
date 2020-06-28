@@ -2,7 +2,7 @@
 const User = require("../models/user");
 
 exports.formularioCrearCuenta = async (req, res, next) => {
-  res.render("user/register");
+  res.render("user/register", { title: "Regístrate en GloboFiestaCake's" });
 };
 
 exports.CrearCuenta = async (req, res, next) => {
@@ -38,13 +38,29 @@ exports.CrearCuenta = async (req, res, next) => {
       });
       console.log(mensajes);
 
-      res.render("user/register", { mensajes });
+      res.render("user/register", {
+        title: "Regístrate en GloboFiestaCake's",
+        mensajes,
+      });
     }
   } else {
     mensajes.push({
       error: "Las contraseñas deben coincidir.",
       type: "alert-danger",
     });
-    res.render("user/register", { mensajes });
+    res.render("user/register", {
+      title: "Regístrate en GloboFiestaCake's",
+      mensajes,
+    });
   }
+};
+
+exports.formularioIniciarSesion = (req, res, next) => {
+  // Verificar si existe algún mensaje
+  const messages = res.locals.messages;
+
+  res.render("iniciar_sesion", {
+    title: "Iniciar sesión en GloboFiestaCake's",
+    messages,
+  });
 };
