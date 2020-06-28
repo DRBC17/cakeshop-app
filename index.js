@@ -1,7 +1,17 @@
 const express = require("express");
 const path = require("path");
+// Importar morgan para mostrar el trafico que hay en el servidor
 const morgan = require("morgan");
+// Importar body-parser para manejar los datos que hay en body
 const bodyParser = require("body-parser");
+// Importar passport para permitir el inicio de sesión
+const passport = require("./config/passport");
+// Importar express-session para manejar las sesiones de usuario
+const session = require("express-session");
+// Importar cookie-parser para habilitar el manejo de cookies en el sitio
+const cookieParser = require("cookie-parser");
+// Importar connect-flash para disponer de los errores en todo el sitio
+const flash = require("connect-flash");
 //handlebars
 const Handlebars = require("handlebars");
 const exphbs = require("express-handlebars");
@@ -15,6 +25,9 @@ const router = require("./routers/index.router");
 
 // Crear la conexión con la base de datos
 const db = require("./config/db");
+
+// Importar modelos
+require('./models/user');
 
 //Realizar  Conexion a la base de datos
 db.sync()
@@ -45,9 +58,39 @@ app.set("view engine", ".hbs");
 
 // Configuracion de morgan
 app.use(morgan("dev"));
+
 // Configuracion de body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Habilitar el uso de cookieParser
+app.use(cookieParser());
+
+// Habilitar las sesiones de usuario
+app.use(
+  session({
+    secret: process.env.SESSIONSECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Habilitar el uso de connect-flash para compartir mensajes
+app.use(flash());
+
+// Crear una instancia de passport y cargar nuestra estrategia
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Pasar algunos valores mediante middleware
+app.use((req, res, next) => {
+  // Pasar el usuario a las variables locales de la petición
+  res.locals.usuario = { ...req.user } || null;
+  res.locals.messages = req.flash();
+  // Continuar con el camino del middleware
+  next();
+});
+
 
 // >Routes
 
