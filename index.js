@@ -16,6 +16,9 @@ const router = require("./routers/index.router");
 // Crear la conexión con la base de datos
 const db = require("./config/db");
 
+// Importar modelos
+require('./models/user');
+
 //Realizar  Conexion a la base de datos
 db.sync()
   .then(() => console.log("Conectado con el servidor de BD"))
