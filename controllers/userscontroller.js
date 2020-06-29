@@ -15,7 +15,8 @@ exports.CrearCuenta = async (req, res, next) => {
     passwordConfirm,
     phone,
   } = req.body;
-  const mensajes = [];
+
+  let messages = "";
 
   if (password === passwordConfirm) {
     // Intentar crear el usuario
@@ -32,25 +33,18 @@ exports.CrearCuenta = async (req, res, next) => {
       // Redireccionar el usuario al formulario de inicio de sesión
       res.redirect("iniciar_sesion");
     } catch (error) {
-      mensajes.push({
-        error,
-        type: "alert-danger",
-      });
-      console.log(mensajes);
+      messages = { error };
 
       res.render("user/register", {
         title: "Regístrate en GloboFiestaCake's",
-        mensajes,
+        messages,
       });
     }
   } else {
-    mensajes.push({
-      error: "Las contraseñas deben coincidir.",
-      type: "alert-danger",
-    });
+    messages = { error: "Las contraseñas deben coincidir." };
     res.render("user/register", {
       title: "Regístrate en GloboFiestaCake's",
-      mensajes,
+      messages,
     });
   }
 };
@@ -62,5 +56,13 @@ exports.formularioIniciarSesion = (req, res, next) => {
   res.render("user/login", {
     title: "Iniciar sesión en GloboFiestaCake's",
     messages,
+  });
+};
+
+exports.formularioCuenta = (req, res, next) => {
+
+  res.render("user/account", {
+    title: "GloboFiestaCake's",
+    auth:"yes"
   });
 };

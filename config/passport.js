@@ -30,7 +30,7 @@ passport.use(
         }
 
         // El usuario y la contraseña son correctas
-        return done(null, usuario);
+        return done(null, user);
       } catch (error) {
         // El usuario no existe
         return done(null, false, {
