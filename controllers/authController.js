@@ -1,6 +1,6 @@
 // Importar modulos
 const passport = require("passport");
-const Usuario = require("../models/user");
+const User= require("../models/user");
 const Sequelize = require("sequelize");
 
 // Verificar si el usuario se puede autenticar con sus credenciales

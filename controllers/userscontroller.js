@@ -15,7 +15,8 @@ exports.CrearCuenta = async (req, res, next) => {
     passwordConfirm,
     phone,
   } = req.body;
-  const mensajes = [];
+
+  let messages = "";
 
   if (password === passwordConfirm) {
     // Intentar crear el usuario
@@ -28,29 +29,30 @@ exports.CrearCuenta = async (req, res, next) => {
         password,
         phone,
       });
-      res.send("Creado");
+
       // Redireccionar el usuario al formulario de inicio de sesión
-      //   res.redirect("iniciar_sesion");
+      res.redirect("iniciar_sesion");
     } catch (error) {
-      mensajes.push({
-        error,
-        type: "alert-danger",
-      });
-      console.log(mensajes);
+      
+      // Mensaje personalizado sobre si un correo ya existe
+      if (error["name"] === "SequelizeUniqueConstraintError") {
+        messages = {
+          error: "Ya existe un usuario registrado con esta dirección de correo",
+        };
+      } else {
+        messages = { error };
+      }
 
       res.render("user/register", {
         title: "Regístrate en GloboFiestaCake's",
-        mensajes,
+        messages,
       });
     }
   } else {
-    mensajes.push({
-      error: "Las contraseñas deben coincidir.",
-      type: "alert-danger",
-    });
+    messages = { error: "Las contraseñas deben coincidir." };
     res.render("user/register", {
       title: "Regístrate en GloboFiestaCake's",
-      mensajes,
+      messages,
     });
   }
 };
@@ -59,8 +61,15 @@ exports.formularioIniciarSesion = (req, res, next) => {
   // Verificar si existe algún mensaje
   const messages = res.locals.messages;
 
-  res.render("iniciar_sesion", {
+  res.render("user/login", {
     title: "Iniciar sesión en GloboFiestaCake's",
     messages,
+  });
+};
+
+exports.formularioCuenta = (req, res, next) => {
+  res.render("user/account", {
+    title: "GloboFiestaCake's",
+    auth: "yes",
   });
 };
