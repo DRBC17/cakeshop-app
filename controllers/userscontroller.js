@@ -15,7 +15,7 @@ exports.CrearCuenta = async (req, res, next) => {
     passwordConfirm,
     phone,
   } = req.body;
-  const mensajes = [];
+  const messages = [];
 
   if (password === passwordConfirm) {
     // Intentar crear el usuario
@@ -32,25 +32,24 @@ exports.CrearCuenta = async (req, res, next) => {
       // Redireccionar el usuario al formulario de inicio de sesión
       res.redirect("iniciar_sesion");
     } catch (error) {
-      mensajes.push({
+      messages.push({
         error,
         type: "alert-danger",
       });
-      console.log(mensajes);
 
       res.render("user/register", {
         title: "Regístrate en GloboFiestaCake's",
-        mensajes,
+        messages,
       });
     }
   } else {
-    mensajes.push({
+    messages.push({
       error: "Las contraseñas deben coincidir.",
       type: "alert-danger",
     });
     res.render("user/register", {
       title: "Regístrate en GloboFiestaCake's",
-      mensajes,
+      messages,
     });
   }
 };
