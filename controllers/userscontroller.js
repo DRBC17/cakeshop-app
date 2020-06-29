@@ -28,9 +28,9 @@ exports.CrearCuenta = async (req, res, next) => {
         password,
         phone,
       });
-      res.send("Creado");
+
       // Redireccionar el usuario al formulario de inicio de sesión
-      //   res.redirect("iniciar_sesion");
+      res.redirect("iniciar_sesion");
     } catch (error) {
       mensajes.push({
         error,
@@ -59,7 +59,7 @@ exports.formularioIniciarSesion = (req, res, next) => {
   // Verificar si existe algún mensaje
   const messages = res.locals.messages;
 
-  res.render("iniciar_sesion", {
+  res.render("user/login", {
     title: "Iniciar sesión en GloboFiestaCake's",
     messages,
   });
