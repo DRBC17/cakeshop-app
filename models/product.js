@@ -4,16 +4,25 @@ const db = require("../config/db");
 // Constante para obtener fecha
 const now = new Date();
 
-//Modelo de categoría
-const Category = db.define(
-  "category",
+//Modelo de producto
+const Product = db.define(
+  "product",
   {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    categoryId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Debe seleccionar una categoría",
+        },
+      },
+    },
+    title: {
       type: Sequelize.STRING(50),
       allowNull: false,
       validate: {
@@ -31,6 +40,28 @@ const Category = db.define(
         },
       },
     },
+    imageId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Debe seleccionar una imagen",
+        },
+      },
+    },
+    unitPrice: {
+      type: Sequelize.DECIMAL(10,2),
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Debe ingresar un nombre para la categoría",
+        },
+      },
+    },
+    available: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 0,
+      },
     createAt: {
       type: Sequelize.DATE,
     },
@@ -40,17 +71,17 @@ const Category = db.define(
   },
   {
     hooks: {
-      beforeCreate(category) {
+      beforeCreate(product) {
         // Definimos la fecha de creación y modificación como fecha actual
-        category.createAt = now;
-        category.updatedAt = now;
+        product.createAt = now;
+        product.updatedAt = now;
       },
-      beforeUpdate(category) {
+      beforeUpdate(product) {
         //Cundo se realizan cambios en el modelo se actualiza la fecha
-        category.updatedAt = now;
+        product.updatedAt = now;
       },
     },
   }
 );
 
-module.exports = Category;
+module.exports = Product;
