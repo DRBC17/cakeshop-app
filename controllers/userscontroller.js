@@ -28,9 +28,9 @@ exports.CrearCuenta = async (req, res, next) => {
         password,
         phone,
       });
-      res.send("Creado");
+
       // Redireccionar el usuario al formulario de inicio de sesión
-      //   res.redirect("iniciar_sesion");
+      res.redirect("iniciar_sesion");
     } catch (error) {
       mensajes.push({
         error,
