@@ -33,7 +33,15 @@ exports.CrearCuenta = async (req, res, next) => {
       // Redireccionar el usuario al formulario de inicio de sesión
       res.redirect("iniciar_sesion");
     } catch (error) {
-      messages = { error };
+      
+      // Mensaje personalizado sobre si un correo ya existe
+      if (error["name"] === "SequelizeUniqueConstraintError") {
+        messages = {
+          error: "Ya existe un usuario registrado con esta dirección de correo",
+        };
+      } else {
+        messages = { error };
+      }
 
       res.render("user/register", {
         title: "Regístrate en GloboFiestaCake's",
@@ -60,9 +68,8 @@ exports.formularioIniciarSesion = (req, res, next) => {
 };
 
 exports.formularioCuenta = (req, res, next) => {
-
   res.render("user/account", {
     title: "GloboFiestaCake's",
-    auth:"yes"
+    auth: "yes",
   });
 };
