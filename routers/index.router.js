@@ -8,5 +8,6 @@ const authController = require("../controllers/authController");
 module.exports = function () {
   routes.get("/registrate", usersController.formularioCrearCuenta);
   routes.post("/registrate", usersController.CrearCuenta);
+  routes.get("/iniciar_sesion", usersController.formularioIniciarSesion);
   return routes;
 };
