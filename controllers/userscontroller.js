@@ -58,3 +58,11 @@ exports.formularioIniciarSesion = (req, res, next) => {
     messages,
   });
 };
+
+exports.formularioCuenta = (req, res, next) => {
+
+  res.render("user/account", {
+    title: "GloboFiestaCake's",
+    auth:"yes"
+  });
+};

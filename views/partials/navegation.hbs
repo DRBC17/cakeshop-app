@@ -1,4 +1,6 @@
 {{#if auth}}
+
+{{!-- Menu cuando has iniciado sesión --}}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/">GloboFiestaCake's</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
@@ -11,7 +13,7 @@
         <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/">Cuenta</a>
+        <a class="nav-link" href="/cuenta">Cuenta</a>
       </li>
       <li class="nav-item">
         <a href="/cerrar_sesion" class="btn btn-success btn-block">Cerrar sesión</a>
@@ -20,6 +22,8 @@
   </div>
 </nav>
 {{else}}
+
+{{!-- Menu cuando no has iniciado sesión --}}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/">GloboFiestaCake's</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"

@@ -15,6 +15,12 @@ module.exports = function () {
   routes.post("/iniciar_sesion", authController.autenticarUsuario);
   routes.get("/cerrar_sesion", authController.cerrarSesion);
 
+  routes.get(
+    "/cuenta",
+    authController.usuarioAutenticado,
+    usersController.formularioCuenta
+  );
+
   //Tienda
   routes.get(
     "/",
