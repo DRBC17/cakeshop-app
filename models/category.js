@@ -1,7 +1,8 @@
 // Importamos los modulos a utilizar
 const Sequelize = require("sequelize");
 const db = require("../config/db");
-
+// Constante para obtener fecha
+const now = new Date();
 
 //Modelo de categoría
 const Category = db.define(
@@ -40,9 +41,12 @@ const Category = db.define(
   {
     hooks: {
       beforeCreate(category) {
-      
-        const now = new Date();
+        // Definimos la fecha de creación y modificación como fecha actual
         category.createAt = now;
+        category.updatedAt = now;
+      },
+      beforeUpdate(category) {
+        //Cundo se realizan cambios en el usuario se actualiza la fecha
         category.updatedAt = now;
       },
     },
