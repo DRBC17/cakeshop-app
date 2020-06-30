@@ -29,8 +29,12 @@ nav li{
   margin-left: 0.2rem;
 }
 
+
 @media (max-width: 768px) {
   .form-account{
+    width: 100%;
+  }
+  .form-admin{
     width: 100%;
   }
   nav li{
@@ -38,9 +42,21 @@ nav li{
     margin-top: 0.2rem;
     text-align: center;
   }
-}
+  .admin-container{
+    display: flex;
+    flex-direction: column;
+  }
+  
 
+}
+@media (min-width: 768px) {
+  .btn-custom{
+    padding-left: 30%;
+    padding-right: 30%;
+   }
+}
 .nav-account a{
   height: 6rem;
+  width: auto;
   text-align: center;
 }
