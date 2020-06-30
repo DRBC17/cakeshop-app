@@ -2,6 +2,8 @@
 const Sequelize = require("sequelize");
 const db = require("../config/db");
 const bcrypt = require("bcrypt-nodejs");
+// Constante para obtener fecha
+const now = new Date();
 
 //Modelo de usuario
 const User = db.define(
@@ -83,9 +85,13 @@ const User = db.define(
         // Realizar el hash del password
         // https://www.npmjs.com/package/bcrypt
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(13));
-
-        const now = new Date();
+        // Definimos la fecha de creación y modificación como fecha actual
         user.createAt = now;
+        user.updatedAt = now;
+      },
+      beforeUpdate(user) {
+
+        //Cundo se realizan cambios en el usuario se actualiza la fecha
         user.updatedAt = now;
       },
     },
