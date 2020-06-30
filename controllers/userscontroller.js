@@ -33,7 +33,6 @@ exports.CrearCuenta = async (req, res, next) => {
       // Redireccionar el usuario al formulario de inicio de sesión
       res.redirect("iniciar_sesion");
     } catch (error) {
-      
       // Mensaje personalizado sobre si un correo ya existe
       if (error["name"] === "SequelizeUniqueConstraintError") {
         messages = {
@@ -67,9 +66,25 @@ exports.formularioIniciarSesion = (req, res, next) => {
   });
 };
 
-exports.formularioCuenta = (req, res, next) => {
-  res.render("user/account", {
-    title: "GloboFiestaCake's",
-    auth: "yes",
-  });
+exports.formularioCuenta = async (req, res, next) => {
+  // Obtener el usuario actual
+  const usuario = res.locals.usuario;
+  const { auth } = usuario;
+
+  console.log(usuario);
+
+  // Si auth es positivo mostrara las opciones de admin
+  if (auth) {
+    res.render("user/adminAccount", {
+      title: "Administrador | GloboFiestaCake's",
+      usuario,
+      authAdmin: "yes",
+    });
+  } else {
+    res.render("user/account", {
+      title: "Mi cuenta | GloboFiestaCake's",
+      usuario,
+      authAdmin: "yes",
+    });
+  }
 };
