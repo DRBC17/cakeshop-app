@@ -39,3 +39,8 @@ nav li{
     text-align: center;
   }
 }
+
+.nav-account a{
+  height: 6rem;
+  text-align: center;
+}

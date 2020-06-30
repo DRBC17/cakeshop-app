@@ -2,18 +2,69 @@
 
 {{!-- Mostrar los mensajes en caso de existir --}}
 {{>messages}}
-<div class="container mt-4">
+<div class="container m-4">
     <div class="card">
-        <div class="card-header">
-Administrador
-        </div>
+        <h5 class="card-header bg-dark text-white text-center">Administrador</h5>
         <div class="card-body admin-container">
             <div class="form-account form-group">
-                <h2>cuenta</h2>
+                <form action="/actualizarCuenta" method="get">
+                    <div class="form-group">
+                        <h5>Nombre:</h5>
+                        <input type="text" name="firstName" placeholder="Nombre" required class="form-control"
+                            value="{{usuario.firstName}}" disabled />
+                    </div>
+                    <div class="form-group">
+                        <h5>Apellido:</h5>
+                        <input type="text" name="lastName" placeholder="Apellido" required class="form-control"
+                            value="{{usuario.lastName}}" disabled />
+                    </div>
+                    <div class="form-group">
+                        <h5>Correo electrónico:</h5>
+                        <input type="email" name="email" placeholder="Correo electrónico" required class="form-control"
+                            value="{{usuario.email}}" disabled />
+
+                    </div>
+                    <div class="form-group">
+                        <h5>Numero de telefono:</h5>
+                        <input type="number" name="phone" placeholder="Numero de telefono" required class="form-control"
+                            value="{{usuario.phone}}" disabled />
+
+                    </div>
+                    <div class="form-group">
+                        <h5>Contraseña:</h5>
+                        <input type="password" name="password" placeholder="**************" required
+                            class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <h5>Nueva contraseña:</h5>
+                        <input type="password" name="passwordConfirm" placeholder="**************" required
+                            class="form-control" />
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-success">
+                            Actualizar
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-admin form-group">
-                a
+            <div class="form-admin form-group m-3">
+                <nav class="nav-account">
+                    <ul class="navbar-nav mt-auto">
+                        <li class="nav-item">
+                            <a href="#" class="btn btn-primary btn-lg btn-block m-2">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="btn btn-primary btn-lg btn-block m-2">Categorías</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="btn btn-primary btn-lg btn-block m-2">Clientes</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
+
     </div>
+</div>
 </div>

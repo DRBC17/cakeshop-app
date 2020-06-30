@@ -71,16 +71,20 @@ exports.formularioCuenta = async (req, res, next) => {
   const usuario = res.locals.usuario;
   const { auth } = usuario;
 
+  console.log(usuario);
+
   // Si auth es positivo mostrara las opciones de admin
   if (auth) {
     res.render("user/adminAccount", {
       title: "Administrador | GloboFiestaCake's",
-      auth,
+      usuario,
+      authAdmin: "yes",
     });
   } else {
     res.render("user/account", {
       title: "Mi cuenta | GloboFiestaCake's",
-      auth,
+      usuario,
+      authAdmin: "yes",
     });
   }
 };
