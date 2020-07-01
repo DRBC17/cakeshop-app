@@ -5,46 +5,24 @@ const db = require("../config/db");
 const now = new Date();
 
 //Modelo de detalle de las ordenes
-const OrderDetail = db.define(
-  "orderDetail",
-  {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    ordeId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    productId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    amount: {
-      type: Sequelize.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    createAt: {
-      type: Sequelize.DATE,
-    },
-    updatedAt: {
-      type: Sequelize.DATE,
-    },
+const OrderDetail = db.define("orderDetail", {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
   },
-  {
-    hooks: {
-      beforeCreate(orderDetail) {
-        // Definimos la fecha de creación y modificación como fecha actual
-        orderDetail.createAt = now;
-        orderDetail.updatedAt = now;
-      },
-      beforeUpdate(orderDetail) {
-        //Cundo se realizan cambios en el modelo se actualiza la fecha
-        orderDetail.updatedAt = now;
-      },
-    },
-  }
-);
+  ordeId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
+  productId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
+  amount: {
+    type: Sequelize.DECIMAL(10, 2),
+    allowNull: false,
+  },
+});
 
 module.exports = OrderDetail;

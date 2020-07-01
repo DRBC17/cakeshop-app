@@ -13,7 +13,7 @@ const db = new Sequelize(
     port: process.env.MYSQLPORT,
     operatorAliases: false,
     define: {
-      timestamps: false,
+      timestamps: true,
     },
     pool: {
       max: 5,
