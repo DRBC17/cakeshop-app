@@ -36,21 +36,21 @@ const Order = db.define(
       },
     },
     discount: {
-        type: Sequelize.DECIMAL(10,2),
-        allowNull: true, 
-      },
-  
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: true,
+    },
+
     status: {
       type: Sequelize.BOOLEAN,
       defaultValue: 0,
     },
     createAt: {
       type: Sequelize.DATE,
-      allowNull: true, 
+      allowNull: true,
     },
     updatedAt: {
       type: Sequelize.DATE,
-      allowNull: true, 
+      allowNull: true,
     },
   },
   {
