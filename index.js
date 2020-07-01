@@ -28,6 +28,11 @@ const db = require("./config/db");
 
 // Importar modelos
 require('./models/user');
+require('./models/category');
+require('./models/imageProduct');
+require('./models/order');
+require('./models/orderDetail');
+require('./models/product');
 
 //Realizar  Conexion a la base de datos
 db.sync()
