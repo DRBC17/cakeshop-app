@@ -106,7 +106,7 @@ exports.actualizarUsuario = async (req, res, next) => {
   // Obtener la información del usuario actual
   const { id, auth } = res.locals.usuario;
 
-  const messages = [];
+  let messages = [];
 
   // Verificar el nombre
   if (!firstName) {
