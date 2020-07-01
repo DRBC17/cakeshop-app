@@ -70,12 +70,6 @@ const User = db.define(
       type: Sequelize.BOOLEAN,
       defaultValue: 0,
     },
-    createAt: {
-      type: Sequelize.DATE,
-    },
-    updatedAt: {
-      type: Sequelize.DATE,
-    },
     token: Sequelize.STRING,
     expiration: Sequelize.DATE,
   },
@@ -86,13 +80,10 @@ const User = db.define(
         // https://www.npmjs.com/package/bcrypt
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(13));
         // Definimos la fecha de creación y modificación como fecha actual
-        user.createAt = now;
-        user.updatedAt = now;
       },
       beforeUpdate(user) {
-
-        //Cundo se realizan cambios en el usuario se actualiza la fecha
-        user.updatedAt = now;
+        // Realizar el hash del password
+        // user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(13));
       },
     },
   }

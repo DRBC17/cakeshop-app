@@ -1,6 +1,9 @@
 // Importamos el modelo para usuarios
 const User = require("../models/user");
 
+const bcrypt = require("bcrypt-nodejs");
+require("dotenv").config();
+
 exports.formularioCrearCuenta = async (req, res, next) => {
   res.render("user/register", { title: "Regístrate en GloboFiestaCake's" });
 };
@@ -92,8 +95,6 @@ exports.formularioCuenta = async (req, res, next) => {
   const { auth } = usuario;
   const messages = [];
 
-  console.log(usuario);
-
   // Si auth es positivo mostrara las opciones de admin
   authAdmin(res, auth, usuario, messages);
 };
@@ -101,7 +102,7 @@ exports.formularioCuenta = async (req, res, next) => {
 // Actualizar los datos de un usuario
 exports.actualizarUsuario = async (req, res, next) => {
   // Obtener la información enviada
-  const { firstName, lastName, email, phone } = req.body;
+  const { firstName, lastName, email, phone, password } = req.body;
 
   // Obtener la información del usuario actual
   const { id, auth } = res.locals.usuario;
@@ -125,12 +126,13 @@ exports.actualizarUsuario = async (req, res, next) => {
   }
 
   // Verificar el correo electrónico
-  if (!email) {
-    messages.push({
-      error: "¡Debe ingresar un correo electrónico!",
-      type: "alert-danger",
-    });
-  }
+  // if (!email) {
+  //   messages.push({
+  //     error: "¡Debe ingresar un correo electrónico!",
+  //     type: "alert-danger",
+  //   });
+  // }
+
   // Verificar el teléfono
   if (!phone) {
     messages.push({
@@ -139,31 +141,47 @@ exports.actualizarUsuario = async (req, res, next) => {
     });
   }
 
-  // Si hay mensajes
-  if (messages.length) {
-    // Enviar valores correctos si la actualización falla
-    const usuario = await User.findByPk(id);
-
-    // Si auth es positivo mostrara las opciones de admin
-    authAdmin(res, auth, usuario, messages);
-  } else {
-    // No existen errores ni mensajes
-    await User.update(
-      { firstName, lastName, email, phone },
-      {
-        where: {
-          id,
-        },
-      }
-    );
-
+  if (false) {
     messages.push({
-      error: "¡Usuario actualizado exitosamente!",
-      type: "alert-success",
+      error: "¡Para actualizar datos debe ingresar su contraseña!",
+      type: "alert-danger",
     });
+  } else {
+    // Si hay mensajes
+    if (messages.length) {
+      // Enviar valores correctos si la actualización falla
+      const usuario = await User.findByPk(id);
 
-    const usuario = await User.findByPk(id);
-    // Si auth es positivo mostrara las opciones de admin
-    authAdmin(res, auth, usuario, messages);
+      // Si auth es positivo mostrara las opciones de admin
+      authAdmin(res, auth, usuario, messages);
+    } else {
+      // No existen errores ni mensajes
+      await User.update(
+        { firstName, lastName, email, phone },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+
+      messages.push({
+        error: "¡Usuario actualizado exitosamente!",
+        type: "alert-success",
+      });
+
+      const usuario = await User.findByPk(id);
+      // Si auth es positivo mostrara las opciones de admin
+      authAdmin(res, auth, usuario, messages);
+    }
   }
 };
+
+async function verificarContraseña(res, password) {
+  // Si el usuario existe, verificar si su contraseña es correcta
+  const passwordOld = res.locals.usuario.password;
+
+  // const bpwd = bcrypt.hashSync(password, bcrypt.genSaltSync(13));
+
+  
+}
