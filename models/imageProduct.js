@@ -4,9 +4,9 @@ const db = require("../config/db");
 // Constante para obtener fecha
 const now = new Date();
 
-//Modelo de imagenProducto
-const Category = db.define(
-    "category",
+//Modelo de imagen del Producto
+const ImageProduct = db.define(
+    "imageProduct",
     {
         id: {
             type: Sequelize.INTEGER,
@@ -49,11 +49,11 @@ const Category = db.define(
                 imageProduct.updatedAt = now;
             },
             beforeUpdate(imageProduct) {
-                //Cundo se realizan cambios en el modelo se actualiza la fecha
+                //Cuando se realizan cambios en el modelo se actualiza la fecha
                 imageProduct.updatedAt = now;
             },
         },
     }
 );
 
-module.exports = Category;
+module.exports = ImageProduct;
