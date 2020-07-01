@@ -125,14 +125,6 @@ exports.actualizarUsuario = async (req, res, next) => {
     });
   }
 
-  // Verificar el correo electrónico
-  // if (!email) {
-  //   messages.push({
-  //     error: "¡Debe ingresar un correo electrónico!",
-  //     type: "alert-danger",
-  //   });
-  // }
-
   // Verificar el teléfono
   if (!phone) {
     messages.push({
@@ -141,47 +133,49 @@ exports.actualizarUsuario = async (req, res, next) => {
     });
   }
 
-  if (false) {
+  //si la contraseña ingresada no es igual mandara el error
+  if (verificarContraseña(res, password) === false) {
     messages.push({
       error: "¡Para actualizar datos debe ingresar su contraseña!",
       type: "alert-danger",
     });
+  }
+  // Si hay mensajes
+  if (messages.length) {
+    // Enviar valores correctos si la actualización falla
+    const usuario = await User.findByPk(id);
+
+    // Si auth es positivo mostrara las opciones de admin
+    authAdmin(res, auth, usuario, messages);
   } else {
-    // Si hay mensajes
-    if (messages.length) {
-      // Enviar valores correctos si la actualización falla
-      const usuario = await User.findByPk(id);
+    // No existen errores ni mensajes
+    await User.update(
+      { firstName, lastName, email, phone },
+      {
+        where: {
+          id,
+        },
+      }
+    );
 
-      // Si auth es positivo mostrara las opciones de admin
-      authAdmin(res, auth, usuario, messages);
-    } else {
-      // No existen errores ni mensajes
-      await User.update(
-        { firstName, lastName, email, phone },
-        {
-          where: {
-            id,
-          },
-        }
-      );
+    messages.push({
+      error: "¡Usuario actualizado exitosamente!",
+      type: "alert-success",
+    });
 
-      messages.push({
-        error: "¡Usuario actualizado exitosamente!",
-        type: "alert-success",
-      });
-
-      const usuario = await User.findByPk(id);
-      // Si auth es positivo mostrara las opciones de admin
-      authAdmin(res, auth, usuario, messages);
-    }
+    const usuario = await User.findByPk(id);
+    // Si auth es positivo mostrara las opciones de admin
+    authAdmin(res, auth, usuario, messages);
   }
 };
 
-async function verificarContraseña(res, password) {
+exports.recargarCuenta = async (req, res, next) => {
+  res.redirect("/cuenta");
+};
+
+function verificarContraseña(res, password) {
   // Si el usuario existe, verificar si su contraseña es correcta
   const passwordOld = res.locals.usuario.password;
 
-  // const bpwd = bcrypt.hashSync(password, bcrypt.genSaltSync(13));
-
-  
+  return bcrypt.compareSync(password, passwordOld);
 }
