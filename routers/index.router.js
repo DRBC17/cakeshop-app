@@ -20,6 +20,11 @@ module.exports = function () {
     authController.usuarioAutenticado,
     usersController.formularioCuenta
   );
+  routes.post(
+    "/actualizar_cuenta",
+    authController.usuarioAutenticado,
+    usersController.actualizarUsuario
+  );
 
   //Tienda
   routes.get(
