@@ -18,11 +18,11 @@ const OrderDetail = db.define(
       allowNull: false,
     },
     productId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
     amount: {
-      type: Sequelize.DECIMAL(10,2),
+      type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
     createAt: {
