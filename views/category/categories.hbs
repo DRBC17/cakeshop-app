@@ -5,6 +5,7 @@
   <div class="d-flex flex-row-reverse">
     <a href="/agregar_categoria" class="btn btn-success btn-lg m-2">Agregar categoría</a>
   </div>
+  {{!-- card-columns --}}
   <div class="m-2">
     {{#if categories}}
     {{#each categories}}
@@ -16,7 +17,7 @@
         <h5 class="card-title">{{description}}</h5>
         <p class="card-text">Creado: {{createdAt}}</p>
         <p class="card-text">Ultima modificación: {{updatedAt}}</p>
-        <a href="#" class="btn btn-primary btn-lg">Actualizar</a>
+        <a href="/actualizar_categoria/{{url}}" class="btn btn-primary btn-lg">Actualizar</a>
         <button name="eliminar-proyecto" type="button" class="btn btn-danger btn-lg">Eliminar</button>
       </div>
     </div>
