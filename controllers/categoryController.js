@@ -136,7 +136,7 @@ exports.actualizarCategoria = async (req, res, next) => {
   // Obtener la información enviada
   const { name, description } = req.body;
 
-  const mensajes = [];
+  let messages = [];
 
   // Verificar el nombre
   if (!name) {
@@ -154,14 +154,14 @@ exports.actualizarCategoria = async (req, res, next) => {
   }
 
   // Si hay mensajes
-  if (mensajes.length) {
+  if (messages.length) {
     // Enviar valores correctos si la actualización falla
-    categories = await Category.findByPk(req.params.id);
+    const categories = await Category.findByPk(req.params.id);
     // Cambiar la visualización de la fecha con Moment.js
     const created = moment(categories.createdAt).format("LLLL");
     const updated = moment(categories.updatedAt).fromNow();
 
-    res.render("updateCategory", {
+    res.render("category/updateCategory", {
       title: "Actualizar categoría | GloboFiestaCake's",
       authAdmin: "yes",
       messages,
@@ -171,16 +171,45 @@ exports.actualizarCategoria = async (req, res, next) => {
     });
   } else {
     // No existen errores ni mensajes
-    await Category.update(
-      { name, description },
-      {
-        where: {
-          id: req.params.id,
-        },
-      }
-    );
+    try {
+      await Category.update(
+        { name, description },
+        {
+          where: {
+            id: req.params.id,
+          },
+        }
+      );
 
-    // Redirigir hacia las categorías
-    res.redirect("/categorias");
+      // Redirigir hacia las categorías
+      res.redirect("/categorias");
+    } catch (error) {
+      // Mensaje personalizado sobre si el nombre ya existe
+      if (error["name"] === "SequelizeUniqueConstraintError") {
+        messages.push({
+          error: "¡Ya existe un categoría con ese nombre¡",
+          type: "alert-danger",
+        });
+      } else {
+        messages.push({ error, type: "alert-danger" });
+      }
+
+      console.log(error);
+
+      // Enviar valores correctos si la actualización falla
+      const categories = await Category.findByPk(req.params.id);
+      // Cambiar la visualización de la fecha con Moment.js
+      const created = moment(categories.createdAt).format("LLLL");
+      const updated = moment(categories.updatedAt).fromNow();
+
+      res.render("category/updateCategory", {
+        title: "Actualizar categoría | GloboFiestaCake's",
+        authAdmin: "yes",
+        messages,
+        created,
+        updated,
+        categories: categories,
+      });
+    }
   }
 };
