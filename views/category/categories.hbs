@@ -8,10 +8,10 @@
   <div class="m-2">
     {{#if categories}}
     {{#each categories}}
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h3 class="font-weight-normal">{{name}}</h3>
-      </div>
+    <div class="card mb-2">
+
+      <h3 class="card-header bg-dark text-white">{{name}}</h3>
+
       <div class="card-body">
         <h5 class="card-title">{{description}}</h5>
         <p class="card-text">Creado: {{createdAt}}</p>
@@ -22,9 +22,9 @@
     </div>
     {{/each}}
     {{else}}
-  
+
     <div class="alert alert-info" role="alert">
-       <h5>Aún no tienes ningúna categoría. ¡Anímate a crear una!</h5>
+      <h5>Aún no tienes ningúna categoría. ¡Anímate a crear una!</h5>
     </div>
     {{/if}}
 

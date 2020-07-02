@@ -1,4 +1,5 @@
 const Category = require("../models/category");
+
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
@@ -69,7 +70,7 @@ exports.CrearCategoria = async (req, res, next) => {
   // Si hay mensajes
   if (messages.length) {
     res.render("category/addCategory", {
-      title: "Agregar categoria | GloboFiestaCake's",
+      title: "Agregar categoría | GloboFiestaCake's",
       authAdmin: "yes",
       messages,
     });
@@ -94,8 +95,8 @@ exports.CrearCategoria = async (req, res, next) => {
         messages = { error };
       }
 
-      res.render("category/categories", {
-        title: "Categorias | GloboFiestaCake's",
+      res.render("category/addCategory", {
+        title: "Agregar categoría | GloboFiestaCake's",
         authAdmin: "yes",
         messages,
       });
