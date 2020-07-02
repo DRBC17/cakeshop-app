@@ -1,10 +1,42 @@
 const Category = require("../models/category");
+// Importar Moment.js
+const moment = require("moment");
+moment.locale("es");
 
-exports.formularioCategorias = (req, res, next) => {
-  res.render("category/categories", {
-    title: "Categorías | GloboFiestaCake's",
-    authAdmin: "yes",
-  });
+exports.formularioCategorias = async (req, res, next) => {
+  let categories = [];
+  let messages = [];
+  try {
+    // Obtenemos las categorías creadas y lo mostramos con la fehca con tiempo
+    Category.findAll().then(function (categories) {
+      categories = categories.map(function (category) {
+        category.dataValues.createdAt = moment(
+          category.dataValues.createdAt
+        ).format("LLLL");
+        category.dataValues.updatedAt = moment(
+          category.dataValues.updatedAt
+        ).fromNow();
+
+        return category;
+      });
+      res.render("category/categories", {
+        title: "Categorías | GloboFiestaCake's",
+        authAdmin: "yes",
+        categories: categories,
+      });
+    });
+  } catch (error) {
+    messages.push({
+      error,
+      type: "alert-danger",
+    });
+    res.render("category/categories", {
+      title: "Categorías | GloboFiestaCake's",
+      authAdmin: "yes",
+      messages,
+      categories: categories,
+    });
+  }
 };
 
 exports.formularioCrearCategoria = (req, res, next) => {
