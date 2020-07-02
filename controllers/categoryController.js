@@ -187,7 +187,7 @@ exports.actualizarCategoria = async (req, res, next) => {
       // Mensaje personalizado sobre si el nombre ya existe
       if (error["name"] === "SequelizeUniqueConstraintError") {
         messages.push({
-          error: "¡Ya existe un categoría con ese nombre¡",
+          error: "¡Ya existe una categoría con ese nombre¡",
           type: "alert-danger",
         });
       } else {
