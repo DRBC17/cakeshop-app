@@ -1,6 +1,9 @@
 // Importamos el modelo para usuarios
 const User = require("../models/user");
 
+const bcrypt = require("bcrypt-nodejs");
+require("dotenv").config();
+
 exports.formularioCrearCuenta = async (req, res, next) => {
   res.render("user/register", { title: "Regístrate en GloboFiestaCake's" });
 };
@@ -66,25 +69,113 @@ exports.formularioIniciarSesion = (req, res, next) => {
   });
 };
 
-exports.formularioCuenta = async (req, res, next) => {
-  // Obtener el usuario actual
-  const usuario = res.locals.usuario;
-  const { auth } = usuario;
-
-  console.log(usuario);
-
+function authAdmin(res, auth, usuario, messages) {
   // Si auth es positivo mostrara las opciones de admin
   if (auth) {
     res.render("user/adminAccount", {
       title: "Administrador | GloboFiestaCake's",
       usuario,
       authAdmin: "yes",
+      messages,
     });
   } else {
     res.render("user/account", {
       title: "Mi cuenta | GloboFiestaCake's",
       usuario,
       authAdmin: "yes",
+      messages,
     });
   }
+}
+
+exports.formularioCuenta = async (req, res, next) => {
+  // Obtener el usuario actual
+  const { id } = res.locals.usuario;
+  const usuario = await User.findByPk(id);
+  const { auth } = usuario;
+  const messages = [];
+
+  // Si auth es positivo mostrara las opciones de admin
+  authAdmin(res, auth, usuario, messages);
 };
+
+// Actualizar los datos de un usuario
+exports.actualizarUsuario = async (req, res, next) => {
+  // Obtener la información enviada
+  const { firstName, lastName, email, phone, password } = req.body;
+
+  // Obtener la información del usuario actual
+  const { id, auth } = res.locals.usuario;
+
+  let messages = [];
+
+  // Verificar el nombre
+  if (!firstName) {
+    messages.push({
+      error: "¡Debe ingresar un nombre!",
+      type: "alert-danger",
+    });
+  }
+
+  // Verificar el Apellido
+  if (!lastName) {
+    messages.push({
+      error: "¡Debe ingresar un apellido!",
+      type: "alert-danger",
+    });
+  }
+
+  // Verificar el teléfono
+  if (!phone) {
+    messages.push({
+      error: "¡Debe ingresar un numero de teléfono!",
+      type: "alert-danger",
+    });
+  }
+
+  //si la contraseña ingresada no es igual mandara el error
+  if (verificarContraseña(res, password) === false) {
+    messages.push({
+      error: "¡Para actualizar datos debe ingresar su contraseña!",
+      type: "alert-danger",
+    });
+  }
+  // Si hay mensajes
+  if (messages.length) {
+    // Enviar valores correctos si la actualización falla
+    const usuario = await User.findByPk(id);
+
+    // Si auth es positivo mostrara las opciones de admin
+    authAdmin(res, auth, usuario, messages);
+  } else {
+    // No existen errores ni mensajes
+    await User.update(
+      { firstName, lastName, email, phone },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+
+    messages.push({
+      error: "¡Usuario actualizado exitosamente!",
+      type: "alert-success",
+    });
+
+    const usuario = await User.findByPk(id);
+    // Si auth es positivo mostrara las opciones de admin
+    authAdmin(res, auth, usuario, messages);
+  }
+};
+
+exports.recargarCuenta = async (req, res, next) => {
+  res.redirect("/cuenta");
+};
+
+function verificarContraseña(res, password) {
+  // Si el usuario existe, verificar si su contraseña es correcta
+  const passwordOld = res.locals.usuario.password;
+
+  return bcrypt.compareSync(password, passwordOld);
+}

@@ -1,53 +1,65 @@
-{{!-- Formulario de Cuenta --}}
+{{!-- Formulario de cuenta cliente --}}
 
 {{!-- Mostrar los mensajes en caso de existir --}}
-{{>messages}}
+{{>ourMessages}}
 
-<form action="/cuenta:id" method="get">
-    <div class="container p-4">
-        <div class="form-account offset-md-3">
-            <div class="card">
-                <h5 class="card-header bg-dark text-white text-center">Mi cuenta en GloboFiestaCake's</h5>
-                <div class="card-body">
+
+<div class="m-4">
+    <div class="card">
+        <h5 class="card-header bg-dark text-white text-center">Mi cuenta</h5>
+        <div class="card-body admin-container">
+            <div class="form-account form-group">
+                <form action="/actualizar_cuenta" method="POST">
                     <div class="form-group">
                         <h5>Nombre:</h5>
-                        <input type="text" name="firstName" placeholder="Nombre" required class="form-control"
-                            value="{{usuario.firstName}}" disabled />
+                        <input type="text" name="firstName" placeholder="Nombre" class="form-control"
+                            value="{{usuario.firstName}}" />
                     </div>
                     <div class="form-group">
                         <h5>Apellido:</h5>
-                        <input type="text" name="lastName" placeholder="Apellido" required class="form-control"
-                            value="{{usuario.lastName}}" disabled />
+                        <input type="text" name="lastName" placeholder="Apellido" class="form-control"
+                            value="{{usuario.lastName}}" />
+                    </div>
+                    <div class="form-group">
+                        <h5>Numero de teléfono:</h5>
+                        <input type="number" name="phone" placeholder="Numero de teléfono" class="form-control"
+                            value="{{usuario.phone}}" />
+
                     </div>
                     <div class="form-group">
                         <h5>Correo electrónico:</h5>
-                        <input type="email" name="email" placeholder="Correo electrónico" required class="form-control"
+                        <input type="email" name="email" placeholder="Correo electrónico" class="form-control"
                             value="{{usuario.email}}" disabled />
 
                     </div>
                     <div class="form-group">
-                        <h5>Numero de telefono:</h5>
-                        <input type="number" name="phone" placeholder="Numero de telefono" required class="form-control"
-                            value="{{usuario.phone}}" disabled />
-
-                    </div>
-                    <div class="form-group">
                         <h5>Contraseña:</h5>
-                        <input type="password" name="password" placeholder="**************" required class="form-control" />
+                        <input type="password" name="password" placeholder="**************" class="form-control" />
                     </div>
                     <div class="form-group">
                         <h5>Nueva contraseña:</h5>
-                        <input type="password" name="passwordConfirm" placeholder="**************" required
+                        <input type="password" name="passwordConfirm" placeholder="**************"
                             class="form-control" />
                     </div>
 
-                    <div class="form-group text-center btn-custom">
-                        <button type="submit" class="btn btn-success btn-block ">
+                    <div class="form-group text-center btn-custom ">
+                        <button type="submit" class="btn btn-success btn-block">
                             Actualizar
                         </button>
                     </div>
-                </div>
+                </form>
+            </div>
+            <div class="form-admin form-group p-3">
+                <nav class="nav-account">
+                    <ul class="navbar-nav mt-auto">
+                        <li class="nav-item">
+                            <a href="#" class="btn btn-primary btn-lg btn-block m-2">Mis pedidos</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
+
     </div>
-</form>
+</div>
+</div>
