@@ -14,6 +14,7 @@ const Category = db.define("category", {
   name: {
     type: Sequelize.STRING(50),
     allowNull: false,
+    unique: true,
     validate: {
       notEmpty: {
         msg: "Debe ingresar un nombre para la categoría",

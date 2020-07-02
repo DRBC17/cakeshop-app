@@ -6,6 +6,7 @@ const usersController = require("../controllers/usersController");
 const authController = require("../controllers/authController");
 const storeController = require("../controllers/storeController");
 const productsController = require("../controllers/productsController");
+const categoryController = require("../controllers/categoryController");
 
 module.exports = function () {
   //Usuario
@@ -31,6 +32,21 @@ module.exports = function () {
     authController.usuarioAutenticado,
     usersController.recargarCuenta
   );
+
+  //Categorías
+  routes.get("/categorias",
+  authController.usuarioAutenticado,
+  categoryController.formularioCategorias
+  );
+  routes.get("/agregar_categoria",
+  authController.usuarioAutenticado,
+  categoryController.formularioCrearCategoria,
+  );
+  routes.post("/agregar_categoria",
+  authController.usuarioAutenticado,
+  categoryController.CrearCategoria,
+  );
+  
 
   //Productos
   routes.get("/productos",
