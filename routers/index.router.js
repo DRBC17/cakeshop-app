@@ -50,6 +50,16 @@ module.exports = function () {
   authAdminController.adminAutenticado,
   categoryController.CrearCategoria,
   );
+  routes.get("/actualizar_categoria/:url",
+  authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
+  categoryController.obtenerCategoriaPorUrl,
+  );
+  routes.post("/actualizar_categoria/:id",
+  authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
+  categoryController.actualizarCategoria,
+  );
   
 
   //Productos
