@@ -17,7 +17,10 @@ body {
 }
 .form-admin {
   width: 50%;
- 
+}
+
+.form-small{
+  width: 40%;
 }
 
 .admin-container{
@@ -35,6 +38,9 @@ nav li{
     width: 100%;
   }
   .form-admin{
+    width: 100%;
+  }
+  .form-small{
     width: 100%;
   }
   nav li{

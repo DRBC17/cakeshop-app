@@ -17,7 +17,7 @@ exports.CrearCategoria = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const { name, description } = req.body;
 
-  let messages = "";
+  let messages = [];
 
   // Verificar el nombre
   if (!name) {
