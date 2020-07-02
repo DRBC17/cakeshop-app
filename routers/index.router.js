@@ -5,6 +5,9 @@ const routes = Router();
 const usersController = require("../controllers/usersController");
 const authController = require("../controllers/authController");
 const storeController = require("../controllers/storeController");
+const productsController = require("../controllers/productsController");
+const categoryController = require("../controllers/categoryController");
+const authAdminController = require("../controllers/authAdmin");
 
 module.exports = function () {
   //Usuario
@@ -29,6 +32,31 @@ module.exports = function () {
     "/actualizar_cuenta",
     authController.usuarioAutenticado,
     usersController.recargarCuenta
+  );
+
+  //Categorías
+  routes.get("/categorias",
+  authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
+  categoryController.formularioCategorias
+  );
+  routes.get("/agregar_categoria",
+  authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
+  categoryController.formularioCrearCategoria,
+  );
+  routes.post("/agregar_categoria",
+  authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
+  categoryController.CrearCategoria,
+  );
+  
+
+  //Productos
+  routes.get("/productos",
+  authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
+  productsController.formularioProductos
   );
 
   //Tienda

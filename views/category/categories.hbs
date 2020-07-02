@@ -1,0 +1,33 @@
+{{!-- Mensajes de error --}}
+{{>ourMessages}}
+<div class="container">
+
+  <div class="d-flex flex-row-reverse">
+    <a href="/agregar_categoria" class="btn btn-success btn-lg m-2">Agregar categoría</a>
+  </div>
+  <div class="m-2">
+    {{#if categories}}
+    {{#each categories}}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header">
+        <h3 class="font-weight-normal">{{name}}</h3>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{description}}</h5>
+        <p class="card-text">Creado: {{createdAt}}</p>
+        <p class="card-text">Ultima modificación: {{updatedAt}}</p>
+        <a href="#" class="btn btn-primary btn-lg">Actualizar</a>
+        <button name="eliminar-proyecto" type="button" class="btn btn-danger btn-lg">Eliminar</button>
+      </div>
+    </div>
+    {{/each}}
+    {{else}}
+  
+    <div class="alert alert-info" role="alert">
+       <h5>Aún no tienes ningúna categoría. ¡Anímate a crear una!</h5>
+    </div>
+    {{/if}}
+
+
+  </div>
+</div>
