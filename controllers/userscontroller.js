@@ -4,7 +4,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt-nodejs");
 require("dotenv").config();
 
-exports.formularioCrearCuenta = async (req, res, next) => {
+exports.formularioCrearCuenta =  (req, res, next) => {
   res.render("user/register", { title: "Regístrate en GloboFiestaCake's" });
 };
 
