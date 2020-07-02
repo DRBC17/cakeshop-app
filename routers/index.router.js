@@ -7,6 +7,7 @@ const authController = require("../controllers/authController");
 const storeController = require("../controllers/storeController");
 const productsController = require("../controllers/productsController");
 const categoryController = require("../controllers/categoryController");
+const authAdminController = require("../controllers/authAdmin");
 
 module.exports = function () {
   //Usuario
@@ -36,14 +37,17 @@ module.exports = function () {
   //Categorías
   routes.get("/categorias",
   authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
   categoryController.formularioCategorias
   );
   routes.get("/agregar_categoria",
   authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
   categoryController.formularioCrearCategoria,
   );
   routes.post("/agregar_categoria",
   authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
   categoryController.CrearCategoria,
   );
   
@@ -51,6 +55,7 @@ module.exports = function () {
   //Productos
   routes.get("/productos",
   authController.usuarioAutenticado,
+  authAdminController.adminAutenticado,
   productsController.formularioProductos
   );
 
