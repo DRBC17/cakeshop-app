@@ -34,39 +34,46 @@ module.exports = function () {
     usersController.recargarCuenta
   );
 
+  routes.get("/politicas_cookies", usersController.formularioPoliticas);
+
   //Categorías
-  routes.get("/categorias",
-  authController.usuarioAutenticado,
-  authAdminController.adminAutenticado,
-  categoryController.formularioCategorias
+  routes.get(
+    "/categorias",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    categoryController.formularioCategorias
   );
-  routes.get("/agregar_categoria",
-  authController.usuarioAutenticado,
-  authAdminController.adminAutenticado,
-  categoryController.formularioCrearCategoria,
+  routes.get(
+    "/agregar_categoria",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    categoryController.formularioCrearCategoria
   );
-  routes.post("/agregar_categoria",
-  authController.usuarioAutenticado,
-  authAdminController.adminAutenticado,
-  categoryController.CrearCategoria,
+  routes.post(
+    "/agregar_categoria",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    categoryController.CrearCategoria
   );
-  routes.get("/actualizar_categoria/:url",
-  authController.usuarioAutenticado,
-  authAdminController.adminAutenticado,
-  categoryController.obtenerCategoriaPorUrl,
+  routes.get(
+    "/actualizar_categoria/:url",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    categoryController.obtenerCategoriaPorUrl
   );
-  routes.post("/actualizar_categoria/:id",
-  authController.usuarioAutenticado,
-  authAdminController.adminAutenticado,
-  categoryController.actualizarCategoria,
+  routes.post(
+    "/actualizar_categoria/:id",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    categoryController.actualizarCategoria
   );
-  
 
   //Productos
-  routes.get("/productos",
-  authController.usuarioAutenticado,
-  authAdminController.adminAutenticado,
-  productsController.formularioProductos
+  routes.get(
+    "/productos",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.formularioProductos
   );
 
   //Tienda
