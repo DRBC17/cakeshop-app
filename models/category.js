@@ -46,7 +46,6 @@ const Category = db.define(
   {
     hooks: {
       beforeCreate(category) {
-        console.log("Antes de insertar en la base de datos");
         const url = slug(category.name).toLowerCase();
 
         category.url = `${url}_${shortid.generate()}`;
