@@ -4,6 +4,10 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt-nodejs");
 require("dotenv").config();
 
+exports.formularioPoliticas =  (req, res, next) => {
+  res.render("user/cookiePolicies", { title: "Politicas de cookies | GloboFiestaCake's" });
+};
+
 exports.formularioCrearCuenta =  (req, res, next) => {
   res.render("user/register", { title: "Regístrate en GloboFiestaCake's" });
 };
