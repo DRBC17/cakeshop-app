@@ -12,6 +12,10 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 // Importar connect-flash para disponer de los errores en todo el sitio
 const flash = require("connect-flash");
+// Importar multer para facilitar el manejo de imágenes
+const multer = require("multer");
+// Importar shortid
+const shortid = require("shortid");
 //handlebars
 const Handlebars = require("handlebars");
 const exphbs = require("express-handlebars");
@@ -95,7 +99,15 @@ app.use((req, res, next) => {
   // Continuar con el camino del middleware
   next();
 });
-
+// Definimos los parámetros para multer
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, "public/img/uploads"),
+  filename: (req, file, cb, filename) => {
+    cb(null, shortid.generate() + path.extname(file.originalname));
+  },
+});
+// Mandamos los parámetros antes definidos y configuramos para solo enviar de 1 en 1 imagen
+app.use(multer({ storage }).single("image"));
 
 // >Routes
 
