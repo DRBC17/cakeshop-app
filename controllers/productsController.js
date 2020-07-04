@@ -2,7 +2,9 @@
 const Product = require("../models/product");
 const ImageProduct = require("../models/imageProduct");
 const Category = require("../models/category");
-
+// Importamos unlink de fs-extra
+const { unlink } = require("fs-extra");
+const path = require("path");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
@@ -112,6 +114,7 @@ exports.formularioProductos = async (req, res, next) => {
 // Busca un categoría por su URL
 exports.obtenerProductoPorUrl = async (req, res, next) => {
   try {
+    //Actualizamos el formulario
     // Obtener el producto mediante la URL
     const products = await Product.findOne({
       where: {
@@ -119,8 +122,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
       },
     });
 
-    const category = await Category.findByPk(products.dataValues.id);
-
+    const category = await Category.findByPk(products.dataValues.categoryId);
     // Cambiar la visualización de la fecha con Moment.js
     const created = moment(products["dataValues"].createdAt).format("LLLL");
     const updated = moment(products["dataValues"].updatedAt).fromNow();
@@ -140,5 +142,115 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
 
 // Actualizar los datos de un producto
 exports.actualizarProducto = async (req, res, next) => {
-  // Obtener la información enviada
+  // Obtenemos por destructuring los datos
+  const { categoryId, name, description, unitPrice } = req.body;
+  let messages = [];
+
+  // Verificar el nombre
+  if (!name) {
+    messages.push({
+      error: "¡Debe ingresar un nombre!",
+      type: "alert-danger",
+    });
+  }
+  // Verificar la descripción
+  if (!description) {
+    messages.push({
+      error: "¡Debe ingresar una descripción!",
+      type: "alert-danger",
+    });
+  }
+  // Verificar la descripción
+  if (!unitPrice) {
+    messages.push({
+      error: "¡Debe ingresar un precio!",
+      type: "alert-danger",
+    });
+  }
+  try {
+    // Si hay mensajes
+    if (messages.length) {
+      //Actualizamos el formulario
+      // Obtener el producto mediante el id
+      const products = await Product.findByPk(req.params.id);
+
+      const category = await Category.findByPk(products.dataValues.categoryId);
+      // Cambiar la visualización de la fecha con Moment.js
+      const created = moment(products["dataValues"].createdAt).format("LLLL");
+      const updated = moment(products["dataValues"].updatedAt).fromNow();
+
+      res.render("product/updateProduct", {
+        title: "Productos | GloboFiestaCake's",
+        authAdmin: "yes",
+        created,
+        updated,
+        messages,
+        category: category.dataValues.name,
+        products: products,
+      });
+    } else {
+      // Si hay nueva foto procedemos a borrar la antigua
+      if (req.file) {
+        // Obtener el producto mediante el id
+        const products = await Product.findByPk(req.params.id);
+
+        const imageOld = await ImageProduct.findOne({
+          where: {
+            id: products.imageId,
+          },
+        });
+        console.log(imageOld.dataValues.path);
+        
+        await unlink(path.resolve("./public" + imageOld.dataValues.path));
+
+        const { filename, originalname, mimetype, size } = req.file;
+        //Actualizamos los datos de la imagen
+        await ImageProduct.update(
+          {
+            fileName: filename,
+            path: "/img/uploads/" + filename,
+            originalName: originalname,
+            mimeType: mimetype,
+            size: size,
+          },
+          {
+            where: {
+              id: products.imageId,
+            },
+          }
+        );
+        //Actualizamos los datos del producto
+        await Product.update(
+          {
+            name,
+            description,
+            unitPrice,
+            urlImage: "/img/uploads/" + filename,
+          },
+          {
+            where: {
+              id: req.params.id,
+            },
+          }
+        );
+        res.redirect("/productos");
+      } else {
+        await Product.update(
+          {
+            name,
+            description,
+            unitPrice,
+          },
+          {
+            where: {
+              id: req.params.id,
+            },
+          }
+        );
+        res.redirect("/productos");
+      }
+    }
+  } catch (error) {
+    res.send(error);
+  }
 };
