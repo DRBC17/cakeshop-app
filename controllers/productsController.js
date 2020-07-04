@@ -3,12 +3,9 @@ const Product = require("../models/product");
 const ImageProduct = require("../models/imageProduct");
 const Category = require("../models/category");
 
-exports.formularioProductos = (req, res, next) => {
-  res.render("product/recordBook", {
-    title: "Productos | GloboFiestaCake's",
-    authAdmin: "yes",
-  });
-};
+// Importar Moment.js
+const moment = require("moment");
+moment.locale("es");
 
 exports.formularioAgregarProducto = async (req, res, next) => {
   try {
@@ -58,12 +55,10 @@ exports.crearProducto = async (req, res, next) => {
       description,
       unitPrice,
       imageId: imageId.id,
+      urlImage: imageId.path,
     });
 
-    res.render("product/recordBook", {
-      title: "Productos | GloboFiestaCake's",
-      authAdmin: "yes",
-    });
+     res.redirect('/productos');
   } catch (error) {
     const messages = { error };
     //Busca las categorías existentes
@@ -74,6 +69,42 @@ exports.crearProducto = async (req, res, next) => {
       authAdmin: "yes",
       categories,
       messages,
+    });
+  }
+};
+
+exports.formularioProductos = async (req, res, next) => {
+  let messages = [];
+  let products = [];
+  try {
+   // Obtenemos las categorías creadas y lo mostramos con la fehca con tiempo
+   Product.findAll().then(function (products) {
+   products = products.map(function (product) {
+      product.dataValues.createdAt = moment(
+        product.dataValues.createdAt
+      ).format("LLLL");
+      product.dataValues.updatedAt = moment(
+        product.dataValues.updatedAt
+      ).fromNow();
+
+      return product;
+    });
+    res.render("product/recordBook", {
+      title: "Productos | GloboFiestaCake's",
+      authAdmin: "yes",
+      products: products,
+    });
+  });
+  } catch (error) {
+    messages.push({
+      error,
+      type: "alert-danger",
+    });
+    res.render("product/recordBook", {
+      title: "Productos | GloboFiestaCake's",
+      authAdmin: "yes",
+      messages,
+      products: products,
     });
   }
 };

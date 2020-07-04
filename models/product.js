@@ -66,6 +66,9 @@ const Product = db.define(
       type: Sequelize.BOOLEAN,
       defaultValue: 1,
     },
+    urlImage:{
+      type: Sequelize.STRING,
+    },
     url: {
       type: Sequelize.STRING,
     },
