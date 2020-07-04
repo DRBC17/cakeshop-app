@@ -1,39 +1,32 @@
 {{!-- Mensajes de error --}}
 {{>ourMessages}}
-<div class="container ">
 
-  <div class="d-flex flex-row-reverse">
-    <a href="/agregar_categoria" class="btn btn-success btn-lg m-2">Agregar categoría</a>
-  </div>
-  {{!-- card-columns --}}
-  <div class="row row-cols-1 row-cols-md-3">
-    {{#if categories}}
-    {{#each categories}}
-    <div class="col mb-4 animate__animated animate__fadeInDown">
-      <div class="card mb-2 animate__animated animate__pulse">
+<div class="d-flex flex-row-reverse">
+  <a href="/agregar_categoria" class="btn btn-success btn-lg m-2">Agregar categoría</a>
+</div>
+{{!-- card-columns --}}
+<div class="row row-cols-1 row-cols-md-3">
+  {{#if categories}}
+  {{#each categories}}
+  <div class="col mb-4 animate__animated animate__fadeInDown">
+    <div class="card mb-2 animate__animated animate__pulse">
 
-        <h3 class="card-header bg-dark text-white">{{name}}</h3>
+      <h3 class="card-header bg-dark text-white">{{name}}</h3>
 
-        <div class="card-body">
-          <h5 class="card-title">{{description}}</h5>
-          <p class="card-text">Creado: {{createdAt}}</p>
-          <p class="card-text">Ultima modificación: {{updatedAt}}</p>
-          <a href="/actualizar_categoria/{{url}}" class="btn btn-primary btn-lg">Actualizar</a>
-          <button name="eliminar-proyecto" type="button" class="btn btn-danger btn-lg">Eliminar</button>
-        </div>
+      <div class="card-body">
+        <h5 class="card-title">{{description}}</h5>
+        <p class="card-text">Creado: {{createdAt}}</p>
+        <p class="card-text">Ultima modificación: {{updatedAt}}</p>
+        <a href="/actualizar_categoria/{{url}}" class="btn btn-primary btn-lg">Actualizar</a>
+        <button name="eliminar-proyecto" type="button" class="btn btn-danger btn-lg">Eliminar</button>
       </div>
     </div>
-    {{/each}}
-    {{else}}
   </div>
+  {{/each}}
+  {{else}}
+</div>
 
-
-
-  <div class="alert alert-info" role="alert">
-    <h5>Aún no tienes ningúna categoría. ¡Anímate a crear una!</h5>
-  </div>
-  {{/if}}
-
-
-
-  </>
+<div class="alert alert-info" role="alert">
+  <h5>Aún no tienes ningúna categoría. ¡Anímate a crear una!</h5>
+</div>
+{{/if}}

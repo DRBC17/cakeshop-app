@@ -8,14 +8,15 @@ exports.formularioProductos = (req, res, next) => {
   });
 };
 
-exports.CrearCuenta = async (req, res, next) => {
+exports.crearProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    passwordConfirm,
-    phone,
-  } = req.body;
+  // const {} = req.body;
+  res.send(req.body);
+};
+
+exports.formularioAgregarProducto = (req, res, next) => {
+  res.render("product/addProduct", {
+    title: "Agregar producto | GloboFiestaCake's",
+    authAdmin: "yes",
+  });
 };
