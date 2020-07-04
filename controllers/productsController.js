@@ -58,7 +58,7 @@ exports.crearProducto = async (req, res, next) => {
       urlImage: imageId.path,
     });
 
-     res.redirect('/productos');
+    res.redirect("/productos");
   } catch (error) {
     const messages = { error };
     //Busca las categorías existentes
@@ -77,24 +77,24 @@ exports.formularioProductos = async (req, res, next) => {
   let messages = [];
   let products = [];
   try {
-   // Obtenemos las categorías creadas y lo mostramos con la fehca con tiempo
-   Product.findAll().then(function (products) {
-   products = products.map(function (product) {
-      product.dataValues.createdAt = moment(
-        product.dataValues.createdAt
-      ).format("LLLL");
-      product.dataValues.updatedAt = moment(
-        product.dataValues.updatedAt
-      ).fromNow();
+    // Obtenemos las categorías creadas y lo mostramos con la fehca con tiempo
+    Product.findAll().then(function (products) {
+      products = products.map(function (product) {
+        product.dataValues.createdAt = moment(
+          product.dataValues.createdAt
+        ).format("LLLL");
+        product.dataValues.updatedAt = moment(
+          product.dataValues.updatedAt
+        ).fromNow();
 
-      return product;
+        return product;
+      });
+      res.render("product/recordBook", {
+        title: "Productos | GloboFiestaCake's",
+        authAdmin: "yes",
+        products: products,
+      });
     });
-    res.render("product/recordBook", {
-      title: "Productos | GloboFiestaCake's",
-      authAdmin: "yes",
-      products: products,
-    });
-  });
   } catch (error) {
     messages.push({
       error,
@@ -107,4 +107,38 @@ exports.formularioProductos = async (req, res, next) => {
       products: products,
     });
   }
+};
+
+// Busca un categoría por su URL
+exports.obtenerProductoPorUrl = async (req, res, next) => {
+  try {
+    // Obtener el producto mediante la URL
+    const products = await Product.findOne({
+      where: {
+        url: req.params.url,
+      },
+    });
+
+    const category = await Category.findByPk(products.dataValues.id);
+
+    // Cambiar la visualización de la fecha con Moment.js
+    const created = moment(products["dataValues"].createdAt).format("LLLL");
+    const updated = moment(products["dataValues"].updatedAt).fromNow();
+
+    res.render("product/updateProduct", {
+      title: "Productos | GloboFiestaCake's",
+      authAdmin: "yes",
+      created,
+      updated,
+      category: category.dataValues.name,
+      products: products,
+    });
+  } catch (error) {
+    res.redirect("/productos");
+  }
+};
+
+// Actualizar los datos de un producto
+exports.actualizarProducto = async (req, res, next) => {
+  // Obtener la información enviada
 };

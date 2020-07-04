@@ -2,7 +2,7 @@
 {{>ourMessages}}
 
 <div class="d-flex flex-row-reverse">
-    <a href="/agregar_producto" class="btn btn-success btn-lg m-2">Agregar producto</a>
+  <a href="/agregar_producto" class="btn btn-success btn-lg m-2">Agregar producto</a>
 </div>
 {{!-- card-columns --}}
 <div class="row row-cols-1 row-cols-md-3">
@@ -10,9 +10,9 @@
   {{#each products}}
   <div class="col mb-4 animate__animated animate__fadeInDown">
     <div class="card mb-2 animate__animated animate__pulse">
-      
+
       <h3 class="card-header bg-dark text-white">{{name}}</h3>
-<img src="{{urlImage}}" class="card-img-top" alt="{{name}}">
+      <img src="{{urlImage}}" class="card-img-top" alt="{{name}}">
       <div class="card-body">
         <h5 class="card-title">{{description}}</h5>
         <h4 class="text-dark">L {{unitPrice}}</h4>
