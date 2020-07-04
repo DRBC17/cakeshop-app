@@ -1,5 +1,7 @@
+// Importar modelos
 const Product = require("../models/product");
 const ImageProduct = require("../models/imageProduct");
+const Category = require("../models/category");
 
 exports.formularioProductos = (req, res, next) => {
   res.render("product/recordBook", {
@@ -17,12 +19,12 @@ exports.formularioAgregarProducto = async (req, res, next) => {
       categories,
     });
   } catch (error) {
-    const messages = {error}
+    const messages = { error };
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
       authAdmin: "yes",
-      categories,
-      messages
+    
+      messages,
     });
   }
 };
@@ -41,7 +43,7 @@ exports.crearProducto = async (req, res, next) => {
     //   mimeType: mimetype,
     //   size: size,
     // });
-    res.send("Ok");
+    res.send(req.body);
   } catch (error) {
     res.send(error);
   }
