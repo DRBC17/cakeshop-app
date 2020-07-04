@@ -1,6 +1,10 @@
 // Importamos los modulos a utilizar
 const Sequelize = require("sequelize");
 const db = require("../config/db");
+// Importar slug
+const slug = require("slug");
+// Importar shortid
+const shortid = require("shortid");
 // Constante para obtener fecha
 const now = new Date();
 

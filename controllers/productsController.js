@@ -12,7 +12,9 @@ exports.formularioProductos = (req, res, next) => {
 
 exports.formularioAgregarProducto = async (req, res, next) => {
   try {
+    //Busca las categorías existentes
     categories = await Category.findAll();
+    //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
       authAdmin: "yes",
@@ -23,7 +25,6 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
       authAdmin: "yes",
-    
       messages,
     });
   }
@@ -35,16 +36,44 @@ exports.crearProducto = async (req, res, next) => {
   const { categoryId, name, description, unitPrice } = req.body;
 
   try {
-    //Guardar la imagen
-    // await ImageProduct.create({
-    //   fileName: filename,
-    //   path: "/img/uploads/" + filename,
-    //   originalName: originalname,
-    //   mimeType: mimetype,
-    //   size: size,
-    // });
-    res.send(req.body);
+    // Guardar la imagen
+    await ImageProduct.create({
+      fileName: filename,
+      path: "/img/uploads/" + filename,
+      originalName: originalname,
+      mimeType: mimetype,
+      size: size,
+    });
+
+    //Buscamos el id de la imagen
+    const imageId = await ImageProduct.findOne({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+    });
+
+    // Guardar la imagen
+    await Product.create({
+      categoryId,
+      name,
+      description,
+      unitPrice,
+      imageId: imageId.id,
+    });
+
+    res.render("product/recordBook", {
+      title: "Productos | GloboFiestaCake's",
+      authAdmin: "yes",
+    });
   } catch (error) {
-    res.send(error);
+    const messages = { error };
+    //Busca las categorías existentes
+    categories = await Category.findAll();
+    //Las enviá para mostrarlas en el formulario
+    res.render("product/addProduct", {
+      title: "Agregar producto | GloboFiestaCake's",
+      authAdmin: "yes",
+      categories,
+      messages,
+    });
   }
 };

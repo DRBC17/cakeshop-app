@@ -77,14 +77,14 @@ module.exports = function () {
   );
   routes.get(
     "/agregar_producto",
-    // authController.usuarioAutenticado,
-    // authAdminController.adminAutenticado,
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
     productsController.formularioAgregarProducto
   );
   routes.post(
     "/agregar_producto",
-    // authController.usuarioAutenticado,
-    // authAdminController.adminAutenticado,
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
     productsController.crearProducto
   );
   //Tienda
