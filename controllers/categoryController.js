@@ -126,7 +126,6 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
       categories: categories,
     });
   } catch (error) {
-    res.send(error);
     res.redirect("/categorias");
   }
 };

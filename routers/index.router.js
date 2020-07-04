@@ -75,7 +75,30 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     productsController.formularioProductos
   );
-
+  routes.get(
+    "/agregar_producto",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.formularioAgregarProducto
+  );
+  routes.post(
+    "/agregar_producto",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.crearProducto
+  );
+  routes.get(
+    "/actualizar_producto/:url",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.obtenerProductoPorUrl
+  );
+  routes.post(
+    "/actualizar_producto/:id",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.actualizarProducto
+  );
   //Tienda
   routes.get(
     "/",
