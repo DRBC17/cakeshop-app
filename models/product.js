@@ -22,7 +22,7 @@ const Product = db.define(
         },
       },
     },
-    title: {
+    name: {
       type: Sequelize.STRING(50),
       allowNull: false,
       validate: {
@@ -60,7 +60,7 @@ const Product = db.define(
     },
     available: {
       type: Sequelize.BOOLEAN,
-      defaultValue: 0,
+      defaultValue: 1,
     },
     url: {
       type: Sequelize.STRING,

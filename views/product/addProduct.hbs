@@ -11,13 +11,20 @@
           <div class="card-body">
 
             <div class="form-group pt-2">
-              <input type="email" name="email" placeholder="Correo electrónico" class="form-control" />
+              <input type="text" name="name" placeholder="Nombre" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <input type="text" name="description" placeholder="Descripción" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <input type="number" name="unitePrice" placeholder="Precio por unidad" class="form-control" required />
             </div>
 
             <div class="form-group">
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="inputGroupFile02" name="image" required>
-                <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02" data-browse="Buscar">Seleccionar
+                <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02"
+                  data-browse="Buscar">Seleccionar
                   Archivo</label>
               </div>
             </div>
