@@ -10,8 +10,29 @@ exports.formularioProductos = (req, res, next) => {
 
 exports.crearProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
-  // const {} = req.body;
-  res.send(req.body);
+  const { filename, originalname, mimetype, size } = req.file;
+
+  // const {
+  //   categoryId,
+  //   title,
+  //   description,
+  //   imageId,
+  //   unitPrice,
+  //   available,
+  // } = req.body;
+  try {
+    //Guardar la imagen
+    await ImageProduct.create({
+      fileName: filename,
+      path: "/img/uploads/" + filename,
+      originalName: originalname,
+      mimeType: mimetype,
+      size: size,
+    });
+    res.send("Ok");
+  } catch (error) {
+    res.send(error);
+  }
 };
 
 exports.formularioAgregarProducto = (req, res, next) => {

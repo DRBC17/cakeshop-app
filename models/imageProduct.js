@@ -23,7 +23,7 @@ const ImageProduct = db.define("imageProduct", {
     type: Sequelize.STRING(100),
     allowNull: false,
   },
-  nimeType: {
+  mimeType: {
     type: Sequelize.STRING(10),
     allowNull: false,
   },
