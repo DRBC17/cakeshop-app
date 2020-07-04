@@ -199,8 +199,7 @@ exports.actualizarProducto = async (req, res, next) => {
             id: products.imageId,
           },
         });
-        console.log(imageOld.dataValues.path);
-        
+
         await unlink(path.resolve("./public" + imageOld.dataValues.path));
 
         const { filename, originalname, mimetype, size } = req.file;
