@@ -79,7 +79,7 @@ exports.formularioProductos = async (req, res, next) => {
   let messages = [];
   let products = [];
   try {
-    // Obtenemos las categorías creadas y lo mostramos con la fehca con tiempo
+    // Obtenemos las categorías creadas y lo mostramos con la fecha con tiempo
     Product.findAll().then(function (products) {
       products = products.map(function (product) {
         product.dataValues.createdAt = moment(

@@ -1,5 +1,6 @@
-// Importamos los modulos a utilizar
+// Importamos los módulos a utilizar
 const Sequelize = require("sequelize");
+//importamos la base de datos.
 const db = require("../config/db");
 // Importar slug
 const slug = require("slug");
@@ -22,11 +23,11 @@ const Category = db.define(
       allowNull: false,
       unique: {
         args: true,
-        msg: "Ya existe una categoría registrada con ese nombre",
+        msg: "¡Ya existe una categoría registrada con ese nombre!",
       },
       validate: {
         notEmpty: {
-          msg: "Debe ingresar un nombre para la categoría",
+          msg: "¡Debe ingresar un nombre para la categoría!",
         },
       },
     },
@@ -35,7 +36,7 @@ const Category = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debes ingresar una descripción",
+          msg: "¡Debes ingresar una descripción!",
         },
       },
     },
@@ -46,11 +47,13 @@ const Category = db.define(
   {
     hooks: {
       beforeCreate(category) {
+        // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(category.name).toLowerCase();
 
         category.url = `${url}_${shortid.generate()}`;
       },
       beforeUpdate(category) {
+        // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(category.name).toLowerCase();
 
         category.url = `${url}_${shortid.generate()}`;

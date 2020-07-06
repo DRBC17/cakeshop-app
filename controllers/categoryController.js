@@ -8,7 +8,7 @@ exports.formularioCategorias = async (req, res, next) => {
   let categories = [];
   let messages = [];
   try {
-    // Obtenemos las categorías creadas y lo mostramos con la fehca con tiempo
+    // Obtenemos las categorías creadas y lo mostramos con la fecha con tiempo
     Category.findAll().then(function (categories) {
       categories = categories.map(function (category) {
         category.dataValues.createdAt = moment(

@@ -1,4 +1,4 @@
-// Importar modulos
+// Importar módulos
 const passport = require("passport");
 const User= require("../models/user");
 const Sequelize = require("sequelize");

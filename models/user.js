@@ -1,5 +1,6 @@
-// Importamos los modulos a utilizar
+// Importamos los módulos a utilizar
 const Sequelize = require("sequelize");
+//importamos la base de datos.
 const db = require("../config/db");
 const bcrypt = require("bcrypt-nodejs");
 // Constante para obtener fecha
@@ -19,7 +20,7 @@ const User = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debes ingresar su nombre",
+          msg: "¡Debes ingresar su nombre!",
         },
       },
     },
@@ -28,7 +29,7 @@ const User = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debes ingresar su apellido",
+          msg: "¡Debes ingresar su apellido!",
         },
       },
     },
@@ -37,14 +38,14 @@ const User = db.define(
       allowNull: false,
       unique: {
         args: true,
-        msg: "Ya existe un usuario registrado con esta dirección de correo",
+        msg: "¡Ya existe un usuario registrado con esta dirección de correo!",
       },
       validate: {
         notEmpty: {
-          msg: "Debes ingresar un correo electrónico",
+          msg: "¡Debes ingresar un correo electrónico!",
         },
         isEmail: {
-          msg: "Verifica que tu correo es un correo electrónico válido",
+          msg: "¡Verifica que tu correo es un correo electrónico válido!",
         },
       },
     },
@@ -53,7 +54,7 @@ const User = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debes ingresar una contraseña",
+          msg: "¡Debes ingresar una contraseña!",
         },
       },
     },
@@ -62,7 +63,7 @@ const User = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debes ingresar un numero de telefono",
+          msg: "¡Debes ingresar un numero de teléfono!",
         },
       },
     },
@@ -79,11 +80,10 @@ const User = db.define(
         // Realizar el hash del password
         // https://www.npmjs.com/package/bcrypt
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(13));
-        // Definimos la fecha de creación y modificación como fecha actual
       },
       beforeUpdate(user) {
         // Realizar el hash del password
-        // user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(13));
+        user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(13));
       },
     },
   }
