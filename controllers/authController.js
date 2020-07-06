@@ -1,7 +1,7 @@
 // Importar módulos
 const passport = require("passport");
-const User= require("../models/user");
-const Sequelize = require("sequelize");
+//const User= require("../models/user");
+//const Sequelize = require("sequelize");
 
 // Verificar si el usuario se puede autenticar con sus credenciales
 exports.autenticarUsuario = passport.authenticate("local", {
@@ -13,20 +13,20 @@ exports.autenticarUsuario = passport.authenticate("local", {
   
   // Cerrar la sesión del usuario actual
   exports.cerrarSesion = (req, res, next) => {
-    // Al cerrar sesión redirigimos al usuario al inicio de sesión
+    // Al cerrar sesión redirigimos al usuario al inicio de sesión.
     req.session.destroy(() => {
       res.redirect("/iniciar_sesion");
     });
   };
   
-  // Verificar si el usuario está autenticado o no
+  // Verificar si el usuario está autenticado o no.
   exports.usuarioAutenticado = (req, res, next) => {
-    // Si el usuario está autenticado que continúe con la petición
+    // Si el usuario está autenticado que continúe con la petición.
     if (req.isAuthenticated()) {
       return next();
     }
   
-    // Si el usuario no está autenticado, iniciar sesión
+    // Si el usuario no está autenticado, iniciar sesión.
     return res.redirect("/iniciar_sesion");
   };
   

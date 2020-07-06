@@ -1,14 +1,17 @@
+//Importamos los modelos
 const Category = require("../models/category");
 
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
 
+// Renderizamos el formulario para las categorías
 exports.formularioCategorias = async (req, res, next) => {
   let categories = [];
   let messages = [];
   try {
-    // Obtenemos las categorías creadas y lo mostramos con la fecha con tiempo
+    // Obtenemos las categorías creadas y
+    // lo mostramos la fecha de creación y de actualización modificadas con moment.js
     Category.findAll().then(function (categories) {
       categories = categories.map(function (category) {
         category.dataValues.createdAt = moment(
@@ -40,12 +43,15 @@ exports.formularioCategorias = async (req, res, next) => {
   }
 };
 
+// Renderizamos formulario para agregar una categoría
 exports.formularioCrearCategoria = (req, res, next) => {
   res.render("category/addCategory", {
     title: "Agregar categoría | GloboFiestaCake's",
     authAdmin: "yes",
   });
 };
+
+// Creamos una categoría
 exports.CrearCategoria = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const { name, description } = req.body;
@@ -89,9 +95,10 @@ exports.CrearCategoria = async (req, res, next) => {
       // Mensaje personalizado sobre si ya existe el nombre registrado
       if (error["name"] === "SequelizeUniqueConstraintError") {
         messages = {
-          error: "Ya existe una categoría registrada con ese nombre",
+          error: "¡Ya existe una categoría registrada con ese nombre!",
         };
       } else {
+        // Si no es el error anterior solo mandamos los mensajes
         messages = { error };
       }
 
@@ -114,7 +121,7 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
       },
     });
 
-    // Cambiar la visualización de la fecha con Moment.js
+    // Cambiar la visualización de las fechas con Moment.js
     const created = moment(categories["dataValues"].createdAt).format("LLLL");
     const updated = moment(categories["dataValues"].updatedAt).fromNow();
 
@@ -126,6 +133,7 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
       categories: categories,
     });
   } catch (error) {
+    // En caso de haber errores volvemos a cargar las categorías.
     res.redirect("/categorias");
   }
 };
@@ -193,7 +201,6 @@ exports.actualizarCategoria = async (req, res, next) => {
         messages.push({ error, type: "alert-danger" });
       }
 
-      console.log(error);
 
       // Enviar valores correctos si la actualización falla
       const categories = await Category.findByPk(req.params.id);
