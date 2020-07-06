@@ -1,17 +1,23 @@
 // Importamos el modelo para usuarios
 const User = require("../models/user");
-
+// Importamos bcrypt-nodejs
 const bcrypt = require("bcrypt-nodejs");
+// Requerimos las variables de entorno
 require("dotenv").config();
 
-exports.formularioPoliticas =  (req, res, next) => {
-  res.render("user/cookiePolicies", { title: "Politicas de cookies | GloboFiestaCake's" });
+// Renderizamos el formulario para las políticas
+exports.formularioPoliticas = (req, res, next) => {
+  res.render("user/cookiePolicies", {
+    title: "Políticas de cookies | GloboFiestaCake's",
+  });
 };
 
-exports.formularioCrearCuenta =  (req, res, next) => {
+// Renderizamos el formulario para crear cuenta
+exports.formularioCrearCuenta = (req, res, next) => {
   res.render("user/register", { title: "Regístrate en GloboFiestaCake's" });
 };
 
+// Creamos una cuenta
 exports.CrearCuenta = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const {
@@ -24,7 +30,7 @@ exports.CrearCuenta = async (req, res, next) => {
   } = req.body;
 
   let messages = "";
-
+  // si las contraseñas son iguales creara la cuenta
   if (password === passwordConfirm) {
     // Intentar crear el usuario
     try {
@@ -43,7 +49,8 @@ exports.CrearCuenta = async (req, res, next) => {
       // Mensaje personalizado sobre si un correo ya existe
       if (error["name"] === "SequelizeUniqueConstraintError") {
         messages = {
-          error: "Ya existe un usuario registrado con esta dirección de correo",
+          error:
+            "¡Ya existe un usuario registrado con esta dirección de correo!",
         };
       } else {
         messages = { error };
@@ -55,14 +62,15 @@ exports.CrearCuenta = async (req, res, next) => {
       });
     }
   } else {
-    messages = { error: "Las contraseñas deben coincidir." };
+    // En caso que las contraseñas no sean iguales mandamos el siguiente mensaje
+    messages = { error: "¡Las contraseñas deben coincidir!" };
     res.render("user/register", {
       title: "Regístrate en GloboFiestaCake's",
       messages,
     });
   }
 };
-
+// Renderizamos el formulario de iniciar sesión
 exports.formularioIniciarSesion = (req, res, next) => {
   // Verificar si existe algún mensaje
   const messages = res.locals.messages;
@@ -92,14 +100,17 @@ function authAdmin(res, auth, usuario, messages) {
   }
 }
 
+// Renderizamos el formulario para la cuenta
 exports.formularioCuenta = async (req, res, next) => {
-  // Obtener el usuario actual
+  // Obtenemos el id del usuario actual
   const { id } = res.locals.usuario;
+  // Buscamos los datos actualizados del usuario
   const usuario = await User.findByPk(id);
+  // Verificamos si el usuario es administrador
   const { auth } = usuario;
   const messages = [];
 
-  // Si auth es positivo mostrara las opciones de admin
+  // Si auth es positivo mostrara las opciones de administrador
   authAdmin(res, auth, usuario, messages);
 };
 
@@ -137,7 +148,7 @@ exports.actualizarUsuario = async (req, res, next) => {
     });
   }
 
-  //si la contraseña ingresada no es igual mandara el error
+  // Si la contraseña enviada no es igual a la que esta almacenada no permitirá al programa modificar los datos
   if (verificarContraseña(res, password) === false) {
     messages.push({
       error: "¡Para actualizar datos debe ingresar su contraseña!",
@@ -153,6 +164,7 @@ exports.actualizarUsuario = async (req, res, next) => {
     authAdmin(res, auth, usuario, messages);
   } else {
     // No existen errores ni mensajes
+    // Actualizamos los datos del usuario
     await User.update(
       { firstName, lastName, email, phone },
       {
@@ -161,14 +173,15 @@ exports.actualizarUsuario = async (req, res, next) => {
         },
       }
     );
-
+    // si se cumplió todo enviamos el siguiente mensaje
     messages.push({
       error: "¡Usuario actualizado exitosamente!",
       type: "alert-success",
     });
 
+    // cargamos los nuevos datos del usuario 
     const usuario = await User.findByPk(id);
-    // Si auth es positivo mostrara las opciones de admin
+    // Verificamos si es administrador y enviamos los nuevos datos
     authAdmin(res, auth, usuario, messages);
   }
 };
@@ -177,9 +190,10 @@ exports.recargarCuenta = async (req, res, next) => {
   res.redirect("/cuenta");
 };
 
+// Verifica qie la contraseña enviada sea igual que la contraseña que esta en el sistema
 function verificarContraseña(res, password) {
   // Si el usuario existe, verificar si su contraseña es correcta
   const passwordOld = res.locals.usuario.password;
-
+  // Regresara un True si las contraseñas son iguales
   return bcrypt.compareSync(password, passwordOld);
 }
