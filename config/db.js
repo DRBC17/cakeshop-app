@@ -1,5 +1,6 @@
 // Importamos el modulo sequelize
 const Sequelize = require("sequelize");
+// Requerimos las variables de entorno
 require("dotenv").config();
 
 // Parámetros de la conexión a la base de datos

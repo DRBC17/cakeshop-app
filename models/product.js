@@ -1,5 +1,6 @@
-// Importamos los modulos a utilizar
+// Importamos los módulos a utilizar
 const Sequelize = require("sequelize");
+//importamos la base de datos.
 const db = require("../config/db");
 // Importar slug
 const slug = require("slug");
@@ -22,7 +23,7 @@ const Product = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debe seleccionar una categoría",
+          msg: "¡Debe seleccionar una categoría!",
         },
       },
     },
@@ -31,16 +32,16 @@ const Product = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debe ingresar un nombre para la categoría",
+          msg: "¡Debe ingresar un nombre para la categoría!",
         },
       },
     },
     description: {
-      type: Sequelize.STRING(100),
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debes ingresar una descripción",
+          msg: "¡Debes ingresar una descripción!",
         },
       },
     },
@@ -49,7 +50,7 @@ const Product = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debe seleccionar una imagen",
+          msg: "¡Debe seleccionar una imagen!",
         },
       },
     },
@@ -58,7 +59,7 @@ const Product = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "Debe ingresar un nombre para la categoría",
+          msg: "¡Debe ingresar un nombre para la categoría!",
         },
       },
     },
@@ -76,11 +77,13 @@ const Product = db.define(
   {
     hooks: {
       beforeCreate(product) {
+        // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(product.name).toLowerCase();
 
         product.url = `${url}_${shortid.generate()}`;
       },
       beforeUpdate(product) {
+        // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(product.name).toLowerCase();
 
         product.url = `${url}_${shortid.generate()}`;

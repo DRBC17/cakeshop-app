@@ -1,5 +1,6 @@
-// Importamos los modulos a utilizar
+// Importamos los módulos a utilizar
 const Sequelize = require("sequelize");
+//importamos la base de datos.
 const db = require("../config/db");
 // Constante para obtener fecha
 const now = new Date();
@@ -24,7 +25,7 @@ const ImageProduct = db.define("imageProduct", {
     allowNull: false,
   },
   mimeType: {
-    type: Sequelize.STRING(10),
+    type: Sequelize.STRING,
     allowNull: false,
   },
   size: {

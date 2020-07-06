@@ -1,14 +1,18 @@
+//Importamos los modelos
 const Category = require("../models/category");
 
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
 
+// Renderizamos el formulario para las categorías
 exports.formularioCategorias = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
   let categories = [];
   let messages = [];
   try {
-    // Obtenemos las categorías creadas y lo mostramos con la fehca con tiempo
+    // Obtenemos las categorías creadas y
+    // lo mostramos la fecha de creación y de actualización modificadas con moment.js
     Category.findAll().then(function (categories) {
       categories = categories.map(function (category) {
         category.dataValues.createdAt = moment(
@@ -23,6 +27,7 @@ exports.formularioCategorias = async (req, res, next) => {
       res.render("category/categories", {
         title: "Categorías | GloboFiestaCake's",
         authAdmin: "yes",
+        auth,
         categories: categories,
       });
     });
@@ -34,22 +39,28 @@ exports.formularioCategorias = async (req, res, next) => {
     res.render("category/categories", {
       title: "Categorías | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       messages,
       categories: categories,
     });
   }
 };
 
+// Renderizamos formulario para agregar una categoría
 exports.formularioCrearCategoria = (req, res, next) => {
+  const { auth } = res.locals.usuario;
   res.render("category/addCategory", {
     title: "Agregar categoría | GloboFiestaCake's",
     authAdmin: "yes",
+    auth,
   });
 };
+
+// Creamos una categoría
 exports.CrearCategoria = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const { name, description } = req.body;
-
+  const { auth } = res.locals.usuario;
   let messages = [];
 
   // Verificar el nombre
@@ -89,15 +100,17 @@ exports.CrearCategoria = async (req, res, next) => {
       // Mensaje personalizado sobre si ya existe el nombre registrado
       if (error["name"] === "SequelizeUniqueConstraintError") {
         messages = {
-          error: "Ya existe una categoría registrada con ese nombre",
+          error: "¡Ya existe una categoría registrada con ese nombre!",
         };
       } else {
+        // Si no es el error anterior solo mandamos los mensajes
         messages = { error };
       }
 
       res.render("category/addCategory", {
         title: "Agregar categoría | GloboFiestaCake's",
         authAdmin: "yes",
+        auth,
         messages,
       });
     }
@@ -106,6 +119,7 @@ exports.CrearCategoria = async (req, res, next) => {
 
 // Busca un categoría por su URL
 exports.obtenerCategoriaPorUrl = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
   try {
     // Obtener la categoría mediante la URL
     const categories = await Category.findOne({
@@ -114,18 +128,20 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
       },
     });
 
-    // Cambiar la visualización de la fecha con Moment.js
+    // Cambiar la visualización de las fechas con Moment.js
     const created = moment(categories["dataValues"].createdAt).format("LLLL");
     const updated = moment(categories["dataValues"].updatedAt).fromNow();
 
     res.render("category/updateCategory", {
       title: "Categorías | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       created,
       updated,
       categories: categories,
     });
   } catch (error) {
+    // En caso de haber errores volvemos a cargar las categorías.
     res.redirect("/categorias");
   }
 };
@@ -134,7 +150,7 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
 exports.actualizarCategoria = async (req, res, next) => {
   // Obtener la información enviada
   const { name, description } = req.body;
-
+  const { auth } = res.locals.usuario;
   let messages = [];
 
   // Verificar el nombre
@@ -163,6 +179,7 @@ exports.actualizarCategoria = async (req, res, next) => {
     res.render("category/updateCategory", {
       title: "Actualizar categoría | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       messages,
       created,
       updated,
@@ -193,8 +210,6 @@ exports.actualizarCategoria = async (req, res, next) => {
         messages.push({ error, type: "alert-danger" });
       }
 
-      console.log(error);
-
       // Enviar valores correctos si la actualización falla
       const categories = await Category.findByPk(req.params.id);
       // Cambiar la visualización de la fecha con Moment.js
@@ -204,6 +219,7 @@ exports.actualizarCategoria = async (req, res, next) => {
       res.render("category/updateCategory", {
         title: "Actualizar categoría | GloboFiestaCake's",
         authAdmin: "yes",
+        auth,
         messages,
         created,
         updated,
