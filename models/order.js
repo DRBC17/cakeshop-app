@@ -1,5 +1,6 @@
-// Importamos los modulos a utilizar
+// Importamos los módulos a utilizar
 const Sequelize = require("sequelize");
+//importamos la base de datos.
 const db = require("../config/db");
 // Constante para obtener fecha
 const now = new Date();
@@ -20,7 +21,7 @@ const Order = db.define("order", {
     allowNull: false,
     validate: {
       notEmpty: {
-        msg: "Debe ingresar una dirección",
+        msg: "¡Debe ingresar una dirección!",
       },
     },
   },
@@ -29,7 +30,7 @@ const Order = db.define("order", {
     allowNull: false,
     validate: {
       notEmpty: {
-        msg: "Debe ingresar un numero de teléfono",
+        msg: "¡Debe ingresar un numero de teléfono!",
       },
     },
   },

@@ -1,14 +1,16 @@
-// Importar modelos
+// Importar los modelos
 const Product = require("../models/product");
 const ImageProduct = require("../models/imageProduct");
 const Category = require("../models/category");
 // Importamos unlink de fs-extra
 const { unlink } = require("fs-extra");
+// Importamos path
 const path = require("path");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
 
+//Renderizamos el formulario para agregar producto.
 exports.formularioAgregarProducto = async (req, res, next) => {
   try {
     //Busca las categorías existentes
@@ -20,6 +22,7 @@ exports.formularioAgregarProducto = async (req, res, next) => {
       categories,
     });
   } catch (error) {
+    // En caso de haber errores lo guardamos en messages y volvemos a cargar el formulario
     const messages = { error };
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
@@ -29,13 +32,14 @@ exports.formularioAgregarProducto = async (req, res, next) => {
   }
 };
 
+// Creamos un producto
 exports.crearProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const { filename, originalname, mimetype, size } = req.file;
   const { categoryId, name, description, unitPrice } = req.body;
 
   try {
-    // Guardar la imagen
+    // Guardar los datos de la imagen
     await ImageProduct.create({
       fileName: filename,
       path: "/img/uploads/" + filename,
@@ -44,13 +48,13 @@ exports.crearProducto = async (req, res, next) => {
       size: size,
     });
 
-    //Buscamos el id de la imagen
+    //Buscamos el id de la ultima imagen agregada
     const imageId = await ImageProduct.findOne({
       limit: 1,
       order: [["createdAt", "DESC"]],
     });
 
-    // Guardar la imagen
+    // Guardamos el producto con el id de la imagen
     await Product.create({
       categoryId,
       name,
@@ -75,11 +79,12 @@ exports.crearProducto = async (req, res, next) => {
   }
 };
 
+// Renderizamos el formulario para los productos
 exports.formularioProductos = async (req, res, next) => {
   let messages = [];
   let products = [];
   try {
-    // Obtenemos las categorías creadas y lo mostramos con la fehca con tiempo
+    // Obtenemos los productos creados y lo mostramos las fecha modificadas con moment.js
     Product.findAll().then(function (products) {
       products = products.map(function (product) {
         product.dataValues.createdAt = moment(
@@ -111,7 +116,7 @@ exports.formularioProductos = async (req, res, next) => {
   }
 };
 
-// Busca un categoría por su URL
+// Busca un producto por su URL
 exports.obtenerProductoPorUrl = async (req, res, next) => {
   try {
     //Actualizamos el formulario
@@ -194,16 +199,20 @@ exports.actualizarProducto = async (req, res, next) => {
         // Obtener el producto mediante el id
         const products = await Product.findByPk(req.params.id);
 
+        // Obtenemos la imagen antigua del producto.
         const imageOld = await ImageProduct.findOne({
           where: {
             id: products.imageId,
           },
         });
 
+        // Eliminamos del servidor la imagen antigua.
         await unlink(path.resolve("./public" + imageOld.dataValues.path));
 
+        // Obtenemos los datos de la nueva imagen.
         const { filename, originalname, mimetype, size } = req.file;
-        //Actualizamos los datos de la imagen
+
+        // Actualizamos los datos de la imagen
         await ImageProduct.update(
           {
             fileName: filename,
@@ -218,7 +227,7 @@ exports.actualizarProducto = async (req, res, next) => {
             },
           }
         );
-        //Actualizamos los datos del producto
+        // Actualizamos los datos del producto
         await Product.update(
           {
             name,
@@ -234,6 +243,8 @@ exports.actualizarProducto = async (req, res, next) => {
         );
         res.redirect("/productos");
       } else {
+        // En caso de no haber una nueva imagen
+        // solo actualizamos los datos del producto
         await Product.update(
           {
             name,
