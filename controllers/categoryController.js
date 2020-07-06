@@ -48,6 +48,7 @@ exports.formularioCategorias = async (req, res, next) => {
 
 // Renderizamos formulario para agregar una categoría
 exports.formularioCrearCategoria = (req, res, next) => {
+  const { auth } = res.locals.usuario;
   res.render("category/addCategory", {
     title: "Agregar categoría | GloboFiestaCake's",
     authAdmin: "yes",

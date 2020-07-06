@@ -25,7 +25,7 @@ const ImageProduct = db.define("imageProduct", {
     allowNull: false,
   },
   mimeType: {
-    type: Sequelize.STRING(10),
+    type: Sequelize.STRING,
     allowNull: false,
   },
   size: {
