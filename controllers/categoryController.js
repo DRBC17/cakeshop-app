@@ -7,6 +7,7 @@ moment.locale("es");
 
 // Renderizamos el formulario para las categorías
 exports.formularioCategorias = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
   let categories = [];
   let messages = [];
   try {
@@ -26,6 +27,7 @@ exports.formularioCategorias = async (req, res, next) => {
       res.render("category/categories", {
         title: "Categorías | GloboFiestaCake's",
         authAdmin: "yes",
+        auth,
         categories: categories,
       });
     });
@@ -37,6 +39,7 @@ exports.formularioCategorias = async (req, res, next) => {
     res.render("category/categories", {
       title: "Categorías | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       messages,
       categories: categories,
     });
@@ -48,6 +51,7 @@ exports.formularioCrearCategoria = (req, res, next) => {
   res.render("category/addCategory", {
     title: "Agregar categoría | GloboFiestaCake's",
     authAdmin: "yes",
+    auth,
   });
 };
 
@@ -55,7 +59,7 @@ exports.formularioCrearCategoria = (req, res, next) => {
 exports.CrearCategoria = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const { name, description } = req.body;
-
+  const { auth } = res.locals.usuario;
   let messages = [];
 
   // Verificar el nombre
@@ -105,6 +109,7 @@ exports.CrearCategoria = async (req, res, next) => {
       res.render("category/addCategory", {
         title: "Agregar categoría | GloboFiestaCake's",
         authAdmin: "yes",
+        auth,
         messages,
       });
     }
@@ -113,6 +118,7 @@ exports.CrearCategoria = async (req, res, next) => {
 
 // Busca un categoría por su URL
 exports.obtenerCategoriaPorUrl = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
   try {
     // Obtener la categoría mediante la URL
     const categories = await Category.findOne({
@@ -128,6 +134,7 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
     res.render("category/updateCategory", {
       title: "Categorías | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       created,
       updated,
       categories: categories,
@@ -142,7 +149,7 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
 exports.actualizarCategoria = async (req, res, next) => {
   // Obtener la información enviada
   const { name, description } = req.body;
-
+  const { auth } = res.locals.usuario;
   let messages = [];
 
   // Verificar el nombre
@@ -171,6 +178,7 @@ exports.actualizarCategoria = async (req, res, next) => {
     res.render("category/updateCategory", {
       title: "Actualizar categoría | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       messages,
       created,
       updated,
@@ -201,7 +209,6 @@ exports.actualizarCategoria = async (req, res, next) => {
         messages.push({ error, type: "alert-danger" });
       }
 
-
       // Enviar valores correctos si la actualización falla
       const categories = await Category.findByPk(req.params.id);
       // Cambiar la visualización de la fecha con Moment.js
@@ -211,6 +218,7 @@ exports.actualizarCategoria = async (req, res, next) => {
       res.render("category/updateCategory", {
         title: "Actualizar categoría | GloboFiestaCake's",
         authAdmin: "yes",
+        auth,
         messages,
         created,
         updated,

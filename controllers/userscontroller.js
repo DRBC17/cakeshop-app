@@ -88,6 +88,7 @@ function authAdmin(res, auth, usuario, messages) {
       title: "Administrador | GloboFiestaCake's",
       usuario,
       authAdmin: "yes",
+      auth,
       messages,
     });
   } else {
@@ -95,6 +96,7 @@ function authAdmin(res, auth, usuario, messages) {
       title: "Mi cuenta | GloboFiestaCake's",
       usuario,
       authAdmin: "yes",
+      auth,
       messages,
     });
   }
@@ -103,13 +105,11 @@ function authAdmin(res, auth, usuario, messages) {
 // Renderizamos el formulario para la cuenta
 exports.formularioCuenta = async (req, res, next) => {
   // Obtenemos el id del usuario actual
-  const { id } = res.locals.usuario;
+  const { id, auth } = res.locals.usuario;
   // Buscamos los datos actualizados del usuario
   const usuario = await User.findByPk(id);
-  // Verificamos si el usuario es administrador
-  const { auth } = usuario;
   const messages = [];
-
+  // Verificamos si el usuario es administrador
   // Si auth es positivo mostrara las opciones de administrador
   authAdmin(res, auth, usuario, messages);
 };
@@ -179,7 +179,7 @@ exports.actualizarUsuario = async (req, res, next) => {
       type: "alert-success",
     });
 
-    // cargamos los nuevos datos del usuario 
+    // cargamos los nuevos datos del usuario
     const usuario = await User.findByPk(id);
     // Verificamos si es administrador y enviamos los nuevos datos
     authAdmin(res, auth, usuario, messages);
