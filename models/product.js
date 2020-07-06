@@ -37,7 +37,7 @@ const Product = db.define(
       },
     },
     description: {
-      type: Sequelize.STRING(100),
+      type: Sequelize.STRING,
       allowNull: false,
       validate: {
         notEmpty: {

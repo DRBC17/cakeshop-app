@@ -12,6 +12,7 @@ moment.locale("es");
 
 //Renderizamos el formulario para agregar producto.
 exports.formularioAgregarProducto = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
   try {
     //Busca las categorías existentes
     categories = await Category.findAll();
@@ -19,6 +20,7 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       categories,
     });
   } catch (error) {
@@ -27,6 +29,7 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       messages,
     });
   }
@@ -37,7 +40,7 @@ exports.crearProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const { filename, originalname, mimetype, size } = req.file;
   const { categoryId, name, description, unitPrice } = req.body;
-
+  const { auth } = res.locals.usuario;
   try {
     // Guardar los datos de la imagen
     await ImageProduct.create({
@@ -73,6 +76,7 @@ exports.crearProducto = async (req, res, next) => {
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       categories,
       messages,
     });
@@ -81,6 +85,7 @@ exports.crearProducto = async (req, res, next) => {
 
 // Renderizamos el formulario para los productos
 exports.formularioProductos = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
   let messages = [];
   let products = [];
   try {
@@ -99,6 +104,7 @@ exports.formularioProductos = async (req, res, next) => {
       res.render("product/recordBook", {
         title: "Productos | GloboFiestaCake's",
         authAdmin: "yes",
+        auth,
         products: products,
       });
     });
@@ -110,6 +116,7 @@ exports.formularioProductos = async (req, res, next) => {
     res.render("product/recordBook", {
       title: "Productos | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       messages,
       products: products,
     });
@@ -118,6 +125,7 @@ exports.formularioProductos = async (req, res, next) => {
 
 // Busca un producto por su URL
 exports.obtenerProductoPorUrl = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
   try {
     //Actualizamos el formulario
     // Obtener el producto mediante la URL
@@ -135,6 +143,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
     res.render("product/updateProduct", {
       title: "Productos | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       created,
       updated,
       category: category.dataValues.name,
@@ -149,6 +158,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
 exports.actualizarProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const { categoryId, name, description, unitPrice } = req.body;
+  const { auth } = res.locals.usuario;
   let messages = [];
 
   // Verificar el nombre
@@ -187,6 +197,7 @@ exports.actualizarProducto = async (req, res, next) => {
       res.render("product/updateProduct", {
         title: "Productos | GloboFiestaCake's",
         authAdmin: "yes",
+        auth,
         created,
         updated,
         messages,

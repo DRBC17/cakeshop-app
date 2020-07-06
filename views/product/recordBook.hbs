@@ -11,15 +11,18 @@
   <div class="col mb-4 animate__animated animate__fadeInDown">
     <div class="card mb-2 animate__animated animate__pulse">
 
-      <h3 class="card-header bg-dark text-white">{{name}}</h3>
+      <h3 class="card-header bg-dark text-white text-center">{{name}}</h3>
       <img src="{{urlImage}}" class="card-img-top imageSize" alt="{{name}}">
       <div class="card-body">
-        <h5 class="card-title">{{description}}</h5>
+        <h5 class="card-title text-center">{{description}}</h5>
         <h4 class="text-dark">L {{unitPrice}}</h4>
         <p class="card-text">Creado: {{createdAt}}</p>
         <p class="card-text">Ultima modificación: {{updatedAt}}</p>
-        <a href="/actualizar_producto/{{url}}" class="btn btn-primary btn-lg">Actualizar</a>
-        <button name="eliminar-producto" type="button" class="btn btn-danger btn-lg">Eliminar</button>
+        <div class="btn-div">
+          <a href="/actualizar_producto/{{url}}" class="btn btn-primary btn-lg btn-card">Actualizar</a>
+          <button name="eliminar-producto" type="button"
+            class="btn btn-danger btn-lg btn-card ml-1">Eliminar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -27,6 +30,6 @@
   {{else}}
 </div>
 <div class="alert alert-info" role="alert">
-  <h5>Aún no tienes ningúna producto. ¡Anímate a crear uno!</h5>
+  <h5>¡Aún no tienes ningúna producto. ¡Anímate a crear uno!</h5>
 </div>
 {{/if}}
