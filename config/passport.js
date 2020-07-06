@@ -5,7 +5,7 @@ const LocalStrategy = require("passport-local");
 // Importar la referencia al modelo que contiene los datos de autenticación
 const User = require("../models/user");
 
-// Definir nuestra estrategia de autencitación
+// Definir nuestra estrategia de autentificacion
 // Local Strategy --> realizar un login con credenciales propias (user, pass)
 passport.use(
   new LocalStrategy(
@@ -25,7 +25,7 @@ passport.use(
         // Si el usuario existe, verificar si su contraseña es correcta
         if (!user.comparePassword(password)) {
           return done(null, false, {
-            message: "Nombre de usuario o contraseña incorrecta",
+            message: "¡Nombre de usuario o contraseña incorrecta!",
           });
         }
 
@@ -34,7 +34,8 @@ passport.use(
       } catch (error) {
         // El usuario no existe
         return done(null, false, {
-          message: "La cuenta de correo electrónico no se encuentra registrada",
+          message:
+            "¡La cuenta de correo electrónico no se encuentra registrada!",
         });
       }
     }
