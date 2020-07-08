@@ -83,6 +83,7 @@ exports.CrearCategoria = async (req, res, next) => {
     res.render("category/addCategory", {
       title: "Agregar categoría | GloboFiestaCake's",
       authAdmin: "yes",
+      auth,
       messages,
     });
   } else {
