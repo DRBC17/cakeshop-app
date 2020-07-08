@@ -4,23 +4,25 @@
 {{>ourMessages}}
 <form action="/actualizar_producto/{{products.id}}" method="post" enctype="multipart/form-data">
     <div class="container p-4">
-        <div class="row">
-            <div class="ml-auto mr-auto form-small">
-                <div class="card animate__animated animate__pulse">
-                    <h5 class="card-header bg-dark text-white text-center">Actualizar producto</h5>
-                    <img src="{{products.urlImage}}" class="card-img-top imageSize" alt="{{products.name}}">
+        <div class="card mb-3  animate__animated animate__fadeInDown">
+            <h5 class="card-header bg-dark text-white text-center">Actualizar categoría</h5>
+            <div class="row no-gutters">
+                <div class="col-md-4 p-1">
+                    <img src="{{products.urlImage}}" class="card-img imageSize border border-dark rounded"
+                        alt="{{products.name}}">
+                    <h3 class="text-dark text-center m-2 mt-2"><strong>L {{products.unitPrice}}</strong></h3>
+                </div>
+                <div class="col-md-8">
                     <div class="card-body">
                         <div class="form-group">
+                            <label for="name">Nombre:</label>
                             <input type="text" name="name" id="name" placeholder="Nombre" class="form-control"
                                 value="{{products.name}}" />
                         </div>
                         <div class="form-group">
-                            <textarea name="description" maxlength = "250" rows="4" id="description" placeholder="Descripción"
+                             <label for="description">Descripción:</label>
+                            <textarea name="description" rows="4" id="description" placeholder="Descripción"
                                 class="form-control">{{products.description}}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <input type="number" name="unitPrice" step="any" placeholder="Precio por unidad"
-                                class="form-control" value="{{products.unitPrice}}" />
                         </div>
                         <div class="form-group">
                             <div class="custom-file">
@@ -31,16 +33,21 @@
                             </div>
                         </div>
                         <h5 class="text-dark">Categoría: {{category}}</h5>
-                        <p class="card-text">Creado: {{created}}</p>
-                        <p class="card-text">Ultima modificación: {{updated}}</p>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success btn-block">
-                                Actualizar
-                            </button>
+                        <div>
+                            <p class="card-text mb-0"><small class="text-muted">Creado: {{created}}</small></p>
+                            <p class="card-text"><small class="text-muted">Ultima modificación: {{updated}}</small>
+                            </p>
+                        </div>
+                        <div class="btn-div mt-2">
+                            <a href="/actualizar_producto/{{url}}"
+                                class="btn btn-primary btn-lg btn-card">Actualizar</a>
+                            <button name="eliminar-producto" type="button"
+                                class="btn btn-danger btn-lg btn-card ml-1">Eliminar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </form>

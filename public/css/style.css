@@ -64,6 +64,9 @@ nav li {
     display: flex;
     flex-direction: column;
   }
+  .imageSize {
+    height: auto;
+  }
 }
 @media (min-width: 768px) {
   .btn-custom {
