@@ -69,6 +69,12 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     categoryController.actualizarCategoria
   );
+  routes.delete(
+    "/eliminar_categoria/:url",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    categoryController.eliminarCategoria
+  );
   // Fin de categoria
 
   // Inicio de Productos

@@ -8,7 +8,7 @@ const slug = require("slug");
 const shortid = require("shortid");
 // Constante para obtener fecha
 const now = new Date();
-
+const Product = require("./product");
 //Modelo de categoría
 const Category = db.define(
   "category",
@@ -58,6 +58,8 @@ const Category = db.define(
     },
   }
 );
+// Definir que una categoría puede tener muchos productos
+Category.hasMany(Product);
 
 // Métodos personalizados
 String.prototype.camelCase = function () {

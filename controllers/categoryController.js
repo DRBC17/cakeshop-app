@@ -238,6 +238,29 @@ exports.actualizarCategoria = async (req, res, next) => {
   }
 };
 
+// Eliminar una categoria
+exports.eliminarCategoria = async (req, res, next) => {
+  // Obtener la URL del proyecto por destructuring query
+  const { url } = req.query;
+
+  // Tratar de eliminar la categoria
+  try {
+    await Category.destroy({
+      where: {
+        url,
+      },
+    });
+
+    // Si el proyecto se puede eliminar sin problemas
+    // Tipos de respuesta que puede tener un servidor
+    // https://developer.mozilla.org/es/docs/Web/HTTP/Status
+    res.status(200).send("Categoria eliminada correctamente");
+  } catch (error) {
+    // Si la categoria no se puede eliminar
+    return next();
+  }
+};
+
 function actualizarUrl(name) {
   // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
   const url = slug(name).toLowerCase();

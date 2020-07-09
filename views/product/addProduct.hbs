@@ -12,12 +12,13 @@
 
             <div class="form-group pt-2">
               <label for="description">Nombre:</label>
-              <input type="text" name="name" placeholder="Pastel de fresa" class="form-control" required value="{{producto.name}}"/>
+              <input type="text" name="name" placeholder="Pastel de fresa" class="form-control" required
+                value="{{producto.name}}" />
             </div>
             <div class="form-group">
-               <label for="description">Descripción:</label>
-              <textarea name="description" maxlength="250" rows="4" id="description"
-                class="form-control" required>{{producto.description}}</textarea>
+              <label for="description">Descripción:</label>
+              <textarea name="description" maxlength="250" rows="4" id="description" class="form-control"
+                required>{{producto.description}}</textarea>
             </div>
             <div class="form-group">
               <select class="custom-select" name="categoryId" required>
@@ -33,8 +34,9 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="basic-addon1">L</span>
                 </div>
-                <input type="number" step="any" name="unitPrice" id="unitPrice" class="form-control" placeholder="0.00"
-                  aria-label="Precio" aria-describedby="basic-addon1" value="{{producto.unitPrice}}" required>
+                <input type="number" step="any" autocomplete="off" name="unitPrice" id="unitPrice" class="form-control"
+                  placeholder="0.00" aria-label="Precio" aria-describedby="basic-addon1" value="{{producto.unitPrice}}"
+                  required>
               </div>
             </div>
 
