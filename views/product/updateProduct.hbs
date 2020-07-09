@@ -3,9 +3,9 @@
 {{!-- Mostrar los mensajes en caso de existir --}}
 {{>ourMessages}}
 <form action="/actualizar_producto/{{products.id}}" method="post" enctype="multipart/form-data">
-    <div class="container p-4">
+    <div class="container pt-4 pb-2 pl-0 pr-0">
         <div class="card mb-3  animate__animated animate__fadeInDown">
-            <h5 class="card-header bg-dark text-white text-center">Actualizar categoría</h5>
+            <h5 class="card-header bg-dark text-white text-center">Actualizar producto</h5>
             <div class="row no-gutters">
                 <div class="col-md-4 p-1">
                     <img src="{{products.urlImage}}" class="card-img imageSize border border-dark rounded"
@@ -29,7 +29,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">L</span>
                                 </div>
-                                <input type="text" name="unitPrice" id="unitPrice" class="form-control" placeholder="0.00" aria-label="Precio"
+                                <input type="number" step="any" name="unitPrice" id="unitPrice" class="form-control" placeholder="0.00" aria-label="Precio"
                                     aria-describedby="basic-addon1" value="{{products.unitPrice}}">
                             </div>
                         </div>

@@ -38,8 +38,9 @@ exports.formularioAgregarProducto = async (req, res, next) => {
 // Creamos un producto
 exports.crearProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
+  const producto = req.body;
   const { filename, originalname, mimetype, size } = req.file;
-  const { categoryId, name, description, unitPrice } = req.body;
+  const { categoryId, name, description, unitPrice } = producto;
   const { auth } = res.locals.usuario;
   try {
     // Guardar los datos de la imagen
@@ -78,6 +79,7 @@ exports.crearProducto = async (req, res, next) => {
       authAdmin: "yes",
       auth,
       categories,
+      producto,
       messages,
     });
   }

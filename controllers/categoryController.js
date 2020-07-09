@@ -59,7 +59,8 @@ exports.formularioCrearCategoria = (req, res, next) => {
 // Creamos una categoría
 exports.CrearCategoria = async (req, res, next) => {
   // Obtenemos por destructuring los datos
-  const { name, description } = req.body;
+  const categoria = req.body;
+  const { name, description } = categoria;
   const { auth } = res.locals.usuario;
   let messages = [];
 
@@ -84,6 +85,7 @@ exports.CrearCategoria = async (req, res, next) => {
       title: "Agregar categoría | GloboFiestaCake's",
       authAdmin: "yes",
       auth,
+      categoria,
       messages,
     });
   } else {
@@ -102,16 +104,18 @@ exports.CrearCategoria = async (req, res, next) => {
       if (error["name"] === "SequelizeUniqueConstraintError") {
         messages = {
           error: "¡Ya existe una categoría registrada con ese nombre!",
+          type: "alert-danger",
         };
       } else {
         // Si no es el error anterior solo mandamos los mensajes
-        messages = { error };
+        messages = { error, type: "alert-danger" };
       }
 
       res.render("category/addCategory", {
         title: "Agregar categoría | GloboFiestaCake's",
         authAdmin: "yes",
         auth,
+        categoria,
         messages,
       });
     }

@@ -6,7 +6,7 @@
 </div>
 {{!-- card-columns --}}
 {{#if products}}
-
+<div class="pb-4">
 {{#each products}}
 <div class="card mb-3  animate__animated animate__fadeInDown">
   <div class="row no-gutters">
@@ -31,10 +31,10 @@
     </div>
   </div>
 </div>
-</div>
+
 
 {{/each}}
-
+</div>
 {{else}}
 <div class="alert alert-info" role="alert">
   <h5>¡Aún no tienes ningúna producto. ¡Anímate a crear uno!</h5>

@@ -51,15 +51,27 @@ const Category = db.define(
         const url = slug(category.name).toLowerCase();
 
         category.url = `${url}_${shortid.generate()}`;
+
+        const name = category.name.camelCase();
+        category.name = name;
       },
       beforeUpdate(category) {
         // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(category.name).toLowerCase();
 
         category.url = `${url}_${shortid.generate()}`;
+
+        const name = category.name.camelCase();
+
+        category.name = name;
       },
     },
   }
 );
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
 module.exports = Category;

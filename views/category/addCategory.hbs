@@ -11,11 +11,11 @@
                     <div class="card-body">
                         <div class="form-group">
                              <label for="description">Nombre:</label>
-                            <input type="text" name="name" id="name" placeholder="Pastel" class="form-control" />
+                            <input type="text" name="name" id="name" placeholder="Pastel" class="form-control" value="{{categoria.name}}" />
                         </div>
                         <div class="form-group">
                              <label for="description">Descripción:</label>
-                            <textarea name="description" maxlength = "250" rows="4" id="description" class="form-control"></textarea>
+                            <textarea name="description" maxlength = "250" rows="4" id="description" class="form-control">{{categoria.description}}</textarea>
                         </div>
                         
                         <div class="form-group">
