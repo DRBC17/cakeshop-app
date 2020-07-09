@@ -22,8 +22,8 @@ botonesEliminar.forEach((botonEliminar) => {
       showCancelButton: true,
       confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar",
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#56CC9D",
+      cancelButtonColor: "#FF7851",
     }).then((result) => {
       // Si el usuario confirma la eliminación la categoría al hacer
       // click en el botón eliminar.
