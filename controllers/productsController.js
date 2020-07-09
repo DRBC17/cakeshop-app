@@ -9,6 +9,10 @@ const path = require("path");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
+// Importar slug
+const slug = require("slug");
+// Importar shortid
+const shortid = require("shortid");
 
 //Renderizamos el formulario para agregar producto.
 exports.formularioAgregarProducto = async (req, res, next) => {
@@ -159,7 +163,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
 // Actualizar los datos de un producto
 exports.actualizarProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
-  const { categoryId, name, description, unitPrice } = req.body;
+  let { categoryId, name, description, unitPrice } = req.body;
   const { auth } = res.locals.usuario;
   let messages = [];
 
@@ -243,9 +247,10 @@ exports.actualizarProducto = async (req, res, next) => {
         // Actualizamos los datos del producto
         await Product.update(
           {
-            name,
+            name: actualizarNombre(name),
             description,
             unitPrice,
+            url: actualizarUrl(name),
             urlImage: "/img/uploads/" + filename,
           },
           {
@@ -260,9 +265,10 @@ exports.actualizarProducto = async (req, res, next) => {
         // solo actualizamos los datos del producto
         await Product.update(
           {
-            name,
+            name: actualizarNombre(name),
             description,
             unitPrice,
+            url: actualizarUrl(name),
           },
           {
             where: {
@@ -276,4 +282,22 @@ exports.actualizarProducto = async (req, res, next) => {
   } catch (error) {
     res.send(error);
   }
+};
+
+function actualizarUrl(name) {
+  // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
+  const url = slug(name).toLowerCase();
+
+  return `${url}_${shortid.generate()}`;
+}
+
+function actualizarNombre(name) {
+  // Convierte el nombre al formato camelCase
+
+  return name.camelCase();
+}
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 };

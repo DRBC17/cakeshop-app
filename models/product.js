@@ -32,7 +32,7 @@ const Product = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "¡Debe ingresar un nombre para la categoría!",
+          msg: "¡Debe ingresar un nombre para el producto!",
         },
       },
     },
@@ -59,7 +59,7 @@ const Product = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "¡Debe ingresar un nombre para la categoría!",
+          msg: "¡Debe ingresar precio para el producto!",
         },
       },
     },
@@ -67,7 +67,7 @@ const Product = db.define(
       type: Sequelize.BOOLEAN,
       defaultValue: 1,
     },
-    urlImage:{
+    urlImage: {
       type: Sequelize.STRING,
     },
     url: {
@@ -79,17 +79,19 @@ const Product = db.define(
       beforeCreate(product) {
         // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(product.name).toLowerCase();
-
         product.url = `${url}_${shortid.generate()}`;
-      },
-      beforeUpdate(product) {
-        // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
-        const url = slug(product.name).toLowerCase();
 
-        product.url = `${url}_${shortid.generate()}`;
+        // Convierte el nombre al formato camelCase
+        const name = category.name.camelCase();
+        category.name = name;
       },
     },
   }
 );
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
 module.exports = Product;

@@ -4,6 +4,10 @@ const Category = require("../models/category");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
+// Importar slug
+const slug = require("slug");
+// Importar shortid
+const shortid = require("shortid");
 
 // Renderizamos el formulario para las categorías
 exports.formularioCategorias = async (req, res, next) => {
@@ -194,7 +198,7 @@ exports.actualizarCategoria = async (req, res, next) => {
     // No existen errores ni mensajes
     try {
       await Category.update(
-        { name, description },
+        { name: actualizarNombre(name), description, url: actualizarUrl(name) },
         {
           where: {
             id: req.params.id,
@@ -232,4 +236,22 @@ exports.actualizarCategoria = async (req, res, next) => {
       });
     }
   }
+};
+
+function actualizarUrl(name) {
+  // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
+  const url = slug(name).toLowerCase();
+
+  return `${url}_${shortid.generate()}`;
+}
+
+function actualizarNombre(name) {
+  // Convierte el nombre al formato camelCase
+
+  return name.camelCase();
+}
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 };

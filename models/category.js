@@ -49,20 +49,10 @@ const Category = db.define(
       beforeCreate(category) {
         // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(category.name).toLowerCase();
-
         category.url = `${url}_${shortid.generate()}`;
 
+        // Convierte el nombre al formato camelCase
         const name = category.name.camelCase();
-        category.name = name;
-      },
-      beforeUpdate(category) {
-        // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
-        const url = slug(category.name).toLowerCase();
-
-        category.url = `${url}_${shortid.generate()}`;
-
-        const name = category.name.camelCase();
-
         category.name = name;
       },
     },
