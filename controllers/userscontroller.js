@@ -20,6 +20,7 @@ exports.formularioCrearCuenta = (req, res, next) => {
 // Creamos una cuenta
 exports.CrearCuenta = async (req, res, next) => {
   // Obtenemos por destructuring los datos
+  const usuario = req.body;
   const {
     firstName,
     lastName,
@@ -27,8 +28,9 @@ exports.CrearCuenta = async (req, res, next) => {
     password,
     passwordConfirm,
     phone,
-  } = req.body;
-
+  } = usuario;
+  console.log(usuario);
+  
   let messages = "";
   // si las contraseñas son iguales creara la cuenta
   if (password === passwordConfirm) {
@@ -58,6 +60,7 @@ exports.CrearCuenta = async (req, res, next) => {
 
       res.render("user/register", {
         title: "Regístrate en GloboFiestaCake's",
+        usuario,
         messages,
       });
     }
@@ -66,7 +69,9 @@ exports.CrearCuenta = async (req, res, next) => {
     messages = { error: "¡Las contraseñas deben coincidir!" };
     res.render("user/register", {
       title: "Regístrate en GloboFiestaCake's",
+      usuario,
       messages,
+    
     });
   }
 };

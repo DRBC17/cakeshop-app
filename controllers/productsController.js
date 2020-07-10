@@ -9,6 +9,10 @@ const path = require("path");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
+// Importar slug
+const slug = require("slug");
+// Importar shortid
+const shortid = require("shortid");
 
 //Renderizamos el formulario para agregar producto.
 exports.formularioAgregarProducto = async (req, res, next) => {
@@ -38,48 +42,83 @@ exports.formularioAgregarProducto = async (req, res, next) => {
 // Creamos un producto
 exports.crearProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
+  const producto = req.body;
   const { filename, originalname, mimetype, size } = req.file;
-  const { categoryId, name, description, unitPrice } = req.body;
+  const { categoryId, name, description, unitPrice } = producto;
   const { auth } = res.locals.usuario;
-  try {
-    // Guardar los datos de la imagen
-    await ImageProduct.create({
-      fileName: filename,
-      path: "/img/uploads/" + filename,
-      originalName: originalname,
-      mimeType: mimetype,
-      size: size,
-    });
+  let messages = [];
 
-    //Buscamos el id de la ultima imagen agregada
-    const imageId = await ImageProduct.findOne({
-      limit: 1,
-      order: [["createdAt", "DESC"]],
+  if (!categoryId) {
+    messages.push({
+      error: "¡Se debe seleccionar una categoría!",
+      type: "alert-danger",
     });
+  }
 
-    // Guardamos el producto con el id de la imagen
-    await Product.create({
-      categoryId,
-      name,
-      description,
-      unitPrice,
-      imageId: imageId.id,
-      urlImage: imageId.path,
+  if (isNaN(unitPrice)) {
+    messages.push({
+      error: "¡El precio debe ser un numero!",
+      type: "alert-danger",
     });
+  }
 
-    res.redirect("/productos");
-  } catch (error) {
-    const messages = { error };
-    //Busca las categorías existentes
-    categories = await Category.findAll();
+  if (messages.length) {
+    const categories = await Category.findAll();
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
       authAdmin: "yes",
       auth,
       categories,
+      producto,
       messages,
     });
+  } else {
+    try {
+      // Guardar los datos de la imagen
+      await ImageProduct.create({
+        fileName: filename,
+        path: "/img/uploads/" + filename,
+        originalName: originalname,
+        mimeType: mimetype,
+        size: size,
+      });
+
+      //Buscamos el id de la ultima imagen agregada
+      const imageId = await ImageProduct.findOne({
+        limit: 1,
+        order: [["createdAt", "DESC"]],
+      });
+
+      // Guardamos el producto con el id de la imagen
+      await Product.create({
+        categoryId,
+        name,
+        description,
+        unitPrice,
+        imageId: imageId.id,
+        urlImage: imageId.path,
+      });
+
+      res.redirect("/productos");
+    } catch (error) {
+      messages.push({
+        error,
+        type: "alert-danger",
+      });
+
+      //Busca las categorías existentes
+      const categories = await Category.findAll();
+      //Las enviá para mostrarlas en el formulario
+      res.render("product/addProduct", {
+        title: "Agregar producto | GloboFiestaCake's",
+        authAdmin: "yes",
+        auth,
+        categories,
+        producto,
+        messages,
+      });
+    }
   }
 };
 
@@ -157,7 +196,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
 // Actualizar los datos de un producto
 exports.actualizarProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
-  const { categoryId, name, description, unitPrice } = req.body;
+  let { categoryId, name, description, unitPrice } = req.body;
   const { auth } = res.locals.usuario;
   let messages = [];
 
@@ -172,6 +211,12 @@ exports.actualizarProducto = async (req, res, next) => {
   if (!description) {
     messages.push({
       error: "¡Debe ingresar una descripción!",
+      type: "alert-danger",
+    });
+  }
+  if (isNaN(unitPrice)) {
+    messages.push({
+      error: "¡El precio debe ser un numero!",
       type: "alert-danger",
     });
   }
@@ -241,9 +286,10 @@ exports.actualizarProducto = async (req, res, next) => {
         // Actualizamos los datos del producto
         await Product.update(
           {
-            name,
+            name: actualizarNombre(name),
             description,
             unitPrice,
+            url: actualizarUrl(name),
             urlImage: "/img/uploads/" + filename,
           },
           {
@@ -258,9 +304,10 @@ exports.actualizarProducto = async (req, res, next) => {
         // solo actualizamos los datos del producto
         await Product.update(
           {
-            name,
+            name: actualizarNombre(name),
             description,
             unitPrice,
+            url: actualizarUrl(name),
           },
           {
             where: {
@@ -274,4 +321,22 @@ exports.actualizarProducto = async (req, res, next) => {
   } catch (error) {
     res.send(error);
   }
+};
+
+function actualizarUrl(name) {
+  // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
+  const url = slug(name).toLowerCase();
+
+  return `${url}_${shortid.generate()}`;
+}
+
+function actualizarNombre(name) {
+  // Convierte el nombre al formato camelCase
+
+  return name.camelCase();
+}
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 };

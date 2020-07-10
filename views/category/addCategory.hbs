@@ -1,7 +1,7 @@
 {{!-- Formulario de agregar categoría --}}
 
 {{!-- Mostrar los mensajes en caso de existir --}}
-{{>messages}}
+{{>ourMessages}}
 <form action="/agregar_categoria" method="post">
     <div class="container p-4">
         <div class="row">
@@ -10,10 +10,12 @@
                     <h5 class="card-header bg-dark text-white text-center">Agregar categoría</h5>
                     <div class="card-body">
                         <div class="form-group">
-                            <input type="text" name="name" id="name" placeholder="Nombre" class="form-control" />
+                             <label for="description">Nombre:</label>
+                            <input type="text" name="name" id="name" placeholder="Pastel" class="form-control" value="{{categoria.name}}" />
                         </div>
                         <div class="form-group">
-                            <textarea name="description" rows="4" id="description" placeholder="Descripción" class="form-control"></textarea>
+                             <label for="description">Descripción:</label>
+                            <textarea name="description" maxlength = "250" rows="4" id="description" class="form-control">{{categoria.description}}</textarea>
                         </div>
                         
                         <div class="form-group">
