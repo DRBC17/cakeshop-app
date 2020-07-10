@@ -8,6 +8,7 @@ moment.locale("es");
 const slug = require("slug");
 // Importar shortid
 const shortid = require("shortid");
+const Product = require("../models/product");
 
 // Renderizamos el formulario para las categorías
 exports.formularioCategorias = async (req, res, next) => {
@@ -243,21 +244,23 @@ exports.eliminarCategoria = async (req, res, next) => {
   // Obtener la URL del proyecto por destructuring query
   const { url } = req.query;
 
-  // Tratar de eliminar la categoria
-  try {
-    await Category.destroy({
-      where: {
-        url,
-      },
-    });
+  if (verificarCategoriaEnUso(url)) {
+    // Tratar de eliminar la categoria
+    try {
+      await Category.destroy({
+        where: {
+          url,
+        },
+      });
 
-    // Si el proyecto se puede eliminar sin problemas
-    // Tipos de respuesta que puede tener un servidor
-    // https://developer.mozilla.org/es/docs/Web/HTTP/Status
-    res.status(200).send("Categoria eliminada correctamente");
-  } catch (error) {
-    // Si la categoria no se puede eliminar
-    return next();
+      // Si el proyecto se puede eliminar sin problemas
+      // Tipos de respuesta que puede tener un servidor
+      // https://developer.mozilla.org/es/docs/Web/HTTP/Status
+      res.status(200).send("Categoria eliminada correctamente");
+    } catch (error) {
+      // Si la categoria no se puede eliminar
+      return next();
+    }
   }
 };
 

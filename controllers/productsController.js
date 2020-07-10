@@ -43,6 +43,7 @@ exports.formularioAgregarProducto = async (req, res, next) => {
 exports.crearProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
   const producto = req.body;
+  console.log(producto);
   const { filename, originalname, mimetype, size } = req.file;
   const { categoryId, name, description, unitPrice } = producto;
   const { auth } = res.locals.usuario;
@@ -76,7 +77,7 @@ exports.crearProducto = async (req, res, next) => {
   } catch (error) {
     const messages = { error };
     //Busca las categorías existentes
-    categories = await Category.findAll();
+    const categories = await Category.findAll();
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",

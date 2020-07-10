@@ -82,8 +82,8 @@ const Product = db.define(
         product.url = `${url}_${shortid.generate()}`;
 
         // Convierte el nombre al formato camelCase
-        const name = category.name.camelCase();
-        category.name = name;
+        const name = product.name.camelCase();
+        product.name = name;
       },
     },
   }
