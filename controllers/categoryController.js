@@ -244,7 +244,7 @@ exports.eliminarCategoria = async (req, res, next) => {
   // Obtener la URL del proyecto por destructuring query
   const { url } = req.query;
 
-  if (verificarCategoriaEnUso(url)) {
+
     // Tratar de eliminar la categoria
     try {
       await Category.destroy({
@@ -261,7 +261,7 @@ exports.eliminarCategoria = async (req, res, next) => {
       // Si la categoria no se puede eliminar
       return next();
     }
-  }
+  
 };
 
 function actualizarUrl(name) {

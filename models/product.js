@@ -6,6 +6,7 @@ const db = require("../config/db");
 const slug = require("slug");
 // Importar shortid
 const shortid = require("shortid");
+const Category = require("./category");
 // Constante para obtener fecha
 const now = new Date();
 
@@ -88,6 +89,8 @@ const Product = db.define(
     },
   }
 );
+// Definir que una categoría puede tener muchos productos
+Product.belongsTo(Category);
 
 // Métodos personalizados
 String.prototype.camelCase = function () {

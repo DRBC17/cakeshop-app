@@ -58,8 +58,6 @@ const Category = db.define(
     },
   }
 );
-// Definir que una categoría puede tener muchos productos
-Category.hasMany(Product);
 
 // Métodos personalizados
 String.prototype.camelCase = function () {
