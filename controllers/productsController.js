@@ -63,6 +63,11 @@ exports.crearProducto = async (req, res, next) => {
   }
 
   if (messages.length) {
+    if (req.file) {
+      // En caso de error eliminamos la imagen que se guardo en el servidor
+      await unlink(path.resolve("./public/img/uploads/" + filename));
+    }
+
     const categories = await Category.findAll();
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
@@ -106,6 +111,11 @@ exports.crearProducto = async (req, res, next) => {
         error,
         type: "alert-danger",
       });
+
+      if (req.file) {
+        // En caso de error eliminamos la imagen que se guardo en el servidor
+        await unlink(path.resolve("./public/img/uploads/" + filename));
+      }
 
       //Busca las categorías existentes
       const categories = await Category.findAll();
