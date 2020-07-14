@@ -149,7 +149,7 @@ exports.formularioProductos = async (req, res, next) => {
       res.render("product/recordBook", {
         title: "Productos | GloboFiestaCake's",
         auth,
-        products: products,
+        products: products.reverse(),
       });
     });
   } catch (error) {
@@ -161,7 +161,7 @@ exports.formularioProductos = async (req, res, next) => {
       title: "Productos | GloboFiestaCake's",
       auth,
       messages,
-      products: products,
+      products: products.reverse(),
     });
   }
 };
@@ -184,6 +184,9 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
     // Cambiar la visualización de la fecha con Moment.js
     const created = moment(products["dataValues"].createdAt).format("LLLL");
     const updated = moment(products["dataValues"].updatedAt).fromNow();
+
+    categories.push({ categoryId: products.dataValues.categoryId });
+    console.log(categories);
 
     res.render("product/updateProduct", {
       title: "Productos | GloboFiestaCake's",
@@ -252,7 +255,7 @@ exports.actualizarProducto = async (req, res, next) => {
       }
 
       res.render("product/updateProduct", {
-        title: "Producto | GloboFiestaCake's",
+        title: "Actualizar producto | GloboFiestaCake's",
         auth,
         created,
         updated,
@@ -299,6 +302,7 @@ exports.actualizarProducto = async (req, res, next) => {
           {
             name: actualizarNombre(name),
             description,
+            categoryId,
             unitPrice,
             url: actualizarUrl(name),
             urlImage: "/img/uploads/" + filename,
@@ -317,6 +321,7 @@ exports.actualizarProducto = async (req, res, next) => {
           {
             name: actualizarNombre(name),
             description,
+            categoryId,
             unitPrice,
             url: actualizarUrl(name),
           },
