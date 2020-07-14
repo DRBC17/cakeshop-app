@@ -7,33 +7,34 @@
 {{!-- card-columns --}}
 {{#if products}}
 <div class="pb-4">
-{{#each products}}
-<div class="card mb-3  animate__animated animate__fadeInDown">
-  <div class="row no-gutters">
-    <div class="col-md-4 p-1">
-      <img src="{{urlImage}}" class="card-img border border-dark rounded" alt="{{name}}">
-      <h3 class="text-dark text-center m-2 mt-2"><strong>L {{unitPrice}}</strong></h3>
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h4 class="card-title text-secondary"><strong>{{name}}</strong></h4>
-        <p class="card-text">{{description}}</p>
-        <class>
-          <div>
-            <p class="card-text mb-0"><small class="text-muted">Creado: {{createdAt}}</small></p>
-            <p class="card-text"><small class="text-muted">Ultima modificación: {{updatedAt}}</small></p>
-          </div>
-          <div class="btn-div mt-2">
-            <a href="/actualizar_producto/{{url}}" class="btn btn-primary btn-lg btn-card">Actualizar</a>
-            <button name="eliminar-producto" type="button" class="btn btn-danger btn-lg btn-card ml-1">Eliminar</button>
-          </div>
+  {{#each products}}
+  <div class="card mb-3  animate__animated animate__fadeInDown">
+    <div class="row no-gutters">
+      <div class="col-md-4 p-1">
+        <img src="{{urlImage}}" class="card-img border border-dark rounded" alt="{{name}}">
+        <h3 class="text-dark text-center m-2 mt-2"><strong>L {{unitPrice}}</strong></h3>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h4 class="card-title text-secondary"><strong>{{name}}</strong></h4>
+          <p class="card-text">{{description}}</p>
+          <class>
+            <div>
+              <p class="card-text mb-0"><small class="text-muted">Creado: {{createdAt}}</small></p>
+              <p class="card-text"><small class="text-muted">Ultima modificación: {{updatedAt}}</small></p>
+            </div>
+            <div class="btn-div mt-2">
+              <a href="/actualizar_producto/{{url}}" class="btn btn-primary btn-lg btn-card">Actualizar</a>
+              <button name="eliminar-producto" data-producto-url={{url}} type="button"
+                class="btn btn-danger btn-lg btn-card ml-1">Eliminar</button>
+            </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
-{{/each}}
+  {{/each}}
 </div>
 {{else}}
 <div class="alert alert-info" role="alert">

@@ -344,6 +344,46 @@ exports.actualizarProducto = async (req, res, next) => {
   }
 };
 
+// Eliminar una producto
+exports.eliminarProducto = async (req, res, next) => {
+  // Obtener la URL del producto por destructuring query
+  const { url } = req.query;
+
+  // Tratar de eliminar la producto
+  try {
+    // Obtener el producto mediante el id
+    const products = await Product.findOne({
+      where: {
+        url,
+      },
+    });
+
+    // Obtenemos la imagen antigua del producto.
+    const imageOld = await ImageProduct.findOne({
+      where: {
+        id: products.imageId,
+      },
+    });
+
+    // Eliminamos del servidor la imagen antigua.
+    await unlink(path.resolve("./public" + imageOld.dataValues.path));
+
+    await Product.destroy({
+      where: {
+        url,
+      },
+    });
+
+    // Si el producto se puede eliminar sin problemas
+    // Tipos de respuesta que puede tener un servidor
+    // https://developer.mozilla.org/es/docs/Web/HTTP/Status
+    res.status(200).send("Producto eliminado correctamente");
+  } catch (error) {
+    // Si el producto no se puede eliminar
+    return next();
+  }
+};
+
 function actualizarUrl(name) {
   // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
   const url = slug(name).toLowerCase();

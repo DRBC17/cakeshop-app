@@ -241,7 +241,7 @@ exports.actualizarCategoria = async (req, res, next) => {
 
 // Eliminar una categoria
 exports.eliminarCategoria = async (req, res, next) => {
-  // Obtener la URL del proyecto por destructuring query
+  // Obtener la URL de la categoria por destructuring query
   const { url } = req.query;
 
   // Tratar de eliminar la categoria
@@ -252,7 +252,7 @@ exports.eliminarCategoria = async (req, res, next) => {
       },
     });
 
-    // Si el proyecto se puede eliminar sin problemas
+    // Si la categoria se puede eliminar sin problemas
     // Tipos de respuesta que puede tener un servidor
     // https://developer.mozilla.org/es/docs/Web/HTTP/Status
     res.status(200).send("Categoria eliminada correctamente");

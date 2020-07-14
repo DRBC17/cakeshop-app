@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const routes = Router();
 
-// Importamos los controladores 
+// Importamos los controladores
 const usersController = require("../controllers/usersController");
 const authController = require("../controllers/authController");
 const storeController = require("../controllers/storeController");
@@ -108,8 +108,13 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     productsController.actualizarProducto
   );
-
-  // Fin de productos 
+  routes.delete(
+    "/eliminar_producto/:url",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.eliminarProducto
+  );
+  // Fin de productos
 
   // Inicio de Tienda
   routes.get(
@@ -117,6 +122,6 @@ module.exports = function () {
     authController.usuarioAutenticado,
     storeController.formularioTiendaHome
   );
-  // Fin de tienda 
+  // Fin de tienda
   return routes;
 };

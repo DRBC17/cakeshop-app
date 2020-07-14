@@ -17,7 +17,7 @@ botonesEliminar.forEach((botonEliminar) => {
     //sweetalert2.github.io/
     https: Swal.fire({
       title: "¿Estás seguro que deseas eliminar este producto?",
-      text: "¡Si eliminas este producto no es posible recuperarla!",
+      text: "¡Si eliminas este producto no es posible recuperarlo!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Eliminar",
@@ -30,7 +30,7 @@ botonesEliminar.forEach((botonEliminar) => {
       // Nos vamos a conectar mediante axios utilizando AJAX
       if (result.value) {
         // Obtener la URL del sitio
-        const url = `${location.origin}/eliminar_producto/${urlCategoria}`;
+        const url = `${location.origin}/eliminar_producto/${urlProducto}`;
 
         //   Implementar axios para la petición
         axios
@@ -53,7 +53,7 @@ botonesEliminar.forEach((botonEliminar) => {
         //   Redireccionar a /
         setTimeout(() => {
           window.location.href = "/productos";
-        }, 3000);
+        }, 2000);
       }
     });
   });

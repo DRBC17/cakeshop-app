@@ -53,7 +53,7 @@ botonesEliminar.forEach((botonEliminar) => {
         //   Redireccionar a /
         setTimeout(() => {
           window.location.href = "/categorias";
-        }, 3000);
+        }, 2000);
       }
     });
   });
