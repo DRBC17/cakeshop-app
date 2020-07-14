@@ -31,7 +31,6 @@ exports.formularioCategorias = async (req, res, next) => {
       });
       res.render("category/categories", {
         title: "Categorías | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         categories: categories,
       });
@@ -43,7 +42,6 @@ exports.formularioCategorias = async (req, res, next) => {
     });
     res.render("category/categories", {
       title: "Categorías | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
       categories: categories,
@@ -56,7 +54,6 @@ exports.formularioCrearCategoria = (req, res, next) => {
   const { auth } = res.locals.usuario;
   res.render("category/addCategory", {
     title: "Agregar categoría | GloboFiestaCake's",
-    authAdmin: "yes",
     auth,
   });
 };
@@ -88,7 +85,6 @@ exports.CrearCategoria = async (req, res, next) => {
   if (messages.length) {
     res.render("category/addCategory", {
       title: "Agregar categoría | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       categoria,
       messages,
@@ -118,7 +114,6 @@ exports.CrearCategoria = async (req, res, next) => {
 
       res.render("category/addCategory", {
         title: "Agregar categoría | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         categoria,
         messages,
@@ -144,7 +139,6 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
 
     res.render("category/updateCategory", {
       title: "Categorías | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       created,
       updated,
@@ -188,7 +182,6 @@ exports.actualizarCategoria = async (req, res, next) => {
 
     res.render("category/updateCategory", {
       title: "Actualizar categoría | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
       created,
@@ -228,7 +221,6 @@ exports.actualizarCategoria = async (req, res, next) => {
 
       res.render("category/updateCategory", {
         title: "Actualizar categoría | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         messages,
         created,

@@ -23,7 +23,6 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       categories,
     });
@@ -32,7 +31,6 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     const messages = { error };
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
     });
@@ -72,7 +70,6 @@ exports.crearProducto = async (req, res, next) => {
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       categories,
       producto,
@@ -122,7 +119,6 @@ exports.crearProducto = async (req, res, next) => {
       //Las enviá para mostrarlas en el formulario
       res.render("product/addProduct", {
         title: "Agregar producto | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         categories,
         producto,
@@ -152,7 +148,6 @@ exports.formularioProductos = async (req, res, next) => {
       });
       res.render("product/recordBook", {
         title: "Productos | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         products: products,
       });
@@ -164,7 +159,6 @@ exports.formularioProductos = async (req, res, next) => {
     });
     res.render("product/recordBook", {
       title: "Productos | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
       products: products,
@@ -191,7 +185,6 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
 
     res.render("product/updateProduct", {
       title: "Productos | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       created,
       updated,
@@ -257,7 +250,6 @@ exports.actualizarProducto = async (req, res, next) => {
 
       res.render("product/updateProduct", {
         title: "Producto | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         created,
         updated,
