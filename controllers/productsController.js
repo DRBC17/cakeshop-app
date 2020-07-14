@@ -249,8 +249,14 @@ exports.actualizarProducto = async (req, res, next) => {
       const created = moment(products["dataValues"].createdAt).format("LLLL");
       const updated = moment(products["dataValues"].updatedAt).fromNow();
 
+      if (req.file) {
+        const { filename } = req.file;
+        // En caso de error eliminamos la imagen que se guardo en el servidor
+        await unlink(path.resolve("./public/img/uploads/" + filename));
+      }
+
       res.render("product/updateProduct", {
-        title: "Productos | GloboFiestaCake's",
+        title: "Producto | GloboFiestaCake's",
         authAdmin: "yes",
         auth,
         created,
@@ -329,6 +335,11 @@ exports.actualizarProducto = async (req, res, next) => {
       }
     }
   } catch (error) {
+    if (req.file) {
+      const { filename } = req.file;
+      // En caso de error eliminamos la imagen que se guardo en el servidor
+      await unlink(path.resolve("./public/img/uploads/" + filename));
+    }
     res.send(error);
   }
 };
