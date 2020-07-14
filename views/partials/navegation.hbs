@@ -1,4 +1,4 @@
-{{#if authAdmin}}
+{{#if auth}}
 
 {{!-- Menu cuando has iniciado sesión --}}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -19,12 +19,13 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="/cuenta">Mi cuenta</a>
-          {{#if auth}}
+          {{#compare auth 2}}
           <a class="dropdown-item" href="/productos">Productos</a>
           <a class="dropdown-item" href="/categorias">Categorías</a>
-          {{else}}
+          {{/compare}}
+          {{#compare auth 1}}
           <a class="dropdown-item" href="#">Mis pedidos</a>
-          {{/if}}
+          {{/compare}}
         </div>
       </li>
       <li class="nav-item">
