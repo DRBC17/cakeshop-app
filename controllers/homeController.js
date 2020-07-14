@@ -1,5 +1,8 @@
-// Renderizar el formulario de home
+// Renderizar el formulario de inicio
 exports.formularioHome = (req, res, next) => {
-     res.redirect('/tienda');
-  };
-  
+  const { auth } = res.locals.usuario;
+  res.render("home", {
+    title: "Bienvenido a GloboFiestaCake's",
+    auth,
+  });
+};
