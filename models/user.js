@@ -68,8 +68,8 @@ const User = db.define(
       },
     },
     auth: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: 0,
+      type: Sequelize.INTEGER,
+      defaultValue: 1,
     },
     token: Sequelize.STRING,
     expiration: Sequelize.DATE,

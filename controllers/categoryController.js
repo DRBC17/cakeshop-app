@@ -31,9 +31,8 @@ exports.formularioCategorias = async (req, res, next) => {
       });
       res.render("category/categories", {
         title: "Categorías | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
-        categories: categories,
+        categories: categories.reverse(),
       });
     });
   } catch (error) {
@@ -43,10 +42,9 @@ exports.formularioCategorias = async (req, res, next) => {
     });
     res.render("category/categories", {
       title: "Categorías | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
-      categories: categories,
+      categories: categories.reverse(),
     });
   }
 };
@@ -56,7 +54,6 @@ exports.formularioCrearCategoria = (req, res, next) => {
   const { auth } = res.locals.usuario;
   res.render("category/addCategory", {
     title: "Agregar categoría | GloboFiestaCake's",
-    authAdmin: "yes",
     auth,
   });
 };
@@ -88,7 +85,6 @@ exports.CrearCategoria = async (req, res, next) => {
   if (messages.length) {
     res.render("category/addCategory", {
       title: "Agregar categoría | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       categoria,
       messages,
@@ -118,7 +114,6 @@ exports.CrearCategoria = async (req, res, next) => {
 
       res.render("category/addCategory", {
         title: "Agregar categoría | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         categoria,
         messages,
@@ -143,8 +138,7 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
     const updated = moment(categories["dataValues"].updatedAt).fromNow();
 
     res.render("category/updateCategory", {
-      title: "Categorías | GloboFiestaCake's",
-      authAdmin: "yes",
+      title: "Actualizar categoria | GloboFiestaCake's",
       auth,
       created,
       updated,
@@ -188,7 +182,6 @@ exports.actualizarCategoria = async (req, res, next) => {
 
     res.render("category/updateCategory", {
       title: "Actualizar categoría | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
       created,
@@ -228,7 +221,6 @@ exports.actualizarCategoria = async (req, res, next) => {
 
       res.render("category/updateCategory", {
         title: "Actualizar categoría | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         messages,
         created,
@@ -241,27 +233,25 @@ exports.actualizarCategoria = async (req, res, next) => {
 
 // Eliminar una categoria
 exports.eliminarCategoria = async (req, res, next) => {
-  // Obtener la URL del proyecto por destructuring query
+  // Obtener la URL de la categoria por destructuring query
   const { url } = req.query;
 
+  // Tratar de eliminar la categoria
+  try {
+    await Category.destroy({
+      where: {
+        url,
+      },
+    });
 
-    // Tratar de eliminar la categoria
-    try {
-      await Category.destroy({
-        where: {
-          url,
-        },
-      });
-
-      // Si el proyecto se puede eliminar sin problemas
-      // Tipos de respuesta que puede tener un servidor
-      // https://developer.mozilla.org/es/docs/Web/HTTP/Status
-      res.status(200).send("Categoria eliminada correctamente");
-    } catch (error) {
-      // Si la categoria no se puede eliminar
-      return next();
-    }
-  
+    // Si la categoria se puede eliminar sin problemas
+    // Tipos de respuesta que puede tener un servidor
+    // https://developer.mozilla.org/es/docs/Web/HTTP/Status
+    res.status(200).send("Categoria eliminada correctamente");
+  } catch (error) {
+    // Si la categoria no se puede eliminar
+    return next();
+  }
 };
 
 function actualizarUrl(name) {

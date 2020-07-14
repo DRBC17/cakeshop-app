@@ -60,6 +60,8 @@ app.engine(
     layoutsDir: path.join(app.get("views"), "layouts"),
     // Definimos la carpeta partials
     partialsDir: path.join(app.get("views"), "partials"),
+    // Definimos la carpeta de los helpers
+    helpers: require("./helpers/handlebars"),
     // Definimos la extension del motor
     extname: ".hbs",
     // Prevenimos el error recomendado por Handlebars

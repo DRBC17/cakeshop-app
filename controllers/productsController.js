@@ -23,7 +23,6 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       categories,
     });
@@ -32,7 +31,6 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     const messages = { error };
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
     });
@@ -63,11 +61,15 @@ exports.crearProducto = async (req, res, next) => {
   }
 
   if (messages.length) {
+    if (req.file) {
+      // En caso de error eliminamos la imagen que se guardo en el servidor
+      await unlink(path.resolve("./public/img/uploads/" + filename));
+    }
+
     const categories = await Category.findAll();
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       categories,
       producto,
@@ -107,12 +109,16 @@ exports.crearProducto = async (req, res, next) => {
         type: "alert-danger",
       });
 
+      if (req.file) {
+        // En caso de error eliminamos la imagen que se guardo en el servidor
+        await unlink(path.resolve("./public/img/uploads/" + filename));
+      }
+
       //Busca las categorías existentes
       const categories = await Category.findAll();
       //Las enviá para mostrarlas en el formulario
       res.render("product/addProduct", {
         title: "Agregar producto | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         categories,
         producto,
@@ -142,9 +148,8 @@ exports.formularioProductos = async (req, res, next) => {
       });
       res.render("product/recordBook", {
         title: "Productos | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
-        products: products,
+        products: products.reverse(),
       });
     });
   } catch (error) {
@@ -154,10 +159,9 @@ exports.formularioProductos = async (req, res, next) => {
     });
     res.render("product/recordBook", {
       title: "Productos | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
-      products: products,
+      products: products.reverse(),
     });
   }
 };
@@ -175,17 +179,19 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
     });
 
     const category = await Category.findByPk(products.dataValues.categoryId);
+    //Busca las categorías existentes
+    const categories = await Category.findAll();
     // Cambiar la visualización de la fecha con Moment.js
     const created = moment(products["dataValues"].createdAt).format("LLLL");
     const updated = moment(products["dataValues"].updatedAt).fromNow();
 
     res.render("product/updateProduct", {
-      title: "Productos | GloboFiestaCake's",
-      authAdmin: "yes",
+      title: "Actualizar producto | GloboFiestaCake's",
       auth,
       created,
       updated,
       category: category.dataValues.name,
+      categories,
       products: products,
     });
   } catch (error) {
@@ -239,9 +245,14 @@ exports.actualizarProducto = async (req, res, next) => {
       const created = moment(products["dataValues"].createdAt).format("LLLL");
       const updated = moment(products["dataValues"].updatedAt).fromNow();
 
+      if (req.file) {
+        const { filename } = req.file;
+        // En caso de error eliminamos la imagen que se guardo en el servidor
+        await unlink(path.resolve("./public/img/uploads/" + filename));
+      }
+
       res.render("product/updateProduct", {
-        title: "Productos | GloboFiestaCake's",
-        authAdmin: "yes",
+        title: "Actualizar producto | GloboFiestaCake's",
         auth,
         created,
         updated,
@@ -288,6 +299,7 @@ exports.actualizarProducto = async (req, res, next) => {
           {
             name: actualizarNombre(name),
             description,
+            categoryId,
             unitPrice,
             url: actualizarUrl(name),
             urlImage: "/img/uploads/" + filename,
@@ -306,6 +318,7 @@ exports.actualizarProducto = async (req, res, next) => {
           {
             name: actualizarNombre(name),
             description,
+            categoryId,
             unitPrice,
             url: actualizarUrl(name),
           },
@@ -319,7 +332,52 @@ exports.actualizarProducto = async (req, res, next) => {
       }
     }
   } catch (error) {
+    if (req.file) {
+      const { filename } = req.file;
+      // En caso de error eliminamos la imagen que se guardo en el servidor
+      await unlink(path.resolve("./public/img/uploads/" + filename));
+    }
     res.send(error);
+  }
+};
+
+// Eliminar una producto
+exports.eliminarProducto = async (req, res, next) => {
+  // Obtener la URL del producto por destructuring query
+  const { url } = req.query;
+
+  // Tratar de eliminar la producto
+  try {
+    // Obtener el producto mediante el id
+    const products = await Product.findOne({
+      where: {
+        url,
+      },
+    });
+
+    // Obtenemos la imagen antigua del producto.
+    const imageOld = await ImageProduct.findOne({
+      where: {
+        id: products.imageId,
+      },
+    });
+
+    // Eliminamos del servidor la imagen antigua.
+    await unlink(path.resolve("./public" + imageOld.dataValues.path));
+
+    await Product.destroy({
+      where: {
+        url,
+      },
+    });
+
+    // Si el producto se puede eliminar sin problemas
+    // Tipos de respuesta que puede tener un servidor
+    // https://developer.mozilla.org/es/docs/Web/HTTP/Status
+    res.status(200).send("Producto eliminado correctamente");
+  } catch (error) {
+    // Si el producto no se puede eliminar
+    return next();
   }
 };
 

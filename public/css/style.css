@@ -86,3 +86,13 @@ nav li {
 }
 
 
+
+@media (max-width: 768px) {
+  .barra{
+    width: 100%;
+  }
+  
+  .btn-buscar{
+    width: 100%;
+  }
+}

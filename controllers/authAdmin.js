@@ -15,5 +15,5 @@ exports.adminAutenticado = async (req, res, next) => {
   }
 
   // Si el usuario no administrador lo regresamos al inicio.
-  return res.redirect("/");
+  return res.redirect("/tienda");
 };
