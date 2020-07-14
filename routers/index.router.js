@@ -120,12 +120,12 @@ module.exports = function () {
   // Inicio de Tienda
   routes.get(
     "/tienda",
-    authController.usuarioAutenticado,
+  
     storeController.formularioTiendaHome
   );
   routes.get(
     "/",
-    authController.usuarioAutenticado,
+
     homeController.formularioHome
   );
 
