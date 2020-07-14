@@ -179,6 +179,8 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
     });
 
     const category = await Category.findByPk(products.dataValues.categoryId);
+    //Busca las categorías existentes
+    const categories = await Category.findAll();
     // Cambiar la visualización de la fecha con Moment.js
     const created = moment(products["dataValues"].createdAt).format("LLLL");
     const updated = moment(products["dataValues"].updatedAt).fromNow();
@@ -189,6 +191,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
       created,
       updated,
       category: category.dataValues.name,
+      categories,
       products: products,
     });
   } catch (error) {
