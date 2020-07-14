@@ -19,8 +19,9 @@
         <p class="card-text">Ultima modificación: {{updatedAt}}</p>
         <div class="btn-div">
           <a href="/actualizar_categoria/{{url}}" class="btn btn-primary btn-lg btn-card">Actualizar</a>
-          <button name="eliminar-categoria" type="button"
+          <button name="eliminar-categoria" data-categoria-url={{url}} type="button"
             class="btn btn-danger btn-lg btn-card ml-1">Eliminar</button>
+
         </div>
       </div>
     </div>
@@ -29,7 +30,7 @@
   {{else}}
 </div>
 
-<div class="alert alert-info" role="alert">
+<div class="alert alert-info animate__animated animate__pulse" role="alert">
   <h5>Aún no tienes ningúna categoría. ¡Anímate a crear una!</h5>
 </div>
 {{/if}}

@@ -5,7 +5,7 @@ const passport = require("passport");
 
 // Verificar si el usuario se puede autenticar con sus credenciales
 exports.autenticarUsuario = passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/tienda",
     failureRedirect: "/iniciar_sesion",
     badRequestMessage: "Debes ingresar tu correo electrónico y tu contraseña",
     failureFlash: true,

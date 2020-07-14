@@ -8,7 +8,7 @@ const slug = require("slug");
 const shortid = require("shortid");
 // Constante para obtener fecha
 const now = new Date();
-
+const Product = require("./product");
 //Modelo de categoría
 const Category = db.define(
   "category",
@@ -49,17 +49,19 @@ const Category = db.define(
       beforeCreate(category) {
         // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(category.name).toLowerCase();
-
         category.url = `${url}_${shortid.generate()}`;
-      },
-      beforeUpdate(category) {
-        // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
-        const url = slug(category.name).toLowerCase();
 
-        category.url = `${url}_${shortid.generate()}`;
+        // Convierte el nombre al formato camelCase
+        const name = category.name.camelCase();
+        category.name = name;
       },
     },
   }
 );
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
 module.exports = Category;

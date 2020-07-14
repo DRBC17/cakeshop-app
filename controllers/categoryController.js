@@ -4,6 +4,11 @@ const Category = require("../models/category");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
+// Importar slug
+const slug = require("slug");
+// Importar shortid
+const shortid = require("shortid");
+const Product = require("../models/product");
 
 // Renderizamos el formulario para las categorías
 exports.formularioCategorias = async (req, res, next) => {
@@ -26,9 +31,8 @@ exports.formularioCategorias = async (req, res, next) => {
       });
       res.render("category/categories", {
         title: "Categorías | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
-        categories: categories,
+        categories: categories.reverse(),
       });
     });
   } catch (error) {
@@ -38,10 +42,9 @@ exports.formularioCategorias = async (req, res, next) => {
     });
     res.render("category/categories", {
       title: "Categorías | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
-      categories: categories,
+      categories: categories.reverse(),
     });
   }
 };
@@ -51,7 +54,6 @@ exports.formularioCrearCategoria = (req, res, next) => {
   const { auth } = res.locals.usuario;
   res.render("category/addCategory", {
     title: "Agregar categoría | GloboFiestaCake's",
-    authAdmin: "yes",
     auth,
   });
 };
@@ -59,7 +61,8 @@ exports.formularioCrearCategoria = (req, res, next) => {
 // Creamos una categoría
 exports.CrearCategoria = async (req, res, next) => {
   // Obtenemos por destructuring los datos
-  const { name, description } = req.body;
+  const categoria = req.body;
+  const { name, description } = categoria;
   const { auth } = res.locals.usuario;
   let messages = [];
 
@@ -82,7 +85,8 @@ exports.CrearCategoria = async (req, res, next) => {
   if (messages.length) {
     res.render("category/addCategory", {
       title: "Agregar categoría | GloboFiestaCake's",
-      authAdmin: "yes",
+      auth,
+      categoria,
       messages,
     });
   } else {
@@ -101,16 +105,17 @@ exports.CrearCategoria = async (req, res, next) => {
       if (error["name"] === "SequelizeUniqueConstraintError") {
         messages = {
           error: "¡Ya existe una categoría registrada con ese nombre!",
+          type: "alert-danger",
         };
       } else {
         // Si no es el error anterior solo mandamos los mensajes
-        messages = { error };
+        messages = { error, type: "alert-danger" };
       }
 
       res.render("category/addCategory", {
         title: "Agregar categoría | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
+        categoria,
         messages,
       });
     }
@@ -133,8 +138,7 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
     const updated = moment(categories["dataValues"].updatedAt).fromNow();
 
     res.render("category/updateCategory", {
-      title: "Categorías | GloboFiestaCake's",
-      authAdmin: "yes",
+      title: "Actualizar categoria | GloboFiestaCake's",
       auth,
       created,
       updated,
@@ -178,7 +182,6 @@ exports.actualizarCategoria = async (req, res, next) => {
 
     res.render("category/updateCategory", {
       title: "Actualizar categoría | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
       created,
@@ -189,7 +192,7 @@ exports.actualizarCategoria = async (req, res, next) => {
     // No existen errores ni mensajes
     try {
       await Category.update(
-        { name, description },
+        { name: actualizarNombre(name), description, url: actualizarUrl(name) },
         {
           where: {
             id: req.params.id,
@@ -218,7 +221,6 @@ exports.actualizarCategoria = async (req, res, next) => {
 
       res.render("category/updateCategory", {
         title: "Actualizar categoría | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
         messages,
         created,
@@ -227,4 +229,45 @@ exports.actualizarCategoria = async (req, res, next) => {
       });
     }
   }
+};
+
+// Eliminar una categoria
+exports.eliminarCategoria = async (req, res, next) => {
+  // Obtener la URL de la categoria por destructuring query
+  const { url } = req.query;
+
+  // Tratar de eliminar la categoria
+  try {
+    await Category.destroy({
+      where: {
+        url,
+      },
+    });
+
+    // Si la categoria se puede eliminar sin problemas
+    // Tipos de respuesta que puede tener un servidor
+    // https://developer.mozilla.org/es/docs/Web/HTTP/Status
+    res.status(200).send("Categoria eliminada correctamente");
+  } catch (error) {
+    // Si la categoria no se puede eliminar
+    return next();
+  }
+};
+
+function actualizarUrl(name) {
+  // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
+  const url = slug(name).toLowerCase();
+
+  return `${url}_${shortid.generate()}`;
+}
+
+function actualizarNombre(name) {
+  // Convierte el nombre al formato camelCase
+
+  return name.camelCase();
+}
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 };

@@ -10,12 +10,14 @@
                     <h5 class="card-header bg-dark text-white text-center">Actualizar categoría</h5>
                     <div class="card-body">
                         <div class="form-group">
-                            <input type="text" name="name" id="name" placeholder="Nombre" class="form-control"
+                            <label for="description">Nombre:</label>
+                            <input type="text" name="name" id="name" class="form-control"
                                 value="{{categories.name}}" />
                         </div>
                         <div class="form-group">
-                            <textarea name="description" rows="4" id="description" placeholder="Descripción"
-                                class="form-control">{{categories.description}}</textarea>
+                            <label for="description">Descripción:</label>
+                            <textarea name="description" maxlength="250" rows="4" id="description"
+                                 class="form-control">{{categories.description}}</textarea>
                         </div>
                         <p class="card-text">Creado: {{created}}</p>
                         <p class="card-text">Ultima modificación: {{updated}}</p>

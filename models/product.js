@@ -6,6 +6,7 @@ const db = require("../config/db");
 const slug = require("slug");
 // Importar shortid
 const shortid = require("shortid");
+const Category = require("./category");
 // Constante para obtener fecha
 const now = new Date();
 
@@ -32,7 +33,7 @@ const Product = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "¡Debe ingresar un nombre para la categoría!",
+          msg: "¡Debe ingresar un nombre para el producto!",
         },
       },
     },
@@ -59,7 +60,7 @@ const Product = db.define(
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "¡Debe ingresar un nombre para la categoría!",
+          msg: "¡Debe ingresar precio para el producto!",
         },
       },
     },
@@ -67,7 +68,7 @@ const Product = db.define(
       type: Sequelize.BOOLEAN,
       defaultValue: 1,
     },
-    urlImage:{
+    urlImage: {
       type: Sequelize.STRING,
     },
     url: {
@@ -79,17 +80,21 @@ const Product = db.define(
       beforeCreate(product) {
         // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
         const url = slug(product.name).toLowerCase();
-
         product.url = `${url}_${shortid.generate()}`;
-      },
-      beforeUpdate(product) {
-        // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
-        const url = slug(product.name).toLowerCase();
 
-        product.url = `${url}_${shortid.generate()}`;
+        // Convierte el nombre al formato camelCase
+        const name = product.name.camelCase();
+        product.name = name;
       },
     },
   }
 );
+// Definir que una categoría puede tener muchos productos
+Product.belongsTo(Category);
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
 module.exports = Product;

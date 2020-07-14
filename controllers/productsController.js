@@ -9,6 +9,10 @@ const path = require("path");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
+// Importar slug
+const slug = require("slug");
+// Importar shortid
+const shortid = require("shortid");
 
 //Renderizamos el formulario para agregar producto.
 exports.formularioAgregarProducto = async (req, res, next) => {
@@ -19,7 +23,6 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       categories,
     });
@@ -28,7 +31,6 @@ exports.formularioAgregarProducto = async (req, res, next) => {
     const messages = { error };
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
     });
@@ -38,48 +40,91 @@ exports.formularioAgregarProducto = async (req, res, next) => {
 // Creamos un producto
 exports.crearProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
+  const producto = req.body;
   const { filename, originalname, mimetype, size } = req.file;
-  const { categoryId, name, description, unitPrice } = req.body;
+  const { categoryId, name, description, unitPrice } = producto;
   const { auth } = res.locals.usuario;
-  try {
-    // Guardar los datos de la imagen
-    await ImageProduct.create({
-      fileName: filename,
-      path: "/img/uploads/" + filename,
-      originalName: originalname,
-      mimeType: mimetype,
-      size: size,
-    });
+  let messages = [];
 
-    //Buscamos el id de la ultima imagen agregada
-    const imageId = await ImageProduct.findOne({
-      limit: 1,
-      order: [["createdAt", "DESC"]],
+  if (!categoryId) {
+    messages.push({
+      error: "¡Se debe seleccionar una categoría!",
+      type: "alert-danger",
     });
+  }
 
-    // Guardamos el producto con el id de la imagen
-    await Product.create({
-      categoryId,
-      name,
-      description,
-      unitPrice,
-      imageId: imageId.id,
-      urlImage: imageId.path,
+  if (isNaN(unitPrice)) {
+    messages.push({
+      error: "¡El precio debe ser un numero!",
+      type: "alert-danger",
     });
+  }
 
-    res.redirect("/productos");
-  } catch (error) {
-    const messages = { error };
-    //Busca las categorías existentes
-    categories = await Category.findAll();
+  if (messages.length) {
+    if (req.file) {
+      // En caso de error eliminamos la imagen que se guardo en el servidor
+      await unlink(path.resolve("./public/img/uploads/" + filename));
+    }
+
+    const categories = await Category.findAll();
     //Las enviá para mostrarlas en el formulario
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       categories,
+      producto,
       messages,
     });
+  } else {
+    try {
+      // Guardar los datos de la imagen
+      await ImageProduct.create({
+        fileName: filename,
+        path: "/img/uploads/" + filename,
+        originalName: originalname,
+        mimeType: mimetype,
+        size: size,
+      });
+
+      //Buscamos el id de la ultima imagen agregada
+      const imageId = await ImageProduct.findOne({
+        limit: 1,
+        order: [["createdAt", "DESC"]],
+      });
+
+      // Guardamos el producto con el id de la imagen
+      await Product.create({
+        categoryId,
+        name,
+        description,
+        unitPrice,
+        imageId: imageId.id,
+        urlImage: imageId.path,
+      });
+
+      res.redirect("/productos");
+    } catch (error) {
+      messages.push({
+        error,
+        type: "alert-danger",
+      });
+
+      if (req.file) {
+        // En caso de error eliminamos la imagen que se guardo en el servidor
+        await unlink(path.resolve("./public/img/uploads/" + filename));
+      }
+
+      //Busca las categorías existentes
+      const categories = await Category.findAll();
+      //Las enviá para mostrarlas en el formulario
+      res.render("product/addProduct", {
+        title: "Agregar producto | GloboFiestaCake's",
+        auth,
+        categories,
+        producto,
+        messages,
+      });
+    }
   }
 };
 
@@ -103,9 +148,8 @@ exports.formularioProductos = async (req, res, next) => {
       });
       res.render("product/recordBook", {
         title: "Productos | GloboFiestaCake's",
-        authAdmin: "yes",
         auth,
-        products: products,
+        products: products.reverse(),
       });
     });
   } catch (error) {
@@ -115,10 +159,9 @@ exports.formularioProductos = async (req, res, next) => {
     });
     res.render("product/recordBook", {
       title: "Productos | GloboFiestaCake's",
-      authAdmin: "yes",
       auth,
       messages,
-      products: products,
+      products: products.reverse(),
     });
   }
 };
@@ -136,17 +179,19 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
     });
 
     const category = await Category.findByPk(products.dataValues.categoryId);
+    //Busca las categorías existentes
+    const categories = await Category.findAll();
     // Cambiar la visualización de la fecha con Moment.js
     const created = moment(products["dataValues"].createdAt).format("LLLL");
     const updated = moment(products["dataValues"].updatedAt).fromNow();
 
     res.render("product/updateProduct", {
-      title: "Productos | GloboFiestaCake's",
-      authAdmin: "yes",
+      title: "Actualizar producto | GloboFiestaCake's",
       auth,
       created,
       updated,
       category: category.dataValues.name,
+      categories,
       products: products,
     });
   } catch (error) {
@@ -157,7 +202,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
 // Actualizar los datos de un producto
 exports.actualizarProducto = async (req, res, next) => {
   // Obtenemos por destructuring los datos
-  const { categoryId, name, description, unitPrice } = req.body;
+  let { categoryId, name, description, unitPrice } = req.body;
   const { auth } = res.locals.usuario;
   let messages = [];
 
@@ -172,6 +217,12 @@ exports.actualizarProducto = async (req, res, next) => {
   if (!description) {
     messages.push({
       error: "¡Debe ingresar una descripción!",
+      type: "alert-danger",
+    });
+  }
+  if (isNaN(unitPrice)) {
+    messages.push({
+      error: "¡El precio debe ser un numero!",
       type: "alert-danger",
     });
   }
@@ -194,9 +245,14 @@ exports.actualizarProducto = async (req, res, next) => {
       const created = moment(products["dataValues"].createdAt).format("LLLL");
       const updated = moment(products["dataValues"].updatedAt).fromNow();
 
+      if (req.file) {
+        const { filename } = req.file;
+        // En caso de error eliminamos la imagen que se guardo en el servidor
+        await unlink(path.resolve("./public/img/uploads/" + filename));
+      }
+
       res.render("product/updateProduct", {
-        title: "Productos | GloboFiestaCake's",
-        authAdmin: "yes",
+        title: "Actualizar producto | GloboFiestaCake's",
         auth,
         created,
         updated,
@@ -241,9 +297,11 @@ exports.actualizarProducto = async (req, res, next) => {
         // Actualizamos los datos del producto
         await Product.update(
           {
-            name,
+            name: actualizarNombre(name),
             description,
+            categoryId,
             unitPrice,
+            url: actualizarUrl(name),
             urlImage: "/img/uploads/" + filename,
           },
           {
@@ -258,9 +316,11 @@ exports.actualizarProducto = async (req, res, next) => {
         // solo actualizamos los datos del producto
         await Product.update(
           {
-            name,
+            name: actualizarNombre(name),
             description,
+            categoryId,
             unitPrice,
+            url: actualizarUrl(name),
           },
           {
             where: {
@@ -272,6 +332,69 @@ exports.actualizarProducto = async (req, res, next) => {
       }
     }
   } catch (error) {
+    if (req.file) {
+      const { filename } = req.file;
+      // En caso de error eliminamos la imagen que se guardo en el servidor
+      await unlink(path.resolve("./public/img/uploads/" + filename));
+    }
     res.send(error);
   }
+};
+
+// Eliminar una producto
+exports.eliminarProducto = async (req, res, next) => {
+  // Obtener la URL del producto por destructuring query
+  const { url } = req.query;
+
+  // Tratar de eliminar la producto
+  try {
+    // Obtener el producto mediante el id
+    const products = await Product.findOne({
+      where: {
+        url,
+      },
+    });
+
+    // Obtenemos la imagen antigua del producto.
+    const imageOld = await ImageProduct.findOne({
+      where: {
+        id: products.imageId,
+      },
+    });
+
+    // Eliminamos del servidor la imagen antigua.
+    await unlink(path.resolve("./public" + imageOld.dataValues.path));
+
+    await Product.destroy({
+      where: {
+        url,
+      },
+    });
+
+    // Si el producto se puede eliminar sin problemas
+    // Tipos de respuesta que puede tener un servidor
+    // https://developer.mozilla.org/es/docs/Web/HTTP/Status
+    res.status(200).send("Producto eliminado correctamente");
+  } catch (error) {
+    // Si el producto no se puede eliminar
+    return next();
+  }
+};
+
+function actualizarUrl(name) {
+  // Convertimos en minúscula la url y le adjuntamos un código generado con shortid
+  const url = slug(name).toLowerCase();
+
+  return `${url}_${shortid.generate()}`;
+}
+
+function actualizarNombre(name) {
+  // Convierte el nombre al formato camelCase
+
+  return name.camelCase();
+}
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 };

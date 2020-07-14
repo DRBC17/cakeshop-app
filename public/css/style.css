@@ -64,6 +64,9 @@ nav li {
     display: flex;
     flex-direction: column;
   }
+  .imageSize {
+    height: auto;
+  }
 }
 @media (min-width: 768px) {
   .btn-custom {
@@ -80,4 +83,16 @@ nav li {
   height: 6rem;
   width: auto;
   text-align: center;
+}
+
+
+
+@media (max-width: 768px) {
+  .barra{
+    width: 100%;
+  }
+  
+  .btn-buscar{
+    width: 100%;
+  }
 }
