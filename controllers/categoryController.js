@@ -32,7 +32,7 @@ exports.formularioCategorias = async (req, res, next) => {
       res.render("category/categories", {
         title: "Categorías | GloboFiestaCake's",
         auth,
-        categories: categories,
+        categories: categories.reverse(),
       });
     });
   } catch (error) {
@@ -44,7 +44,7 @@ exports.formularioCategorias = async (req, res, next) => {
       title: "Categorías | GloboFiestaCake's",
       auth,
       messages,
-      categories: categories,
+      categories: categories.reverse(),
     });
   }
 };
