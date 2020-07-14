@@ -8,6 +8,7 @@ const storeController = require("../controllers/storeController");
 const productsController = require("../controllers/productsController");
 const categoryController = require("../controllers/categoryController");
 const authAdminController = require("../controllers/authAdmin");
+const homeController = require("../controllers/homeController");
 
 module.exports = function () {
   // Inicio de Usuario
@@ -118,10 +119,16 @@ module.exports = function () {
 
   // Inicio de Tienda
   routes.get(
-    "/",
+    "/tienda",
     authController.usuarioAutenticado,
     storeController.formularioTiendaHome
   );
+  routes.get(
+    "/",
+    authController.usuarioAutenticado,
+    homeController.formularioHome
+  );
+
   // Fin de tienda
   return routes;
 };
