@@ -28,13 +28,10 @@
                             <select class="custom-select" name="categoryId" required>
                                 <option value="0" disabled hidden>Categorías</option>
                                 {{#each categories}}
-                                <option value="{{id}}" {{#compare id categoryId}} selected {{/compare}}>
+                                <option value="{{id}}" {{#compare id ../products.categoryId}} selected {{/compare}}>
                                     {{name}}</option>
                                 {{/each}}
                             </select>
-                            {{#each categories}}
-                            <h2>{{id}}-{{categoryId}}</h2>
-                            {{/each}}
                         </div>
                         <div class="form-group">
                             <label for="description">Precio:</label>
