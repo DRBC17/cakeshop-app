@@ -138,7 +138,7 @@ exports.obtenerCategoriaPorUrl = async (req, res, next) => {
     const updated = moment(categories["dataValues"].updatedAt).fromNow();
 
     res.render("category/updateCategory", {
-      title: "Categorías | GloboFiestaCake's",
+      title: "Actualizar categoria | GloboFiestaCake's",
       auth,
       created,
       updated,

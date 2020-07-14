@@ -184,9 +184,9 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
     // Cambiar la visualización de la fecha con Moment.js
     const created = moment(products["dataValues"].createdAt).format("LLLL");
     const updated = moment(products["dataValues"].updatedAt).fromNow();
-    
+
     res.render("product/updateProduct", {
-      title: "Productos | GloboFiestaCake's",
+      title: "Actualizar producto | GloboFiestaCake's",
       auth,
       created,
       updated,
