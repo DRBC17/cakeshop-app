@@ -87,7 +87,7 @@ exports.formularioIniciarSesion = (req, res, next) => {
 
 function authAdmin(res, auth, usuario, messages) {
   // Si auth es positivo mostrara las opciones de admin
-  if (auth) {
+  if (auth === 2) {
     res.render("user/adminAccount", {
       title: "Administrador | GloboFiestaCake's",
       usuario,
