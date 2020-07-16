@@ -11,20 +11,26 @@
                     <div class="card-body">
                         <div class="form-group pt-2">
                             <label>Nombre:</label>
-                            <input type="text" name="firstName" required class="form-control" value="{{usuario.firstName}}" />
+                            <input type="text" name="firstName" required class="form-control"
+                                value="{{usuario.firstName}}" />
                         </div>
                         <div class="form-group">
                             <label>Apellido:</label>
-                            <input type="text" name="lastName" required class="form-control" value="{{usuario.lastName}}" />
+                            <input type="text" name="lastName" required class="form-control"
+                                value="{{usuario.lastName}}" />
                         </div>
                         <div class="form-group">
                             <label>Correo electrónico:</label>
                             <input type="email" name="email" placeholder="ejemplo@correo.com" required
-                                class="form-control" value="{{usuario.email}}"/>
+                                class="form-control" value="{{usuario.email}}" />
                         </div>
                         <div class="form-group">
                             <label>Contraseña:</label>
                             <input type="password" name="password" required class="form-control" />
+                            <small id="passwordHelpInline" class="text-muted">
+                                Debe tener:<br />- Entre 6 y 20 caracteres de longitud<br />- Tener al menos una letra
+                                mayúscula
+                            </small>
                         </div>
                         <div class="form-group">
                             <label>Confirmar contraseña:</label>
