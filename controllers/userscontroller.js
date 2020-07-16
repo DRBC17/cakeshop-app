@@ -2,6 +2,8 @@
 const User = require("../models/user");
 // Importamos bcrypt-nodejs
 const bcrypt = require("bcrypt-nodejs");
+// Importar slug
+const slug = require("slug");
 // Requerimos las variables de entorno
 require("dotenv").config();
 
@@ -32,8 +34,19 @@ exports.CrearCuenta = async (req, res, next) => {
   console.log(usuario);
 
   let messages = "";
-  // si las contraseñas son iguales creara la cuenta
-  if (password === passwordConfirm) {
+  if (validarContraseña(password)) {
+    // En caso que las contraseñas no cumpla con los requisitos
+    messages = {
+      error:
+        "La contraseña debe tener como mínimo 4 caracteres de longitud y tener al menos una letra mayúscula",
+    };
+    res.render("user/register", {
+      title: "Regístrate en GloboFiestaCake's",
+      usuario,
+      messages,
+    });
+    // si las contraseñas son iguales creara la cuenta
+  } else if (password === passwordConfirm) {
     // Intentar crear el usuario
     try {
       //Crear el usuario
@@ -198,4 +211,13 @@ function verificarContraseña(res, password) {
   const passwordOld = res.locals.usuario.password;
   // Regresara un True si las contraseñas son iguales
   return bcrypt.compareSync(password, passwordOld);
+}
+
+function validarContraseña(contraseña) {
+  const verificar = slug(contraseña).toLowerCase();
+  if (contraseña.length >= 4 && contraseña != verificar) {
+    return false;
+  } else {
+    return true;
+  }
 }
