@@ -76,6 +76,12 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     categoryController.eliminarCategoria
   );
+  routes.post(
+    "/buscar_categoria",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    categoryController.buscarCategoria
+  );
   // Fin de categoria
 
   // Inicio de Productos

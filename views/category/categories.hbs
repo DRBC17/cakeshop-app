@@ -1,8 +1,12 @@
 {{!-- Mensajes de error --}}
 {{>ourMessages}}
 
-<div class="d-flex flex-row-reverse">
-  <a href="/agregar_categoria" class="btn btn-success btn-lg m-2">Agregar categoría</a>
+<div class="form-inline">
+  <form action="/buscar_categoria" method="POST" class="form-search">
+    <input class="form-control m-1" type="search" name="search" value="{{search}}">
+    <button class="btn btn-success m-1 btn-buscar" type="submit">Buscar</button>
+  </form>
+  <a href="/agregar_categoria" class="btn btn-success btn-lg m-2 ml-auto">Agregar categoría</a>
 </div>
 {{!-- card-columns --}}
 <div class="row row-cols-1 row-cols-md-3">
