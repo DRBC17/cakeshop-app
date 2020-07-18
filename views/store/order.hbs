@@ -17,13 +17,17 @@
                             <h3><strong>{{products.name}}</strong></h3>
                         </div>
                         <div class="form-group">
-                           <p><span>{{products.description}}</span></p>
+                            <p><span>{{products.description}}</span></p>
                         </div>
-                       
+
                         <h5 class="text-dark pt-2">Categoría: {{category}}</h5>
                         <h3 class="text-dark m-2 mt-2 mb-2"><strong>L {{products.unitPrice}}</strong></h3>
+                        <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input type="number" name="amount" min="1" max="5" required class="form-control"
+                                {{#if amount}} value="{{amount}}" {{else}} value="1" {{/if}} />
+                        </div>
                         <div>
-                           
                             <p class="card-text"><small class="text-muted">Publicado: {{updated}}</small>
                             </p>
                         </div>
