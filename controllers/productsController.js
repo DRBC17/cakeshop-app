@@ -13,6 +13,7 @@ moment.locale("es");
 const slug = require("slug");
 // Importar shortid
 const shortid = require("shortid");
+const { ProvidePlugin } = require("webpack");
 
 //Renderizamos el formulario para agregar producto.
 exports.formularioAgregarProducto = async (req, res, next) => {
@@ -424,4 +425,78 @@ function actualizarNombre(name) {
 // Métodos personalizados
 String.prototype.camelCase = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
+exports.buscarProducto = async (req, res, next) => {
+  const { search } = req.body;
+  const { auth } = res.locals.usuario;
+  const messages = [];
+
+  if (!search) {
+    res.redirect("productos");
+  } else {
+    try {
+      Product.findAll({
+        where: {
+          name: search,
+        },
+      }).then(function (products) {
+        products = products.map(function (product) {
+          product.dataValues.createdAt = moment(
+            product.dataValues.createdAt
+          ).format("LLLL");
+          product.dataValues.updatedAt = moment(
+            product.dataValues.updatedAt
+          ).fromNow();
+
+          return product;
+        });
+        if (products.length) {
+          res.render("product/recordBook", {
+            title: "Productos | GloboFiestaCake's",
+            auth,
+            products: products.reverse(),
+            search,
+          });
+        } else {
+          messages.push({
+            error: `No se encontraron resultados para: ${search}`,
+            type: "alert-danger",
+          });
+
+          Product.findAll().then(function (products) {
+            products = products.map(function (product) {
+              product.dataValues.createdAt = moment(
+                product.dataValues.createdAt
+              ).format("LLLL");
+              product.dataValues.updatedAt = moment(
+                product.dataValues.updatedAt
+              ).fromNow();
+
+              return product;
+            });
+            res.render("product/recordBook", {
+              title: "Productos | GloboFiestaCake's",
+              auth,
+              products: products.reverse(),
+              search,
+              messages,
+            });
+          });
+        }
+      });
+    } catch (error) {
+      messages.push({
+        error,
+        type: "alert-danger",
+      });
+      res.render("product/recordBook", {
+        title: "Productos | GloboFiestaCake's",
+        auth,
+        products: products.reverse(),
+        search,
+        messages,
+      });
+    }
+  }
 };

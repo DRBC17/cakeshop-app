@@ -121,6 +121,12 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     productsController.eliminarProducto
   );
+  routes.post(
+    "/buscar_producto",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.buscarProducto
+  );
   // Fin de productos
 
   // Inicio de Tienda
