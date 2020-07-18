@@ -271,3 +271,76 @@ function actualizarNombre(name) {
 String.prototype.camelCase = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
+
+exports.buscarCategoria = async (req, res, next) => {
+  const { search } = req.body;
+  const { auth } = res.locals.usuario;
+  const messages = [];
+
+  if (!search) {
+    res.redirect("categorias");
+  } else {
+    try {
+      Category.findAll({
+        where: {
+          name: search,
+        },
+      }).then(function (categories) {
+        categories = categories.map(function (category) {
+          category.dataValues.createdAt = moment(
+            category.dataValues.createdAt
+          ).format("LLLL");
+          category.dataValues.updatedAt = moment(
+            category.dataValues.updatedAt
+          ).fromNow();
+          return category;
+        });
+        if (categories.length) {
+          res.render("category/categories", {
+            title: "Categorías | GloboFiestaCake's",
+            auth,
+            categories: categories.reverse(),
+            search,
+          });
+        } else {
+          messages.push({
+            error: `No se encontraron resultados para: ${search}`,
+            type: "alert-danger",
+          });
+
+          Category.findAll().then(function (categories) {
+            categories = categories.map(function (category) {
+              category.dataValues.createdAt = moment(
+                category.dataValues.createdAt
+              ).format("LLLL");
+              category.dataValues.updatedAt = moment(
+                category.dataValues.updatedAt
+              ).fromNow();
+
+              return category;
+            });
+            res.render("category/categories", {
+              title: "Categorías | GloboFiestaCake's",
+              auth,
+              categories: categories.reverse(),
+              messages,
+              search,
+            });
+          });
+        }
+      });
+    } catch (error) {
+      messages.push({
+        error,
+        type: "alert-danger",
+      });
+      res.render("category/categories", {
+        title: "Categorías | GloboFiestaCake's",
+        auth,
+        categories: categories.reverse(),
+        messages,
+        search,
+      });
+    }
+  }
+};

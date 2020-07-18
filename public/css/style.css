@@ -45,6 +45,10 @@ nav li {
   height: 20rem;
 }
 
+.imageSizeStore {
+  height: 16rem;
+}
+
 @media (max-width: 768px) {
   .form-account {
     width: 100%;
@@ -64,9 +68,7 @@ nav li {
     display: flex;
     flex-direction: column;
   }
-  .imageSize {
-    height: auto;
-  }
+  
 }
 @media (min-width: 768px) {
   .btn-custom {
@@ -78,6 +80,7 @@ nav li {
     width: 50%;
     
   }
+  
 }
 .nav-account a {
   height: 6rem;
@@ -85,7 +88,9 @@ nav li {
   text-align: center;
 }
 
-
+.form-search{
+  width: 50%;
+}
 
 @media (max-width: 768px) {
   .barra{
@@ -95,4 +100,8 @@ nav li {
   .btn-buscar{
     width: 100%;
   }
+  .form-search{
+    width: 100%;
+  }
 }
+
