@@ -142,6 +142,11 @@ module.exports = function () {
     homeController.formularioHome
   );
   routes.get("/tienda/producto/:url", storeController.obtenerProductoPorUrl);
+  routes.post(
+    "/tienda/agregar_al_carrito/:id",
+    authController.usuarioAutenticado,
+    storeController.añadirAlCarrito
+  );
 
   // Fin de tienda
   return routes;

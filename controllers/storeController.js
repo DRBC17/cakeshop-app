@@ -6,6 +6,8 @@ const Category = require("../models/category");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
+let carrito = [];
+
 // Renderizar el formulario de la tienda
 exports.formularioTiendaHome = (req, res, next) => {
   const { auth } = res.locals.usuario;
@@ -28,6 +30,7 @@ exports.formularioTiendaHome = (req, res, next) => {
         title: "Tienda | GloboFiestaCake's",
         auth,
         products: products.reverse(),
+        carrito,
       });
     });
   } catch (error) {
@@ -74,6 +77,7 @@ exports.buscarProducto = async (req, res, next) => {
             auth,
             products: products.reverse(),
             search,
+            carrito,
           });
         } else {
           messages.push({
@@ -97,6 +101,7 @@ exports.buscarProducto = async (req, res, next) => {
               auth,
               products: products.reverse(),
               search,
+              carrito,
               messages,
             });
           });
@@ -112,6 +117,7 @@ exports.buscarProducto = async (req, res, next) => {
         auth,
         products: products.reverse(),
         search,
+        carrito,
         messages,
       });
     }
@@ -130,14 +136,14 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
           url: req.params.url,
         },
       });
-  
+
       const category = await Category.findByPk(products.dataValues.categoryId);
       //Busca las categorías existentes
       const categories = await Category.findAll();
       // Cambiar la visualización de la fecha con Moment.js
       const created = moment(products["dataValues"].createdAt).format("LLLL");
       const updated = moment(products["dataValues"].updatedAt).fromNow();
-  
+
       res.render("store/order", {
         title: "Realizar pedido | GloboFiestaCake's",
         auth,
@@ -151,6 +157,21 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
       res.redirect("/tienda");
     }
   } else {
-     res.redirect('/iniciar_sesion');
+    res.redirect("/iniciar_sesion");
   }
+};
+
+exports.añadirAlCarrito = (req, res, next) => {
+  const { amount } = req.body;
+  const { email } = res.locals.usuario;
+  const idProduct = req.params.id;
+  carrito.push({ email, idProduct, amount });
+
+  let carritoPersonal = [];
+  carrito.forEach((element) => {
+    if (element.email === email) {
+      carritoPersonal.push(element);
+    }
+  });
+  res.redirect("/tienda");
 };
