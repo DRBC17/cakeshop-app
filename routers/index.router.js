@@ -147,6 +147,11 @@ module.exports = function () {
     authController.usuarioAutenticado,
     storeController.añadirAlCarrito
   );
+  routes.get(
+    "/tienda/carrito",
+    authController.usuarioAutenticado,
+    storeController.formularioCarrito
+  );
 
   // Fin de tienda
   return routes;

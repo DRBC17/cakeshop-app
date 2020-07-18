@@ -175,3 +175,33 @@ exports.añadirAlCarrito = (req, res, next) => {
   });
   res.redirect("/tienda");
 };
+
+exports.formularioCarrito = async (req, res, next) => {
+  const { email, auth } = res.locals.usuario;
+
+  try {
+    let carritoPersonal = [];
+    let total = 0;
+    for (const element of carrito) {
+      if (element.email === email) {
+        const product = await Product.findByPk(element.idProduct);
+        total = total + element.amount * product["dataValues"].unitPrice;
+        carritoPersonal.push({
+          name: product["dataValues"].name,
+          amount: element.amount,
+          unitPrice: product["dataValues"].unitPrice,
+          subTotal: element.amount * product["dataValues"].unitPrice,
+        });
+      }
+    }
+    res.render("store/cart", {
+      title: "Carrito",
+      auth,
+      carritoPersonal,
+      total,
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/tienda");
+  }
+};
