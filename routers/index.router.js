@@ -121,19 +121,27 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     productsController.eliminarProducto
   );
+  routes.post(
+    "/buscar_producto",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.buscarProducto
+  );
   // Fin de productos
 
   // Inicio de Tienda
   routes.get(
     "/tienda",
-  
+
     storeController.formularioTiendaHome
   );
+  routes.post("/tienda/buscar_producto", storeController.buscarProducto);
   routes.get(
     "/",
 
     homeController.formularioHome
   );
+  routes.get("/tienda/producto/:url", storeController.obtenerProductoPorUrl);
 
   // Fin de tienda
   return routes;

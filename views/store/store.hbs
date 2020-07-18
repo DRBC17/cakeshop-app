@@ -1,8 +1,8 @@
 {{!-- Mostrar los mensajes en caso de existir --}}
 {{>ourMessages}}
-<form class="form-inline my-2 my-lg-0 pt-3">
-    <input class="form-control mr-sm-2 barra" type="search" placeholder="" aria-label="Search">
-    <button class="btn btn-success my-2 my-sm-0 btn-buscar" type="submit">Buscar</button>
+<form action="/tienda/buscar_producto" method="POST" class="form-search form-inline mt-3">
+    <input class="form-control m-1" type="search" name="search" value="{{search}}">
+    <button class="btn btn-success m-1 btn-buscar" type="submit">Buscar</button>
 </form>
 
 {{#if products}}
@@ -14,7 +14,7 @@
             <h5 class="card-title text-dark"><strong>{{name}}</strong></h5>
             <p class="card-text">{{description}}</p>
             <h3 class="text-dark text-center m-2 mt-2"><strong>L {{unitPrice}}</strong></h3>
-            <a href="#" class="btn btn-primary btn-block">Comprar</a>
+            <a href="/tienda/producto/{{url}}" class="btn btn-primary btn-block">Realizar pedido</a>
         </div>
     </div>
     {{/each}}
