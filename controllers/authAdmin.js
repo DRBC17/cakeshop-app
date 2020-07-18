@@ -9,7 +9,7 @@ exports.adminAutenticado = async (req, res, next) => {
   // extraemos auth, que contiene un true si el usuario es administrador.
   const { auth } = usuario;
   // Verificamos si es administrador.
-  if (auth) {
+  if (auth === 2) {
     // En caso de ser administrador lo dejamos continuar.
     return next();
   }
