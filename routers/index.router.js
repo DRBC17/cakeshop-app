@@ -135,6 +135,7 @@ module.exports = function () {
   
     storeController.formularioTiendaHome
   );
+  routes.post("/tienda/buscar_producto",storeController.buscarProducto)
   routes.get(
     "/",
 

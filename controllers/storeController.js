@@ -43,3 +43,77 @@ exports.formularioTiendaHome = (req, res, next) => {
     });
   }
 };
+
+exports.buscarProducto = async (req, res, next) => {
+  const { search } = req.body;
+  const { auth } = res.locals.usuario;
+  const messages = [];
+
+  if (!search) {
+    res.redirect("/tienda");
+  } else {
+    try {
+      Product.findAll({
+        where: {
+          name: search,
+        },
+      }).then(function (products) {
+        products = products.map(function (product) {
+          product.dataValues.createdAt = moment(
+            product.dataValues.createdAt
+          ).format("LLLL");
+          product.dataValues.updatedAt = moment(
+            product.dataValues.updatedAt
+          ).fromNow();
+
+          return product;
+        });
+        if (products.length) {
+          res.render("store/store", {
+            title: "Tienda | GloboFiestaCake's",
+            auth,
+            products: products.reverse(),
+            search,
+          });
+        } else {
+          messages.push({
+            error: `No se encontraron resultados para: ${search}`,
+            type: "alert-danger",
+          });
+
+          Product.findAll().then(function (products) {
+            products = products.map(function (product) {
+              product.dataValues.createdAt = moment(
+                product.dataValues.createdAt
+              ).format("LLLL");
+              product.dataValues.updatedAt = moment(
+                product.dataValues.updatedAt
+              ).fromNow();
+
+              return product;
+            });
+            res.render("store/store", {
+              title: "Tienda | GloboFiestaCake's",
+              auth,
+              products: products.reverse(),
+              search,
+              messages,
+            });
+          });
+        }
+      });
+    } catch (error) {
+      messages.push({
+        error,
+        type: "alert-danger",
+      });
+      res.render("store/store", {
+        title: "Tienda | GloboFiestaCake's",
+        auth,
+        products: products.reverse(),
+        search,
+        messages,
+      });
+    }
+  }
+};
