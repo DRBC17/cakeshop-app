@@ -17,18 +17,45 @@ const shortid = require("shortid");
 //Renderizamos el formulario para agregar producto.
 exports.formularioAgregarProducto = async (req, res, next) => {
   const { auth } = res.locals.usuario;
+  let messages = [];
   try {
     //Busca las categorías existentes
-    categories = await Category.findAll();
-    //Las enviá para mostrarlas en el formulario
-    res.render("product/addProduct", {
-      title: "Agregar producto | GloboFiestaCake's",
-      auth,
-      categories,
-    });
+    const categories = await Category.findAll();
+    if (categories.length) {
+      //Las enviá para mostrarlas en el formulario
+      res.render("product/addProduct", {
+        title: "Agregar producto | GloboFiestaCake's",
+        auth,
+        categories,
+      });
+    } else {
+      // Obtenemos los productos creados y lo mostramos las fecha modificadas con moment.js
+      Product.findAll().then(function (products) {
+        products = products.map(function (product) {
+          product.dataValues.createdAt = moment(
+            product.dataValues.createdAt
+          ).format("LLLL");
+          product.dataValues.updatedAt = moment(
+            product.dataValues.updatedAt
+          ).fromNow();
+
+          return product;
+        });
+        messages.push({
+          error: "¡Para ingresar un producto debes tener categorías creadas!",
+          type: "alert-danger",
+        });
+        res.render("product/recordBook", {
+          title: "Productos | GloboFiestaCake's",
+          auth,
+          messages,
+          products: products.reverse(),
+        });
+      });
+    }
   } catch (error) {
     // En caso de haber errores lo guardamos en messages y volvemos a cargar el formulario
-    const messages = { error };
+    messages = { error };
     res.render("product/addProduct", {
       title: "Agregar producto | GloboFiestaCake's",
       auth,
