@@ -3,8 +3,12 @@
 
 <div class="form-inline">
   <form action="/buscar_categoria" method="POST" class="form-search">
-    <input class="form-control m-1" type="search" name="search" value="{{search}}">
-    <button class="btn btn-success m-1 btn-buscar" type="submit">Buscar</button>
+    <input class="form-control mt-1" type="search" name="search" value="{{search}}">
+    <button class="btn btn-success mt-1 btn-buscar" type="submit">Buscar</button>
+    {{#if search}}
+    <a href="/categorias" class="form-control mt-1 ml-1  btn btn-warning" title="Restablecer pagina"><i
+        class="fas fa-redo"></i></a>
+    {{/if}}
   </form>
   <a href="/agregar_categoria" class="btn btn-success btn-lg m-2 ml-auto">Agregar categoría</a>
 </div>
@@ -18,8 +22,8 @@
       <h3 class="card-header bg-dark text-white text-center">{{name}}</h3>
 
       <div class="card-body">
-        <h5 class="card-title text-center">{{description}}</h5>
-        <p class="card-text">Creado: {{createdAt}}</p>
+        <h5 class="card-title text-center text-parcial div-top-category">{{description}}</h5>
+        <p class="card-text mb-0 mt-1">Creado: {{createdAt}}</p>
         <p class="card-text">Ultima modificación: {{updatedAt}}</p>
         <div class="btn-div">
           <a href="/actualizar_categoria/{{url}}" class="btn btn-primary btn-lg btn-card">Actualizar</a>
