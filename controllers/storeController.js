@@ -193,7 +193,9 @@ exports.formularioCarrito = async (req, res, next) => {
           name: product["dataValues"].name,
           amount: element.amount,
           unitPrice: product["dataValues"].unitPrice,
-          subTotal: element.amount * product["dataValues"].unitPrice,
+          subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(
+            2
+          ),
         });
       }
     }
@@ -201,7 +203,7 @@ exports.formularioCarrito = async (req, res, next) => {
       title: "Carrito | GloboFiestaCake's",
       auth,
       carritoPersonal,
-      total,
+      total: total.toFixed(2),
     });
   } catch (error) {
     console.log(error);
