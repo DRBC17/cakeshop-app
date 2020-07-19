@@ -68,7 +68,6 @@ nav li {
     display: flex;
     flex-direction: column;
   }
-  
 }
 @media (min-width: 768px) {
   .btn-custom {
@@ -78,9 +77,7 @@ nav li {
 
   .btn-card {
     width: 50%;
-    
   }
-  
 }
 .nav-account a {
   height: 6rem;
@@ -88,34 +85,35 @@ nav li {
   text-align: center;
 }
 
-.form-search{
+.form-search {
   width: 50%;
 }
 
 @media (max-width: 768px) {
-  .barra{
+  .barra {
     width: 100%;
   }
-  
-  .btn-buscar{
+
+  .btn-buscar {
     width: 100%;
   }
-  .form-search{
+  .form-search {
     width: 100%;
   }
 }
-
-.text-parcial{
-  height: 5rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+/* Mostramos parcialmente el texto en la tienda */
+.text-parcial {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.div-top{
+.div-top {
   height: 15rem;
 }
 
-.div-bot{
+.div-bot {
   height: 30%;
 }
