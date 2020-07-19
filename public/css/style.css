@@ -105,3 +105,17 @@ nav li {
   }
 }
 
+.text-parcial{
+  height: 5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.div-top{
+  height: 15rem;
+}
+
+.div-bot{
+  height: 30%;
+}
