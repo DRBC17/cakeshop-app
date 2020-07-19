@@ -109,9 +109,13 @@ nav li {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .div-top {
-  height: 15rem;
+  height: 70%;
+}
+@media (min-width: 768px) {
+  .div-top {
+    height: 15rem;
+  }
 }
 
 .div-bot {
