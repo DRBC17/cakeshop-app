@@ -183,11 +183,13 @@ exports.formularioCarrito = async (req, res, next) => {
   try {
     let carritoPersonal = [];
     let total = 0;
+    numero = 1;
     for (const element of carrito) {
       if (element.email === email) {
         const product = await Product.findByPk(element.idProduct);
         total = total + element.amount * product["dataValues"].unitPrice;
         carritoPersonal.push({
+          numero: numero++,
           name: product["dataValues"].name,
           amount: element.amount,
           unitPrice: product["dataValues"].unitPrice,
@@ -196,7 +198,7 @@ exports.formularioCarrito = async (req, res, next) => {
       }
     }
     res.render("store/cart", {
-      title: "Carrito",
+      title: "Carrito | GloboFiestaCake's",
       auth,
       carritoPersonal,
       total,

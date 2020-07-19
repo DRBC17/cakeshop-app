@@ -1,6 +1,34 @@
-<ul>
-    {{#each carritoPersonal}}
-    <li>{{name}} Precio: {{amount}}  L {{unitPrice}} SubTotal: {{subTotal}}</li>
-    {{/each}}
-    <h3>Total:{{total}}</h3>
-</ul>
+<div class="card mt-3 mb-3">
+    <div class="card-header text-center bg-secondary text-white">
+        <h3> Mi carrito de compra </br> GloboFiestaCake's</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each carritoPersonal}}
+                    <tr>
+                        <th scope="row">{{numero}}</th>
+                        <td>{{name}}</td>
+                        <td>L {{unitPrice}}</td>
+                        <td>{{amount}}</td>
+                        <td>L {{subTotal}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+          
+        </div>
+          <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
+        <a href="#" class="btn btn-success btn-block">Terminar compra</a>
+    </div>
+</div>
