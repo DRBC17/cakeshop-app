@@ -3,8 +3,12 @@
 
 <div class="form-inline">
   <form action="/buscar_categoria" method="POST" class="form-search">
-    <input class="form-control m-1" type="search" name="search" value="{{search}}">
-    <button class="btn btn-success m-1 btn-buscar" type="submit">Buscar</button>
+    <input class="form-control mt-1" type="search" name="search" value="{{search}}">
+    <button class="btn btn-success mt-1 btn-buscar" type="submit">Buscar</button>
+    {{#if search}}
+    <a href="/categorias" class="form-control m-1 btn btn-warning" title="Restablecer pagina"><i
+        class="fas fa-redo"></i></a>
+    {{/if}}
   </form>
   <a href="/agregar_categoria" class="btn btn-success btn-lg m-2 ml-auto">Agregar categoría</a>
 </div>

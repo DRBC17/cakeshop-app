@@ -3,13 +3,18 @@
 
 
 <div class="form-inline">
- <form action="/tienda/buscar_producto" method="POST" class="form-search mt-3">
-    <input class="form-control m-1" type="search" name="search" value="{{search}}">
-    <button class="btn btn-success m-1 btn-buscar" type="submit">Buscar</button>
-</form>
-{{#if carrito}}
-<a href="/tienda/carrito" class="btn btn-secondary btn-lg m-2 mt-3 ml-auto ml-1">Terminar compra<i class="ml-1 fas fa-cart-plus mr-1"></i></a>
-{{/if}}
+    <form action="/tienda/buscar_producto" method="POST" class="form-search mt-3 p-0">
+        <input class="form-control mt-1" type="search" name="search" value="{{search}}">
+        <button class="btn btn-success mt-1 btn-buscar" type="submit">Buscar</button>
+        {{#if search}}
+        <a href="/tienda" class="form-control m-1 btn btn-warning" title="Restablecer pagina"><i
+                class="fas fa-redo"></i></a>
+        {{/if}}
+    </form>
+    {{#if carrito}}
+    <a href="/tienda/carrito" class="btn btn-secondary btn-lg m-2 mt-3 ml-auto ml-1">Terminar compra<i
+            class="ml-1 fas fa-cart-plus mr-1"></i></a>
+    {{/if}}
 </div>
 
 {{#if products}}
