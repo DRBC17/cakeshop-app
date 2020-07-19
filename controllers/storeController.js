@@ -10,7 +10,7 @@ let carrito = [];
 
 // Renderizar el formulario de la tienda
 exports.formularioTiendaHome = (req, res, next) => {
-  const { auth } = res.locals.usuario;
+  const { auth, email } = res.locals.usuario;
   let messages = [];
   let products = [];
   try {
@@ -30,7 +30,7 @@ exports.formularioTiendaHome = (req, res, next) => {
         title: "Tienda | GloboFiestaCake's",
         auth,
         products: products.reverse(),
-        carrito,
+        carrito: existeCarrito(email),
       });
     });
   } catch (error) {
@@ -42,6 +42,7 @@ exports.formularioTiendaHome = (req, res, next) => {
       title: "Productos | GloboFiestaCake's",
       auth,
       messages,
+      carrito: existeCarrito(email),
       products: products.reverse(),
     });
   }
@@ -49,7 +50,7 @@ exports.formularioTiendaHome = (req, res, next) => {
 
 exports.buscarProducto = async (req, res, next) => {
   const { search } = req.body;
-  const { auth } = res.locals.usuario;
+  const { auth, email } = res.locals.usuario;
   const messages = [];
 
   if (!search) {
@@ -77,7 +78,7 @@ exports.buscarProducto = async (req, res, next) => {
             auth,
             products: products.reverse(),
             search,
-            carrito,
+            carrito: existeCarrito(email),
           });
         } else {
           messages.push({
@@ -101,7 +102,7 @@ exports.buscarProducto = async (req, res, next) => {
               auth,
               products: products.reverse(),
               search,
-              carrito,
+              carrito: existeCarrito(email),
               messages,
             });
           });
@@ -205,3 +206,21 @@ exports.formularioCarrito = async (req, res, next) => {
     res.redirect("/tienda");
   }
 };
+
+function existeCarrito(email) {
+  try {
+    let carritoPersonal = [];
+    for (const element of carrito) {
+      if (element.email === email) {
+        carritoPersonal.push(element);
+      }
+    }
+    if (carritoPersonal.length) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
