@@ -111,16 +111,23 @@ nav li {
 }
 .div-top {
   height: 70%;
-}
-@media (min-width: 768px) {
-  .div-top {
-    height: 15rem;
-  }
+  text-align: center;
 }
 
 .div-bot {
   height: 30%;
+  text-align: center;
 }
+@media (min-width: 768px) {
+  .div-top {
+    height: 15rem;
+    text-align: left;
+  }
+  .div-bot {
+    text-align: left;
+  }
+}
+
 
 .div-top-category {
   height: 6.1rem;
