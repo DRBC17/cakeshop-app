@@ -15,7 +15,11 @@ exports.formularioTiendaHome = (req, res, next) => {
   let products = [];
   try {
     // Obtenemos los productos creados y lo mostramos las fecha modificadas con moment.js
-    Product.findAll().then(function (products) {
+    Product.findAll({
+      where: {
+        available: 1,
+      },
+    }).then(function (products) {
       products = products.map(function (product) {
         product.dataValues.createdAt = moment(
           product.dataValues.createdAt
@@ -60,6 +64,7 @@ exports.buscarProducto = async (req, res, next) => {
       Product.findAll({
         where: {
           name: search,
+          available: 1,
         },
       }).then(function (products) {
         products = products.map(function (product) {
@@ -86,7 +91,11 @@ exports.buscarProducto = async (req, res, next) => {
             type: "alert-danger",
           });
 
-          Product.findAll().then(function (products) {
+          Product.findAll({
+            where: {
+              available: 1,
+            },
+          }).then(function (products) {
             products = products.map(function (product) {
               product.dataValues.createdAt = moment(
                 product.dataValues.createdAt
@@ -128,6 +137,8 @@ exports.buscarProducto = async (req, res, next) => {
 // Busca un producto por su URL
 exports.obtenerProductoPorUrl = async (req, res, next) => {
   const { auth } = res.locals.usuario;
+  let messages = [];
+  // Si no esta registrado lo enviá a productos
   if (auth) {
     try {
       //Actualizamos el formulario
@@ -138,22 +149,55 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
         },
       });
 
-      const category = await Category.findByPk(products.dataValues.categoryId);
-      //Busca las categorías existentes
-      const categories = await Category.findAll();
-      // Cambiar la visualización de la fecha con Moment.js
-      const created = moment(products["dataValues"].createdAt).format("LLLL");
-      const updated = moment(products["dataValues"].updatedAt).fromNow();
+      // Si el producto ya no esta disponible no lo deja continuar
+      if (products["dataValues"].available === true) {
+        const category = await Category.findByPk(
+          products.dataValues.categoryId
+        );
+        //Busca las categorías existentes
+        const categories = await Category.findAll();
+        // Cambiar la visualización de la fecha con Moment.js
+        const created = moment(products["dataValues"].createdAt).format("LLLL");
+        const updated = moment(products["dataValues"].updatedAt).fromNow();
 
-      res.render("store/order", {
-        title: "Realizar pedido | GloboFiestaCake's",
-        auth,
-        created,
-        updated,
-        category: category.dataValues.name,
-        categories,
-        products: products,
-      });
+        res.render("store/order", {
+          title: "Realizar pedido | GloboFiestaCake's",
+          auth,
+          created,
+          updated,
+          category: category.dataValues.name,
+          categories,
+          products: products,
+        });
+      } else {
+        messages.push({
+          error: `El producto ya no esta disponible`,
+          type: "alert-danger",
+        });
+
+        Product.findAll({
+          where: {
+            available: 1,
+          },
+        }).then(function (products) {
+          products = products.map(function (product) {
+            product.dataValues.createdAt = moment(
+              product.dataValues.createdAt
+            ).format("LLLL");
+            product.dataValues.updatedAt = moment(
+              product.dataValues.updatedAt
+            ).fromNow();
+
+            return product;
+          });
+          res.render("store/store", {
+            title: "Tienda | GloboFiestaCake's",
+            auth,
+            products: products.reverse(),
+            messages,
+          });
+        });
+      }
     } catch (error) {
       res.redirect("/tienda");
     }
