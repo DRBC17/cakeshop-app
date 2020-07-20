@@ -500,3 +500,34 @@ exports.buscarProducto = async (req, res, next) => {
     }
   }
 };
+
+// Permite actualizar el estado de un producto
+exports.actualizarEstadoProducto = async (req, res, next) => {
+  try {
+    // Obtener el id del producto
+    // Patch como HTTP Verb obtiene solamente los valores a través de req.params
+    const { id } = req.params;
+
+    // Buscar la tarea a actualizar
+    const producto = await Product.findOne({
+      where: {
+        id,
+      },
+    });
+    // Actualizar el estado del producto
+    // ternary operator
+    const estado = producto.available == 1 ? 0 : 1;
+    await Product.update(
+      { available: estado },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(401);
+  }
+};

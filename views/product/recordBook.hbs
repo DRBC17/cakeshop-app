@@ -13,10 +13,10 @@
   <a href="/agregar_producto" class="btn btn-success btn-lg m-2 ml-auto">Agregar producto</a>
 </div>
 {{!-- card-columns --}}
-{{#if products}}
-<div class="pb-4">
+{{#if products }}
+<div class="pb-4" id="listado-productos">
   {{#each products}}
-  <div class="card mb-3  animate__animated animate__fadeInDown">
+  <div class="card mb-3  animate__animated animate__fadeInDown" id="{{id}}">
     <div class="row no-gutters">
       <div class="col-md-4 p-1">
         <img src="{{urlImage}}" class="card-img border border-dark rounded imageSize" alt="{{name}}">
@@ -33,7 +33,18 @@
 
           </div>
           <div class="div-bot">
-            <h2 class="text-dark  m-2 mt-2"><strong>L {{unitPrice}}</strong></h2>
+            <div class="form-inline">
+              <h2 class="text-dark  m-2 mt-2 mr-auto"><strong>L {{unitPrice}}</strong></h2>
+              <div class="custom-control custom-switch" data-producto={{id}} id="boton-estado">
+                {{#if available}}
+                <input type="checkbox" class="custom-control-input" id="customSwitch_{{id}}" checked>
+                <label class="custom-control-label" for="customSwitch_{{id}}" id="label_{{id}}">Disponible</label>
+                {{else}}
+                <input type="checkbox" class="custom-control-input" id="customSwitch_{{id}}">
+                <label class="custom-control-label" for="customSwitch_{{id}}" id="label_{{id}}">No disponible</label>
+                {{/if}}
+              </div>
+            </div>
 
             <div class=" btn-div mt-2">
               <a href="/actualizar_producto/{{url}}" class="btn btn-primary btn-lg btn-card">Actualizar</a>
