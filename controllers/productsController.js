@@ -248,13 +248,14 @@ exports.actualizarProducto = async (req, res, next) => {
       type: "alert-danger",
     });
   }
+  // Verificar el precio sea un numero
   if (isNaN(unitPrice)) {
     messages.push({
       error: "¡El precio debe ser un numero!",
       type: "alert-danger",
     });
   }
-  // Verificar la descripción
+  // Verificar el precio
   if (!unitPrice) {
     messages.push({
       error: "¡Debe ingresar un precio!",
@@ -269,6 +270,8 @@ exports.actualizarProducto = async (req, res, next) => {
       const products = await Product.findByPk(req.params.id);
 
       const category = await Category.findByPk(products.dataValues.categoryId);
+      //Busca las categorías existentes
+      const categories = await Category.findAll();
       // Cambiar la visualización de la fecha con Moment.js
       const created = moment(products["dataValues"].createdAt).format("LLLL");
       const updated = moment(products["dataValues"].updatedAt).fromNow();
@@ -286,6 +289,7 @@ exports.actualizarProducto = async (req, res, next) => {
         updated,
         messages,
         category: category.dataValues.name,
+        categories,
         products: products,
       });
     } else {
