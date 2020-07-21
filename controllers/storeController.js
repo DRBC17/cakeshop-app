@@ -212,12 +212,17 @@ exports.añadirAlCarrito = (req, res, next) => {
   const { amount } = req.body;
   const { email } = res.locals.usuario;
   const idProduct = req.params.id;
-  carrito.push({ email, idProduct, amount });
+  carrito.push({ email, id: shortid.generate(), idProduct, amount });
 
   let carritoPersonal = [];
   carrito.forEach((element) => {
     if (element.email === email) {
-      carritoPersonal.push(element);
+      carritoPersonal.push({
+        email,
+        id: element.id,
+        idProduct,
+        amount,
+      });
     }
   });
   res.redirect("/tienda");
@@ -236,7 +241,7 @@ exports.formularioCarrito = async (req, res, next) => {
         total = total + element.amount * product["dataValues"].unitPrice;
         carritoPersonal.push({
           numero: numero++,
-          id: shortid.generate(),
+          id: element.id,
           name: product["dataValues"].name,
           amount: element.amount,
           unitPrice: product["dataValues"].unitPrice,
@@ -246,12 +251,17 @@ exports.formularioCarrito = async (req, res, next) => {
         });
       }
     }
-    res.render("store/cart", {
-      title: "Carrito | GloboFiestaCake's",
-      auth,
-      carritoPersonal,
-      total: total.toFixed(2),
-    });
+
+    if (carritoPersonal.length) {
+      res.render("store/cart", {
+        title: "Carrito | GloboFiestaCake's",
+        auth,
+        carritoPersonal,
+        total: total.toFixed(2),
+      });
+    } else {
+      res.redirect("/tienda");
+    }
   } catch (error) {
     console.log(error);
     res.redirect("/tienda");
@@ -275,3 +285,21 @@ function existeCarrito(email) {
     console.log(error);
   }
 }
+
+exports.eliminarDelCarrito = (req, res, next) => {
+  const { id } = req.params;
+  try {
+    let index = 0;
+    for (const element of carrito) {
+      if (element.id === id) {
+        carrito.splice(index, 1);
+        break;
+      }
+      index++;
+    }
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(401);
+  }
+};
