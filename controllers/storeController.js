@@ -6,6 +6,8 @@ const Category = require("../models/category");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
+// Importar shortid
+const shortid = require("shortid");
 let carrito = [];
 
 // Renderizar el formulario de la tienda
@@ -234,6 +236,7 @@ exports.formularioCarrito = async (req, res, next) => {
         total = total + element.amount * product["dataValues"].unitPrice;
         carritoPersonal.push({
           numero: numero++,
+          id: shortid.generate(),
           name: product["dataValues"].name,
           amount: element.amount,
           unitPrice: product["dataValues"].unitPrice,

@@ -14,7 +14,7 @@
                         <th scope="col">Subtotal</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="listado=compras">
                     {{#each carritoPersonal}}
                     <tr>
                         <th scope="row">{{numero}}</th>
@@ -22,6 +22,7 @@
                         <td>L {{unitPrice}}</td>
                         <td>{{amount}}</td>
                         <td>L {{subTotal}}</td>
+                        <td>L {{id}} {{email}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
