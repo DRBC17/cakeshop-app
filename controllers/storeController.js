@@ -6,6 +6,8 @@ const Category = require("../models/category");
 // Importar Moment.js
 const moment = require("moment");
 moment.locale("es");
+// Importar shortid
+const shortid = require("shortid");
 let carrito = [];
 
 // Renderizar el formulario de la tienda
@@ -15,7 +17,11 @@ exports.formularioTiendaHome = (req, res, next) => {
   let products = [];
   try {
     // Obtenemos los productos creados y lo mostramos las fecha modificadas con moment.js
-    Product.findAll().then(function (products) {
+    Product.findAll({
+      where: {
+        available: 1,
+      },
+    }).then(function (products) {
       products = products.map(function (product) {
         product.dataValues.createdAt = moment(
           product.dataValues.createdAt
@@ -60,6 +66,7 @@ exports.buscarProducto = async (req, res, next) => {
       Product.findAll({
         where: {
           name: search,
+          available: 1,
         },
       }).then(function (products) {
         products = products.map(function (product) {
@@ -86,7 +93,11 @@ exports.buscarProducto = async (req, res, next) => {
             type: "alert-danger",
           });
 
-          Product.findAll().then(function (products) {
+          Product.findAll({
+            where: {
+              available: 1,
+            },
+          }).then(function (products) {
             products = products.map(function (product) {
               product.dataValues.createdAt = moment(
                 product.dataValues.createdAt
@@ -128,6 +139,8 @@ exports.buscarProducto = async (req, res, next) => {
 // Busca un producto por su URL
 exports.obtenerProductoPorUrl = async (req, res, next) => {
   const { auth } = res.locals.usuario;
+  let messages = [];
+  // Si no esta registrado lo enviá a productos
   if (auth) {
     try {
       //Actualizamos el formulario
@@ -138,22 +151,55 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
         },
       });
 
-      const category = await Category.findByPk(products.dataValues.categoryId);
-      //Busca las categorías existentes
-      const categories = await Category.findAll();
-      // Cambiar la visualización de la fecha con Moment.js
-      const created = moment(products["dataValues"].createdAt).format("LLLL");
-      const updated = moment(products["dataValues"].updatedAt).fromNow();
+      // Si el producto ya no esta disponible no lo deja continuar
+      if (products["dataValues"].available === true) {
+        const category = await Category.findByPk(
+          products.dataValues.categoryId
+        );
+        //Busca las categorías existentes
+        const categories = await Category.findAll();
+        // Cambiar la visualización de la fecha con Moment.js
+        const created = moment(products["dataValues"].createdAt).format("LLLL");
+        const updated = moment(products["dataValues"].updatedAt).fromNow();
 
-      res.render("store/order", {
-        title: "Realizar pedido | GloboFiestaCake's",
-        auth,
-        created,
-        updated,
-        category: category.dataValues.name,
-        categories,
-        products: products,
-      });
+        res.render("store/order", {
+          title: "Realizar pedido | GloboFiestaCake's",
+          auth,
+          created,
+          updated,
+          category: category.dataValues.name,
+          categories,
+          products: products,
+        });
+      } else {
+        messages.push({
+          error: `El producto ya no esta disponible`,
+          type: "alert-danger",
+        });
+
+        Product.findAll({
+          where: {
+            available: 1,
+          },
+        }).then(function (products) {
+          products = products.map(function (product) {
+            product.dataValues.createdAt = moment(
+              product.dataValues.createdAt
+            ).format("LLLL");
+            product.dataValues.updatedAt = moment(
+              product.dataValues.updatedAt
+            ).fromNow();
+
+            return product;
+          });
+          res.render("store/store", {
+            title: "Tienda | GloboFiestaCake's",
+            auth,
+            products: products.reverse(),
+            messages,
+          });
+        });
+      }
     } catch (error) {
       res.redirect("/tienda");
     }
@@ -166,12 +212,17 @@ exports.añadirAlCarrito = (req, res, next) => {
   const { amount } = req.body;
   const { email } = res.locals.usuario;
   const idProduct = req.params.id;
-  carrito.push({ email, idProduct, amount });
+  carrito.push({ email, id: shortid.generate(), idProduct, amount });
 
   let carritoPersonal = [];
   carrito.forEach((element) => {
     if (element.email === email) {
-      carritoPersonal.push(element);
+      carritoPersonal.push({
+        email,
+        id: element.id,
+        idProduct,
+        amount,
+      });
     }
   });
   res.redirect("/tienda");
@@ -190,6 +241,7 @@ exports.formularioCarrito = async (req, res, next) => {
         total = total + element.amount * product["dataValues"].unitPrice;
         carritoPersonal.push({
           numero: numero++,
+          id: element.id,
           name: product["dataValues"].name,
           amount: element.amount,
           unitPrice: product["dataValues"].unitPrice,
@@ -199,12 +251,17 @@ exports.formularioCarrito = async (req, res, next) => {
         });
       }
     }
-    res.render("store/cart", {
-      title: "Carrito | GloboFiestaCake's",
-      auth,
-      carritoPersonal,
-      total: total.toFixed(2),
-    });
+
+    if (carritoPersonal.length) {
+      res.render("store/cart", {
+        title: "Carrito | GloboFiestaCake's",
+        auth,
+        carritoPersonal,
+        total: total.toFixed(2),
+      });
+    } else {
+      res.redirect("/tienda");
+    }
   } catch (error) {
     console.log(error);
     res.redirect("/tienda");
@@ -228,3 +285,21 @@ function existeCarrito(email) {
     console.log(error);
   }
 }
+
+exports.eliminarDelCarrito = (req, res, next) => {
+  const { id } = req.params;
+  try {
+    let index = 0;
+    for (const element of carrito) {
+      if (element.id === id) {
+        carrito.splice(index, 1);
+        break;
+      }
+      index++;
+    }
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(401);
+  }
+};

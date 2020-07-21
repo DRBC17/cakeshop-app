@@ -12,9 +12,10 @@
                         <th scope="col">Precio</th>
                         <th scope="col">Cantidad</th>
                         <th scope="col">Subtotal</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="listado-compras">
                     {{#each carritoPersonal}}
                     <tr>
                         <th scope="row">{{numero}}</th>
@@ -22,13 +23,18 @@
                         <td>L {{unitPrice}}</td>
                         <td>{{amount}}</td>
                         <td>L {{subTotal}}</td>
+                        <td data-compra={{id}}>
+                            <button class="btn btn-fab btn-round btn-danger">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
-          
+
         </div>
-          <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
+        <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
         <a href="#" class="btn btn-success btn-block">Terminar compra</a>
     </div>
 </div>
