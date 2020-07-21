@@ -1,4 +1,4 @@
 import categories from "./modules/categories";
 import products from "./modules/products";
-import searchCategory from "./modules/categories";
-
+import listProducts from "./modules/listadoProductos";
+import carrito from "./modules/carrito";

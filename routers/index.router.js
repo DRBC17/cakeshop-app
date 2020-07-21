@@ -127,6 +127,13 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     productsController.buscarProducto
   );
+  routes.patch(
+    "/producto/:id",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    productsController.actualizarEstadoProducto
+  );
+
   // Fin de productos
 
   // Inicio de Tienda
@@ -153,6 +160,12 @@ module.exports = function () {
     storeController.formularioCarrito
   );
 
+  routes.delete(
+    "/tienda/eliminar_del_carrito/:id",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    storeController.eliminarDelCarrito
+  );
   // Fin de tienda
   return routes;
 };
