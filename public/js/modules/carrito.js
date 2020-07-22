@@ -38,6 +38,10 @@ if (compras) {
                   response.data.message,
                   "success"
                 );
+                //   Redireccionar al carrito
+                setTimeout(() => {
+                  window.location.href = "/tienda/carrito";
+                }, 3000);
               }
             })
             .catch((result) => {
@@ -50,10 +54,6 @@ if (compras) {
             });
         }
       });
-      //   Redireccionar a /
-      setTimeout(() => {
-        window.location.href = "/tienda/carrito";
-      }, 3000);
     }
   });
 }
