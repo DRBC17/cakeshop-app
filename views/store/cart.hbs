@@ -1,3 +1,5 @@
+{{!-- Mostrar los mensajes en caso de existir --}}
+{{>ourMessages}}
 <div class="card mt-3 mb-3">
     <div class="card-header text-center bg-secondary text-white">
         <h3> Mi carrito de compra </br> GloboFiestaCake's</h3>
@@ -34,12 +36,14 @@
             </table>
 
         </div>
-        <div class="form-group">
-            <label class="h4" for="address">Dirección:</label>
-            <textarea name="address" maxlength="250" rows="4" id="address" class="form-control"
-                placeholder="Ejemplo: Barrio El Carmen, Carretera al Batallón, cuadra y media de la gasolinera Uno, casa color verde."></textarea>
-        </div>
-        <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
-        <a href="#" class="btn btn-success btn-block">Terminar compra</a>
+        <form action="/tienda/terminar_compra" method="post">
+            <div class="form-group">
+                <label class="h4" for="address">Dirección:</label>
+                <textarea name="address" maxlength="250" rows="4" id="address" class="form-control" required
+                    placeholder="Ejemplo: Barrio El Carmen, Carretera al Batallón, cuadra y media de la gasolinera Uno, casa color verde.">{{address}}</textarea>
+            </div>
+            <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
+            <button type="submit" class="btn btn-success btn-block">Terminar compra</button>
+        </form>
     </div>
 </div>

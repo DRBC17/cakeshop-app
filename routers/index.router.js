@@ -166,6 +166,12 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     storeController.eliminarDelCarrito
   );
+  routes.post(
+    "/tienda/terminar_compra",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    storeController.terminarCompra
+  );
   // Fin de tienda
   return routes;
 };
