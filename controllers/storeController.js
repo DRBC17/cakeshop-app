@@ -10,11 +10,10 @@ const moment = require("moment");
 moment.locale("es");
 // Importar shortid
 const shortid = require("shortid");
-let carrito = [];
 
 // Renderizar el formulario de la tienda
 exports.formularioTiendaHome = (req, res, next) => {
-  const { auth, email } = res.locals.usuario;
+  const { auth } = res.locals.usuario;
   let messages = [];
   let products = [];
   try {
@@ -38,7 +37,7 @@ exports.formularioTiendaHome = (req, res, next) => {
         title: "Tienda | GloboFiestaCake's",
         auth,
         products: products.reverse(),
-        carrito: existeCarrito(email),
+        carrito: existeCarrito(req),
       });
     });
   } catch (error) {
@@ -50,7 +49,7 @@ exports.formularioTiendaHome = (req, res, next) => {
       title: "Productos | GloboFiestaCake's",
       auth,
       messages,
-      carrito: existeCarrito(email),
+      carrito: existeCarrito(req),
       products: products.reverse(),
     });
   }
@@ -58,7 +57,7 @@ exports.formularioTiendaHome = (req, res, next) => {
 
 exports.buscarProducto = async (req, res, next) => {
   const { search } = req.body;
-  const { auth, email } = res.locals.usuario;
+  const { auth } = res.locals.usuario;
   const messages = [];
 
   if (!search) {
@@ -87,7 +86,7 @@ exports.buscarProducto = async (req, res, next) => {
             auth,
             products: products.reverse(),
             search,
-            carrito: existeCarrito(email),
+            carrito: existeCarrito(req),
           });
         } else {
           messages.push({
@@ -115,7 +114,7 @@ exports.buscarProducto = async (req, res, next) => {
               auth,
               products: products.reverse(),
               search,
-              carrito: existeCarrito(email),
+              carrito: existeCarrito(req),
               messages,
             });
           });
@@ -131,7 +130,7 @@ exports.buscarProducto = async (req, res, next) => {
         auth,
         products: products.reverse(),
         search,
-        carrito,
+        carrito: existeCarrito(req),
         messages,
       });
     }
@@ -198,6 +197,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
             title: "Tienda | GloboFiestaCake's",
             auth,
             products: products.reverse(),
+            carrito: existeCarrito(req),
             messages,
           });
         });
@@ -212,34 +212,36 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
 
 exports.añadirAlCarrito = (req, res, next) => {
   const { amount } = req.body;
-  const { email } = res.locals.usuario;
   const idProduct = req.params.id;
-  carrito.push({ email, id: shortid.generate(), idProduct, amount });
+  // Verificamos si existe el carrito si no lo creamos
+  if (!req.session.carrito) {
+    req.session.carrito = [];
+  }
+  let carrito = req.session.carrito;
+  carrito.push({ id: shortid.generate(), idProduct, amount });
+  req.session.carrito = carrito;
   res.redirect("/tienda");
 };
 
 exports.formularioCarrito = async (req, res, next) => {
-  const { email, auth } = res.locals.usuario;
+  const { auth } = res.locals.usuario;
 
   try {
     let carritoPersonal = [];
+    let carrito = req.session.carrito;
     let total = 0;
     numero = 1;
     for (const element of carrito) {
-      if (element.email === email) {
-        const product = await Product.findByPk(element.idProduct);
-        total = total + element.amount * product["dataValues"].unitPrice;
-        carritoPersonal.push({
-          numero: numero++,
-          id: element.id,
-          name: product["dataValues"].name,
-          amount: element.amount,
-          unitPrice: product["dataValues"].unitPrice,
-          subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(
-            2
-          ),
-        });
-      }
+      const product = await Product.findByPk(element.idProduct);
+      total = total + element.amount * product["dataValues"].unitPrice;
+      carritoPersonal.push({
+        numero: numero++,
+        id: element.id,
+        name: product["dataValues"].name,
+        amount: element.amount,
+        unitPrice: product["dataValues"].unitPrice,
+        subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(2),
+      });
     }
 
     if (carritoPersonal.length) {
@@ -258,15 +260,10 @@ exports.formularioCarrito = async (req, res, next) => {
   }
 };
 
-function existeCarrito(email) {
+function existeCarrito(req) {
   try {
-    let carritoPersonal = [];
-    for (const element of carrito) {
-      if (element.email === email) {
-        carritoPersonal.push(element);
-      }
-    }
-    if (carritoPersonal.length) {
+    let carrito = req.session.carrito;
+    if (carrito.length) {
       return true;
     } else {
       return false;
@@ -278,6 +275,7 @@ function existeCarrito(email) {
 
 exports.eliminarDelCarrito = (req, res, next) => {
   const { id } = req.params;
+  let carrito = req.session.carrito;
   try {
     let index = 0;
     for (const element of carrito) {
@@ -299,23 +297,7 @@ exports.terminarCompra = async (req, res, next) => {
   const { id, email, phone, auth } = res.locals.usuario;
   let messages = [];
   try {
-    let carritoPersonal = [];
-
-    for (const element of carrito) {
-      if (element.email === email) {
-        carritoPersonal.push({
-          email,
-          id: element.id,
-          idProduct: element.idProduct,
-          amount: element.amount,
-        });
-      }
-    }
-
-    //Elimina todos los perdidos con el email del usuario
-
-    eliminarDelCarrito(email);
-
+    let carrito = req.session.carrito;
     //Crear la orden
     await Order.create({
       userId: id,
@@ -327,8 +309,7 @@ exports.terminarCompra = async (req, res, next) => {
       limit: 1,
       order: [["createdAt", "DESC"]],
     });
-    console.log(carritoPersonal);
-    for (let element of carritoPersonal) {
+    for (let element of carrito) {
       //Crear el detalle orden
       await OrderDetail.create({
         orderId: order["dataValues"].id,
@@ -336,6 +317,9 @@ exports.terminarCompra = async (req, res, next) => {
         amount: element.amount,
       });
     }
+    //Elimina todos los perdidos con el email del usuario
+
+    req.session.carrito = [];
 
     Product.findAll({
       where: {
@@ -362,6 +346,7 @@ exports.terminarCompra = async (req, res, next) => {
         title: "Tienda | GloboFiestaCake's",
         auth,
         products: products.reverse(),
+        carrito: existeCarrito(req),
         messages,
       });
     });
@@ -391,23 +376,9 @@ exports.terminarCompra = async (req, res, next) => {
         title: "Tienda | GloboFiestaCake's",
         auth,
         products: products.reverse(),
+        carrito: existeCarrito(req),
         messages,
       });
     });
   }
 };
-
-//Elimina todos los perdidos con el email del usuario
-function eliminarDelCarrito(email) {
-  let index = 0;
-  carrito.forEach((element) => {
-    if (element.email === email) {
-      carrito.splice(index, 1);
-    }
-    index++;
-  });
-
-  if (existeCarrito(email)) {
-    return eliminarDelCarrito(email);
-  }
-}
