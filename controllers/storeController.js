@@ -2,6 +2,8 @@
 const Product = require("../models/product");
 const ImageProduct = require("../models/imageProduct");
 const Category = require("../models/category");
+const Order = require("../models/order");
+const OrderDetail = require("../models/orderDetail");
 
 // Importar Moment.js
 const moment = require("moment");
@@ -213,18 +215,6 @@ exports.añadirAlCarrito = (req, res, next) => {
   const { email } = res.locals.usuario;
   const idProduct = req.params.id;
   carrito.push({ email, id: shortid.generate(), idProduct, amount });
-
-  let carritoPersonal = [];
-  carrito.forEach((element) => {
-    if (element.email === email) {
-      carritoPersonal.push({
-        email,
-        id: element.id,
-        idProduct,
-        amount,
-      });
-    }
-  });
   res.redirect("/tienda");
 };
 
@@ -303,3 +293,121 @@ exports.eliminarDelCarrito = (req, res, next) => {
     res.sendStatus(401);
   }
 };
+
+exports.terminarCompra = async (req, res, next) => {
+  const { address } = req.body;
+  const { id, email, phone, auth } = res.locals.usuario;
+  let messages = [];
+  try {
+    let carritoPersonal = [];
+
+    for (const element of carrito) {
+      if (element.email === email) {
+        carritoPersonal.push({
+          email,
+          id: element.id,
+          idProduct: element.idProduct,
+          amount: element.amount,
+        });
+      }
+    }
+
+    //Elimina todos los perdidos con el email del usuario
+
+    eliminarDelCarrito(email);
+
+    //Crear la orden
+    await Order.create({
+      userId: id,
+      address,
+      phone,
+    });
+    //Buscamos el id de la ultima orden
+    const order = await Order.findOne({
+      limit: 1,
+      order: [["createdAt", "DESC"]],
+    });
+    console.log(carritoPersonal);
+    for (let element of carritoPersonal) {
+      //Crear el detalle orden
+      await OrderDetail.create({
+        orderId: order["dataValues"].id,
+        productId: element.idProduct,
+        amount: element.amount,
+      });
+    }
+
+    Product.findAll({
+      where: {
+        available: 1,
+      },
+    }).then(function (products) {
+      products = products.map(function (product) {
+        product.dataValues.createdAt = moment(
+          product.dataValues.createdAt
+        ).format("LLLL");
+        product.dataValues.updatedAt = moment(
+          product.dataValues.updatedAt
+        ).fromNow();
+
+        return product;
+      });
+
+      messages.push({
+        error: `Se realizo el pedido`,
+        type: "alert-success",
+      });
+
+      res.render("store/store", {
+        title: "Tienda | GloboFiestaCake's",
+        auth,
+        products: products.reverse(),
+        messages,
+      });
+    });
+  } catch (error) {
+    Product.findAll({
+      where: {
+        available: 1,
+      },
+    }).then(function (products) {
+      products = products.map(function (product) {
+        product.dataValues.createdAt = moment(
+          product.dataValues.createdAt
+        ).format("LLLL");
+        product.dataValues.updatedAt = moment(
+          product.dataValues.updatedAt
+        ).fromNow();
+
+        return product;
+      });
+
+      messages.push({
+        error,
+        type: "alert-danger",
+      });
+
+      res.render("store/store", {
+        title: "Tienda | GloboFiestaCake's",
+        auth,
+        products: products.reverse(),
+        messages,
+      });
+    });
+  }
+};
+
+//Elimina todos los perdidos con el email del usuario
+function eliminarDelCarrito(email) {
+  let index = 0;
+  carrito.forEach((element) => {
+    if (element.email === email) {
+      carrito.splice(index, 1);
+    }
+    index++;
+  });
+
+  if (existeCarrito(email)) {
+    return eliminarDelCarrito(email);
+  }
+}
