@@ -137,7 +137,8 @@ nav li {
 .hero {
   height: 30%;
   min-height: 20.25rem;
- 
+  background-image: url(../img/logo.jpeg);
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
