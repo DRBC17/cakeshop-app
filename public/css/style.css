@@ -132,3 +132,13 @@ nav li {
 .div-top-category {
   height: 6.1rem;
 }
+
+
+.hero {
+  height: 30%;
+  min-height: 20.25rem;
+  background-image: url(../img/logo.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
