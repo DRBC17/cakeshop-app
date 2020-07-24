@@ -265,6 +265,10 @@ exports.formularioCarrito = async (req, res, next) => {
 
 function existeCarrito(req) {
   try {
+    // Verificamos si existe el carrito si no lo creamos
+    if (!req.session.carrito) {
+      req.session.carrito = [];
+    }
     let carrito = req.session.carrito;
     if (carrito.length) {
       return true;
@@ -383,5 +387,61 @@ exports.terminarCompra = async (req, res, next) => {
         messages,
       });
     });
+  }
+};
+
+// Mostrar pedidos
+exports.formularioPedidosAdmin = async (req, res, next) => {
+  const { firstName, lastName, auth } = res.locals.usuario;
+
+  try {
+    let pedidos = [];
+    const orders = await Order.findAll();
+    let numero = 1;
+    for (const element of orders) {
+      pedidos.push({
+        numero,
+        id: element.id,
+        name: `${firstName} ${lastName}`,
+        phone: element.phone,
+        updatedAt: moment(element.updatedAt).format("LLLL"),
+        status: element.status,
+      });
+      numero++;
+    }
+
+    res.render("store/ordersAdmin", {
+      title: "Pedidos | GloboFiestaCake's",
+      pedidos,
+      auth,
+    });
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+exports.cambiarEstadoPedido = async (req, res, next) => {
+  try {
+    // Obtener el id del pedido
+    // Patch como HTTP Verb obtiene solamente los valores a través de req.params
+    const { id } = req.params;
+
+    // Buscar la tarea a actualizar
+    const pedido = await Order.findByPk(id);
+    // Actualizar el estado del pedido
+    // ternary operator
+    const estado = pedido.status == 0 ? 1 : 0;
+    await Order.update(
+      { status: estado },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(401);
   }
 };
