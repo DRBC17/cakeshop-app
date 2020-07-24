@@ -234,7 +234,7 @@ exports.formularioCarrito = async (req, res, next) => {
     let carrito = req.session.carrito;
     let total = 0;
     numero = 1;
-    for (const element of carrito) {
+    for (let element of carrito) {
       const product = await Product.findByPk(element.idProduct);
       total = total + element.amount * product["dataValues"].unitPrice;
       carritoPersonal.push({
@@ -265,6 +265,10 @@ exports.formularioCarrito = async (req, res, next) => {
 
 function existeCarrito(req) {
   try {
+    // Verificamos si existe el carrito si no lo creamos
+    if (!req.session.carrito) {
+      req.session.carrito = [];
+    }
     let carrito = req.session.carrito;
     if (carrito.length) {
       return true;
@@ -279,9 +283,10 @@ function existeCarrito(req) {
 exports.eliminarDelCarrito = (req, res, next) => {
   const { id } = req.params;
   let carrito = req.session.carrito;
+  console.log(req.session.carrito);
   try {
     let index = 0;
-    for (const element of carrito) {
+    for (let element of carrito) {
       if (element.id === id) {
         carrito.splice(index, 1);
         break;
@@ -298,7 +303,6 @@ exports.eliminarDelCarrito = (req, res, next) => {
 exports.terminarCompra = async (req, res, next) => {
   const { address } = req.body;
   const { id, email, phone, auth } = res.locals.usuario;
-  let messages = [];
   try {
     let carrito = req.session.carrito;
     //Crear la orden
@@ -321,67 +325,186 @@ exports.terminarCompra = async (req, res, next) => {
       });
     }
     //Elimina todos los perdidos con el email del usuario
-
     req.session.carrito = [];
 
-    Product.findAll({
-      where: {
-        available: 1,
-      },
-    }).then(function (products) {
-      products = products.map(function (product) {
-        product.dataValues.createdAt = moment(
-          product.dataValues.createdAt
-        ).format("LLLL");
-        product.dataValues.updatedAt = moment(
-          product.dataValues.updatedAt
-        ).fromNow();
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(401);
+  }
+};
+exports.eliminarCarrito = (req, res, next) => {
+ //Elimina todos los perdidos con el email del usuario
+ req.session.carrito = [];
+  res.redirect('/tienda');
+}
 
-        return product;
-      });
+// Mostrar pedidos
+exports.formularioPedidosAdmin = async (req, res, next) => {
+  const { firstName, lastName, auth } = res.locals.usuario;
 
-      messages.push({
-        error: `Se realizo el pedido`,
-        type: "alert-success",
+  try {
+    let pedidos = [];
+    const orders = await Order.findAll();
+    let numero = 1;
+    for (let element of orders) {
+      pedidos.push({
+        numero,
+        id: element.id,
+        name: `${firstName} ${lastName}`,
+        phone: element.phone,
+        updatedAt: moment(element.updatedAt).format("LLLL"),
+        status: element.status,
       });
+      numero++;
+    }
 
-      res.render("store/store", {
-        title: "Tienda | GloboFiestaCake's",
-        auth,
-        products: products.reverse(),
-        carrito: existeCarrito(req),
-        messages,
-      });
+    res.render("store/ordersAdmin", {
+      title: "Pedidos | GloboFiestaCake's",
+      pedidos,
+      auth,
     });
   } catch (error) {
-    Product.findAll({
+    res.send(error);
+  }
+};
+
+exports.cambiarEstadoPedido = async (req, res, next) => {
+  try {
+    // Obtener el id del pedido
+    // Patch como HTTP Verb obtiene solamente los valores a través de req.params
+    const { id } = req.params;
+
+    // Buscar la tarea a actualizar
+    const pedido = await Order.findByPk(id);
+    // Actualizar el estado del pedido
+    // ternary operator
+    const estado = pedido.status == 0 ? 1 : 0;
+    await Order.update(
+      { status: estado },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(401);
+  }
+};
+
+exports.obtenerPedidoPorIdAdmin = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
+  const { id } = req.params;
+  try {
+    const pedido = await Order.findByPk(id);
+    let carritoPersonal = [];
+    let carrito = await OrderDetail.findAll({
       where: {
-        available: 1,
+        OrderId: id,
       },
-    }).then(function (products) {
-      products = products.map(function (product) {
-        product.dataValues.createdAt = moment(
-          product.dataValues.createdAt
-        ).format("LLLL");
-        product.dataValues.updatedAt = moment(
-          product.dataValues.updatedAt
-        ).fromNow();
-
-        return product;
-      });
-
-      messages.push({
-        error,
-        type: "alert-danger",
-      });
-
-      res.render("store/store", {
-        title: "Tienda | GloboFiestaCake's",
-        auth,
-        products: products.reverse(),
-        carrito: existeCarrito(req),
-        messages,
-      });
     });
+
+    let total = 0;
+    numero = 1;
+    for (let element of carrito) {
+      const product = await Product.findByPk(element.productId);
+      total = total + element.amount * product["dataValues"].unitPrice;
+      carritoPersonal.push({
+        numero: numero++,
+        id: element.id,
+        name: product["dataValues"].name,
+        amount: element.amount,
+        unitPrice: product["dataValues"].unitPrice,
+        subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(2),
+      });
+    }
+
+    res.render("store/orderDetailAdmin", {
+      title: "Detalles del pedido | GloboFiestaCake's",
+      auth,
+      carritoPersonal,
+      address: pedido["dataValues"].address,
+      phone: pedido["dataValues"].phone,
+      total: total.toFixed(2),
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/cuenta/pedidos");
+  }
+};
+
+// Mostrar pedidos del cliente
+exports.formularioPedidos = async (req, res, next) => {
+  const { id, firstName, lastName, auth } = res.locals.usuario;
+
+  try {
+    let pedidos = [];
+    const orders = await Order.findAll({
+      where: { userId: id },
+    });
+    let numero = 1;
+    for (let element of orders) {
+      pedidos.push({
+        numero,
+        id: element.id,
+        name: `${firstName} ${lastName}`,
+        phone: element.phone,
+        updatedAt: moment(element.updatedAt).format("LLLL"),
+        status: element.status,
+      });
+      numero++;
+    }
+
+    res.render("store/orders", {
+      title: "Mis pedidos | GloboFiestaCake's",
+      pedidos,
+      auth,
+    });
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+exports.obtenerPedidoPorId = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
+  const { id } = req.params;
+  try {
+    const pedido = await Order.findByPk(id);
+    let carritoPersonal = [];
+    let carrito = await OrderDetail.findAll({
+      where: {
+        OrderId: id,
+      },
+    });
+
+    let total = 0;
+    numero = 1;
+    for (let element of carrito) {
+      const product = await Product.findByPk(element.productId);
+      total = total + element.amount * product["dataValues"].unitPrice;
+      carritoPersonal.push({
+        numero: numero++,
+        id: element.id,
+        name: product["dataValues"].name,
+        amount: element.amount,
+        unitPrice: product["dataValues"].unitPrice,
+        subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(2),
+      });
+    }
+
+    res.render("store/orderDetail", {
+      title: "Detalles del pedido | GloboFiestaCake's",
+      auth,
+      carritoPersonal,
+      address: pedido["dataValues"].address,
+      phone: pedido["dataValues"].phone,
+      total: total.toFixed(2),
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/cuenta/mis_pedidos");
   }
 };

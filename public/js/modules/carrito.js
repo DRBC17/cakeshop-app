@@ -28,7 +28,7 @@ if (compras) {
         if (result.value) {
           // Crear la URL de eliminación
           const url = `${location.origin}/tienda/eliminar_del_carrito/${idCompra}`;
-
+          console.log(url);
           Axios.delete(url, { params: { id: idCompra } })
             .then((response) => {
               if (response.status === 200) {
@@ -41,7 +41,7 @@ if (compras) {
                 //   Redireccionar al carrito
                 setTimeout(() => {
                   window.location.href = "/tienda/carrito";
-                }, 2500);
+                }, 2000);
               }
             })
             .catch((result) => {
