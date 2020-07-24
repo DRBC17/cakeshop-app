@@ -49,6 +49,13 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     storeController.cambiarEstadoPedido
   );
+  routes.get(
+    "/cuenta/pedido/:id",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    storeController.obtenerPedidoPorIdAdmin
+  );
+
   // Fin de Usuario
 
   //Inicio de Categorías

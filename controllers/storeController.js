@@ -234,7 +234,7 @@ exports.formularioCarrito = async (req, res, next) => {
     let carrito = req.session.carrito;
     let total = 0;
     numero = 1;
-    for (const element of carrito) {
+    for (let element of carrito) {
       const product = await Product.findByPk(element.idProduct);
       total = total + element.amount * product["dataValues"].unitPrice;
       carritoPersonal.push({
@@ -285,7 +285,7 @@ exports.eliminarDelCarrito = (req, res, next) => {
   let carrito = req.session.carrito;
   try {
     let index = 0;
-    for (const element of carrito) {
+    for (let element of carrito) {
       if (element.id === id) {
         carrito.splice(index, 1);
         break;
@@ -398,7 +398,7 @@ exports.formularioPedidosAdmin = async (req, res, next) => {
     let pedidos = [];
     const orders = await Order.findAll();
     let numero = 1;
-    for (const element of orders) {
+    for (let element of orders) {
       pedidos.push({
         numero,
         id: element.id,
@@ -443,5 +443,46 @@ exports.cambiarEstadoPedido = async (req, res, next) => {
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(401);
+  }
+};
+
+exports.obtenerPedidoPorIdAdmin = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
+  const { id } = req.params;
+  try {
+    const pedido = await Order.findByPk(id);
+    let carritoPersonal = [];
+    let carrito = await OrderDetail.findAll({
+      where: {
+        OrderId: id,
+      },
+    });
+
+    let total = 0;
+    numero = 1;
+    for (let element of carrito) {
+      const product = await Product.findByPk(element.productId);
+      total = total + element.amount * product["dataValues"].unitPrice;
+      carritoPersonal.push({
+        numero: numero++,
+        id: element.id,
+        name: product["dataValues"].name,
+        amount: element.amount,
+        unitPrice: product["dataValues"].unitPrice,
+        subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(2),
+      });
+    }
+   
+    res.render("store/orderDetailAdmin", {
+      title: "Detalles del pedido | GloboFiestaCake's",
+      auth,
+      carritoPersonal,
+      address: pedido["dataValues"].address,
+      phone: pedido["dataValues"].phone,
+      total: total.toFixed(2),
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/cuenta/pedidos");
   }
 };
