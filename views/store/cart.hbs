@@ -36,14 +36,14 @@
             </table>
 
         </div>
-        <form action="/tienda/terminar_compra" method="post">
-            <div class="form-group">
-                <label class="h4" for="address">Dirección:</label>
-                <textarea name="address" maxlength="250" rows="4" id="address" class="form-control" required
-                    placeholder="Ejemplo: Barrio El Carmen, Carretera al Batallón, cuadra y media de la gasolinera Uno, casa color verde.">{{address}}</textarea>
-            </div>
-            <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
-            <button type="submit" class="btn btn-success btn-block">Terminar compra</button>
-        </form>
+
+        <div class="form-group">
+            <label class="h4" for="address">Dirección:</label>
+            <textarea name="address" maxlength="250" rows="4" id="address" class="form-control" required
+                placeholder="Ejemplo: Barrio El Carmen, Carretera al Batallón, cuadra y media de la gasolinera Uno, casa color verde.">{{address}}</textarea>
+        </div>
+        <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
+        <button type="submit" id="terminar-compra" class="btn btn-success btn-block">Terminar compra</button>
+
     </div>
 </div>

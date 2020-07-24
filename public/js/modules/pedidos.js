@@ -32,4 +32,4 @@ if (pedidos) {
   });
 }
 
-export default productos;
+export default pedidos;

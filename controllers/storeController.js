@@ -302,7 +302,6 @@ exports.eliminarDelCarrito = (req, res, next) => {
 exports.terminarCompra = async (req, res, next) => {
   const { address } = req.body;
   const { id, email, phone, auth } = res.locals.usuario;
-  let messages = [];
   try {
     let carrito = req.session.carrito;
     //Crear la orden
@@ -325,68 +324,12 @@ exports.terminarCompra = async (req, res, next) => {
       });
     }
     //Elimina todos los perdidos con el email del usuario
-
     req.session.carrito = [];
 
-    Product.findAll({
-      where: {
-        available: 1,
-      },
-    }).then(function (products) {
-      products = products.map(function (product) {
-        product.dataValues.createdAt = moment(
-          product.dataValues.createdAt
-        ).format("LLLL");
-        product.dataValues.updatedAt = moment(
-          product.dataValues.updatedAt
-        ).fromNow();
-
-        return product;
-      });
-
-      messages.push({
-        error: `Se realizo el pedido`,
-        type: "alert-success",
-      });
-
-      res.render("store/store", {
-        title: "Tienda | GloboFiestaCake's",
-        auth,
-        products: products.reverse(),
-        carrito: existeCarrito(req),
-        messages,
-      });
-    });
+    res.sendStatus(200);
   } catch (error) {
-    Product.findAll({
-      where: {
-        available: 1,
-      },
-    }).then(function (products) {
-      products = products.map(function (product) {
-        product.dataValues.createdAt = moment(
-          product.dataValues.createdAt
-        ).format("LLLL");
-        product.dataValues.updatedAt = moment(
-          product.dataValues.updatedAt
-        ).fromNow();
-
-        return product;
-      });
-
-      messages.push({
-        error,
-        type: "alert-danger",
-      });
-
-      res.render("store/store", {
-        title: "Tienda | GloboFiestaCake's",
-        auth,
-        products: products.reverse(),
-        carrito: existeCarrito(req),
-        messages,
-      });
-    });
+    console.log(error);
+    res.sendStatus(401);
   }
 };
 
@@ -472,7 +415,7 @@ exports.obtenerPedidoPorIdAdmin = async (req, res, next) => {
         subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(2),
       });
     }
-   
+
     res.render("store/orderDetailAdmin", {
       title: "Detalles del pedido | GloboFiestaCake's",
       auth,
