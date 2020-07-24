@@ -32,7 +32,7 @@ module.exports = function () {
   routes.get(
     "/actualizar_cuenta",
     authController.usuarioAutenticado,
-    usersController.recargarCuenta
+    usersController.formularioCuenta
   );
 
   routes.get("/politicas_cookies", usersController.formularioPoliticas);
@@ -136,18 +136,13 @@ module.exports = function () {
 
   // Fin de productos
 
+  // Inicio Home
+  routes.get("/", homeController.formularioHome);
+  // Fin Home
+
   // Inicio de Tienda
-  routes.get(
-    "/tienda",
-
-    storeController.formularioTiendaHome
-  );
+  routes.get("/tienda", storeController.formularioTiendaHome);
   routes.post("/tienda/buscar_producto", storeController.buscarProducto);
-  routes.get(
-    "/",
-
-    homeController.formularioHome
-  );
   routes.get("/tienda/producto/:url", storeController.obtenerProductoPorUrl);
   routes.post(
     "/tienda/agregar_al_carrito/:id",
@@ -172,6 +167,8 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     storeController.terminarCompra
   );
+  routes.get("/tienda/terminar_compra", storeController.formularioTiendaHome);
   // Fin de tienda
+
   return routes;
 };

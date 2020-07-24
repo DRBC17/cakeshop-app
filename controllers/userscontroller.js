@@ -201,10 +201,6 @@ exports.actualizarUsuario = async (req, res, next) => {
   }
 };
 
-exports.recargarCuenta = async (req, res, next) => {
-  res.redirect("/cuenta");
-};
-
 // Verifica qie la contraseña enviada sea igual que la contraseña que esta en el sistema
 function verificarContraseña(res, password) {
   // Si el usuario existe, verificar si su contraseña es correcta
