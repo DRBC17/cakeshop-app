@@ -30,15 +30,15 @@
                                     <input type="checkbox" class="custom-control-input" id="customSwitch_{{id}}"
                                         checked>
                                     <label class="custom-control-label" for="customSwitch_{{id}}"
-                                        id="label_{{id}}">Disponible</label>
+                                        id="label_{{id}}">Entregado</label>
                                     {{else}}
                                     <input type="checkbox" class="custom-control-input" id="customSwitch_{{id}}">
-                                    <label class="custom-control-label" for="customSwitch_{{id}}" id="label_{{id}}">No
-                                        disponible</label>
+                                    <label class="custom-control-label" for="customSwitch_{{id}}"
+                                        id="label_{{id}}">Pendiente</label>
                                     {{/if}}
 
                                 </div>
-                                <a href="/cuenta/pedido/{{id}}" class="btn btn-primary btn-sm btn-card">Ver pedido</a>
+                                <a href="/cuenta/pedido/{{id}}" class="btn btn-primary btn-sm btn-block">Ver pedido</a>
                             </div>
 
                         </td>
