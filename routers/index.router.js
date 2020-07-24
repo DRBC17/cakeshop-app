@@ -37,6 +37,25 @@ module.exports = function () {
 
   routes.get("/politicas_cookies", usersController.formularioPoliticas);
 
+  routes.get(
+    "/cuenta/pedidos",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    storeController.formularioPedidosAdmin
+  );
+  routes.patch(
+    "/pedido/:id",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    storeController.cambiarEstadoPedido
+  );
+  routes.get(
+    "/cuenta/pedido/:id",
+    authController.usuarioAutenticado,
+    authAdminController.adminAutenticado,
+    storeController.obtenerPedidoPorIdAdmin
+  );
+
   // Fin de Usuario
 
   //Inicio de Categorías

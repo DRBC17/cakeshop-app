@@ -1,0 +1,52 @@
+{{!-- Mostrar los mensajes en caso de existir --}}
+{{>ourMessages}}
+<div class="card mt-3 mb-3">
+    <div class="card-header text-center bg-secondary text-white">
+        <h3>Pedidos</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Numero de teléfono</th>
+                        <th scope="col">Fecha del pedido</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="listado-pedidos">
+                    {{#each pedidos}}
+                    <tr>
+                        <th scope="row">{{numero}}</th>
+                        <td>{{name}}</td>
+                        <td>{{phone}}</td>
+                        <td>{{updatedAt}}</td>
+                        <td>
+                            <div class="form-group p-0">
+                                <div class="custom-control custom-switch" data-pedido={{id}} id="boton-estado">
+                                    {{#if status}}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch_{{id}}"
+                                        checked>
+                                    <label class="custom-control-label" for="customSwitch_{{id}}"
+                                        id="label_{{id}}">Disponible</label>
+                                    {{else}}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch_{{id}}">
+                                    <label class="custom-control-label" for="customSwitch_{{id}}" id="label_{{id}}">No
+                                        disponible</label>
+                                    {{/if}}
+
+                                </div>
+                                <a href="/cuenta/pedido/{{id}}" class="btn btn-primary btn-sm btn-card">Ver pedido</a>
+                            </div>
+
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

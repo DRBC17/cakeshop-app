@@ -17,7 +17,7 @@ const Order = db.define("order", {
     allowNull: false,
   },
   address: {
-    type: Sequelize.STRING(100),
+    type: Sequelize.STRING,
     allowNull: false,
     validate: {
       notEmpty: {

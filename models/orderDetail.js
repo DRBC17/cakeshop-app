@@ -21,7 +21,7 @@ const OrderDetail = db.define("orderDetail", {
     allowNull: false,
   },
   amount: {
-    type: Sequelize.DECIMAL(10, 2),
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
 });

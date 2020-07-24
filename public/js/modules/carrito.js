@@ -41,7 +41,7 @@ if (compras) {
                 //   Redireccionar al carrito
                 setTimeout(() => {
                   window.location.href = "/tienda/carrito";
-                }, 2500);
+                }, 2000);
               }
             })
             .catch((result) => {
