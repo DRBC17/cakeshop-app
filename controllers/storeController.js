@@ -10,7 +10,7 @@ moment.locale("es");
 // Importar shortid
 const shortid = require("shortid");
 // Operador para sequelize en sus búsquedas
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 // Renderizar el formulario de la tienda
 exports.formularioTiendaHome = (req, res, next) => {
@@ -283,6 +283,7 @@ function existeCarrito(req) {
 exports.eliminarDelCarrito = (req, res, next) => {
   const { id } = req.params;
   let carrito = req.session.carrito;
+  console.log(req.session.carrito);
   try {
     let index = 0;
     for (let element of carrito) {
@@ -332,6 +333,11 @@ exports.terminarCompra = async (req, res, next) => {
     res.sendStatus(401);
   }
 };
+exports.eliminarCarrito = (req, res, next) => {
+ //Elimina todos los perdidos con el email del usuario
+ req.session.carrito = [];
+  res.redirect('/tienda');
+}
 
 // Mostrar pedidos
 exports.formularioPedidosAdmin = async (req, res, next) => {

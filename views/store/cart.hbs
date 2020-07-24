@@ -2,7 +2,7 @@
 {{>ourMessages}}
 <div class="card mt-3 mb-3">
     <div class="card-header text-center bg-secondary text-white">
-        <h3> Mi carrito de compra </br> GloboFiestaCake's</h3>
+        <h3> Mi carrito de pedidos</br> GloboFiestaCake's</h3>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -43,7 +43,12 @@
                 placeholder="Ejemplo: Barrio El Carmen, Carretera al Batallón, cuadra y media de la gasolinera Uno, casa color verde.">{{address}}</textarea>
         </div>
         <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
-        <button type="submit" id="terminar-compra" class="btn btn-success btn-block">Terminar compra</button>
+        <div class="form-inline d-flex flex-row-reverse">
+            <button type="submit" id="terminar-compra" class="btn btn-lg btn-success m-1"><i
+                    class="far fa-check-circle p-1"></i>Terminar pedido</button>
 
+            <a href="/tienda/eliminar_carrito" class="btn btn-lg btn-danger m-1"><i
+                    class="far fa-times-circle p-1"></i>Eliminar carrito</a>
+        </div>
     </div>
 </div>
