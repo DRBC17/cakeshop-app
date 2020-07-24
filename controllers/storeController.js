@@ -1,6 +1,5 @@
 // Importar los modelos
 const Product = require("../models/product");
-const ImageProduct = require("../models/imageProduct");
 const Category = require("../models/category");
 const Order = require("../models/order");
 const OrderDetail = require("../models/orderDetail");
@@ -10,6 +9,8 @@ const moment = require("moment");
 moment.locale("es");
 // Importar shortid
 const shortid = require("shortid");
+// Operador para sequelize en sus búsquedas
+const { Op } = require("sequelize");
 
 // Renderizar el formulario de la tienda
 exports.formularioTiendaHome = (req, res, next) => {
@@ -66,7 +67,9 @@ exports.buscarProducto = async (req, res, next) => {
     try {
       Product.findAll({
         where: {
-          name: search,
+          name: {
+            [Op.like]: `%${search}%`,
+          },
           available: 1,
         },
       }).then(function (products) {

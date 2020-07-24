@@ -13,7 +13,7 @@ moment.locale("es");
 const slug = require("slug");
 // Importar shortid
 const shortid = require("shortid");
-const { ProvidePlugin } = require("webpack");
+const { Op } = require("sequelize");
 
 //Renderizamos el formulario para agregar producto.
 exports.formularioAgregarProducto = async (req, res, next) => {
@@ -442,7 +442,9 @@ exports.buscarProducto = async (req, res, next) => {
     try {
       Product.findAll({
         where: {
-          name: search,
+          name: {
+            [Op.like]: `%${search}%`,
+          },
         },
       }).then(function (products) {
         products = products.map(function (product) {
@@ -490,16 +492,28 @@ exports.buscarProducto = async (req, res, next) => {
         }
       });
     } catch (error) {
-      messages.push({
-        error,
-        type: "alert-danger",
-      });
-      res.render("product/recordBook", {
-        title: "Productos | GloboFiestaCake's",
-        auth,
-        products: products.reverse(),
-        search,
-        messages,
+      Product.findAll().then(function (products) {
+        products = products.map(function (product) {
+          product.dataValues.createdAt = moment(
+            product.dataValues.createdAt
+          ).format("LLLL");
+          product.dataValues.updatedAt = moment(
+            product.dataValues.updatedAt
+          ).fromNow();
+
+          return product;
+        });
+        messages.push({
+          error,
+          type: "alert-danger",
+        });
+        res.render("product/recordBook", {
+          title: "Productos | GloboFiestaCake's",
+          auth,
+          products: products.reverse(),
+          search,
+          messages,
+        });
       });
     }
   }
