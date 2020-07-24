@@ -22,9 +22,9 @@ if (pedidos) {
 
           // Si esta seleccionado cambiamos el nombre
           if (cb.checked) {
-            label.innerHTML = "Disponible";
+            label.innerHTML = "Entregado";
           } else {
-            label.innerHTML = "No Disponible";
+            label.innerHTML = "Pendiente";
           }
         }
       });

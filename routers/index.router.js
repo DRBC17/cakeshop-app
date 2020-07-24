@@ -55,7 +55,16 @@ module.exports = function () {
     authAdminController.adminAutenticado,
     storeController.obtenerPedidoPorIdAdmin
   );
-
+  routes.get(
+    "/cuenta/mis_pedidos",
+    authController.usuarioAutenticado,
+    storeController.formularioPedidos
+  );
+  routes.get(
+    "/cuenta/mi_pedido/:id",
+    authController.usuarioAutenticado,
+    storeController.obtenerPedidoPorId
+  );
   // Fin de Usuario
 
   //Inicio de Categorías
@@ -177,7 +186,6 @@ module.exports = function () {
   routes.delete(
     "/tienda/eliminar_del_carrito/:id",
     authController.usuarioAutenticado,
-    authAdminController.adminAutenticado,
     storeController.eliminarDelCarrito
   );
   routes.post(
@@ -187,6 +195,7 @@ module.exports = function () {
     storeController.terminarCompra
   );
   routes.get("/tienda/terminar_compra", storeController.formularioTiendaHome);
+  routes.get("/tienda/eliminar_carrito", storeController.eliminarCarrito);
   // Fin de tienda
 
   return routes;
