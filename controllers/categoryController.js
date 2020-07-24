@@ -8,8 +8,8 @@ moment.locale("es");
 const slug = require("slug");
 // Importar shortid
 const shortid = require("shortid");
-const Product = require("../models/product");
-
+// Operador para sequelize en sus búsquedas
+const { Op } = require("sequelize");
 // Renderizamos el formulario para las categorías
 exports.formularioCategorias = async (req, res, next) => {
   const { auth } = res.locals.usuario;
@@ -283,7 +283,9 @@ exports.buscarCategoria = async (req, res, next) => {
     try {
       Category.findAll({
         where: {
-          name: search,
+          name: {
+            [Op.like]: `%${search}%`,
+          },
         },
       }).then(function (categories) {
         categories = categories.map(function (category) {

@@ -12,7 +12,7 @@ const OrderDetail = db.define("orderDetail", {
     primaryKey: true,
     autoIncrement: true,
   },
-  ordeId: {
+  orderId: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },

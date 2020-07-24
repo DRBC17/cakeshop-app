@@ -5,11 +5,11 @@ require("dotenv").config();
 
 // Parámetros de la conexión a la base de datos
 const db = new Sequelize(
-  "cakeshop",
+  process.env.MYSQLDB,
   process.env.MYSQLUSER,
   process.env.MYSQLPASS,
   {
-    host: "localhost",
+    host: process.env.MYSQLSERVER,
     dialect: "mysql",
     port: process.env.MYSQLPORT,
     operatorAliases: false,

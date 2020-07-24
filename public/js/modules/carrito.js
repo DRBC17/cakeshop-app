@@ -9,7 +9,7 @@ if (compras) {
   // Agregar un evento click sobre los i de cada elemento
   compras.addEventListener("click", (e) => {
     // Si realizo click sobre la papelera de eliminación (fa-times)
-    if (e.target.classList.contains("fa-times")) {
+    if (e.target.classList.contains("fa-trash")) {
       // Necesitamos obtener el elemento
       const eCompra = e.target;
       const idCompra = eCompra.parentElement.parentElement.dataset.compra;
@@ -38,6 +38,10 @@ if (compras) {
                   response.data.message,
                   "success"
                 );
+                //   Redireccionar al carrito
+                setTimeout(() => {
+                  window.location.href = "/tienda/carrito";
+                }, 2500);
               }
             })
             .catch((result) => {
@@ -50,10 +54,6 @@ if (compras) {
             });
         }
       });
-      //   Redireccionar a /
-      setTimeout(() => {
-        window.location.href = "/tienda/carrito";
-      }, 3000);
     }
   });
 }
