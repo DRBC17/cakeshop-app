@@ -10,7 +10,7 @@ moment.locale("es");
 // Importar shortid
 const shortid = require("shortid");
 // Operador para sequelize en sus búsquedas
-const { Op } = require("sequelize");
+const { Op, fn } = require("sequelize");
 
 // Renderizar el formulario de la tienda
 exports.formularioTiendaHome = (req, res, next) => {
@@ -23,6 +23,7 @@ exports.formularioTiendaHome = (req, res, next) => {
       where: {
         available: 1,
       },
+      order: fn("RAND"),
     }).then(function (products) {
       products = products.map(function (product) {
         product.dataValues.createdAt = moment(
@@ -37,7 +38,7 @@ exports.formularioTiendaHome = (req, res, next) => {
       res.render("store/store", {
         title: "Tienda | GloboFiestaCake's",
         auth,
-        products: products.reverse(),
+        products,
         carrito: existeCarrito(req),
       });
     });
@@ -51,7 +52,7 @@ exports.formularioTiendaHome = (req, res, next) => {
       auth,
       messages,
       carrito: existeCarrito(req),
-      products: products.reverse(),
+      products,
     });
   }
 };
@@ -72,6 +73,7 @@ exports.buscarProducto = async (req, res, next) => {
           },
           available: 1,
         },
+        order: fn("RAND"),
       }).then(function (products) {
         products = products.map(function (product) {
           product.dataValues.createdAt = moment(
@@ -87,7 +89,7 @@ exports.buscarProducto = async (req, res, next) => {
           res.render("store/store", {
             title: "Tienda | GloboFiestaCake's",
             auth,
-            products: products.reverse(),
+            products,
             search,
             carrito: existeCarrito(req),
           });
@@ -101,6 +103,7 @@ exports.buscarProducto = async (req, res, next) => {
             where: {
               available: 1,
             },
+            order: fn("RAND"),
           }).then(function (products) {
             products = products.map(function (product) {
               product.dataValues.createdAt = moment(
@@ -115,7 +118,7 @@ exports.buscarProducto = async (req, res, next) => {
             res.render("store/store", {
               title: "Tienda | GloboFiestaCake's",
               auth,
-              products: products.reverse(),
+              products,
               search,
               carrito: existeCarrito(req),
               messages,
@@ -131,7 +134,7 @@ exports.buscarProducto = async (req, res, next) => {
       res.render("store/store", {
         title: "Tienda | GloboFiestaCake's",
         auth,
-        products: products.reverse(),
+        products,
         search,
         carrito: existeCarrito(req),
         messages,
@@ -185,6 +188,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
           where: {
             available: 1,
           },
+          order: fn("RAND"),
         }).then(function (products) {
           products = products.map(function (product) {
             product.dataValues.createdAt = moment(
@@ -199,7 +203,7 @@ exports.obtenerProductoPorUrl = async (req, res, next) => {
           res.render("store/store", {
             title: "Tienda | GloboFiestaCake's",
             auth,
-            products: products.reverse(),
+            products,
             carrito: existeCarrito(req),
             messages,
           });
@@ -334,10 +338,10 @@ exports.terminarCompra = async (req, res, next) => {
   }
 };
 exports.eliminarCarrito = (req, res, next) => {
- //Elimina todos los perdidos con el email del usuario
- req.session.carrito = [];
-  res.redirect('/tienda');
-}
+  //Elimina todos los perdidos con el email del usuario
+  req.session.carrito = [];
+  res.redirect("/tienda");
+};
 
 // Mostrar pedidos
 exports.formularioPedidosAdmin = async (req, res, next) => {
