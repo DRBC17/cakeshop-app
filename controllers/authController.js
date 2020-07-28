@@ -3,11 +3,13 @@ const User = require("../models/user");
 
 // Importar módulos
 const passport = require("passport");
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 // Utilizar los operadores de Sequelize
 const Op = Sequelize.Op;
 // Importar crypto
 const crypto = require("crypto");
+// Importar bycrypt
+const bcrypt = require("bcrypt-nodejs");
 // Importar la configuración de envío de correo electrónico
 const enviarCorreo = require("../helpers/email");
 
@@ -109,6 +111,7 @@ exports.validarToken = async (req, res, next) => {
     // Si el usuario existe, mostrar el formulario de generar nueva contraseña
     res.render("user/restorePassword", {
       title: "Restablecer contraseña | GloboFiestaCake's",
+      token,
     });
   } catch (error) {
     res.redirect("/iniciar_sesion");
