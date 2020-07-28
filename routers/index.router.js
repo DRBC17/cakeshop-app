@@ -214,5 +214,22 @@ module.exports = function () {
   routes.get("/tienda/eliminar_carrito", storeController.eliminarCarrito);
   // Fin de tienda
 
+  // Inicio de correo
+
+  // Reestablecer la contraseña de un usuario
+  routes.get(
+    "/restablecer_password",
+    usersController.formularioRestablecerPassword
+  );
+
+  routes.post("/restablecer_password", authController.enviarToken);
+
+  routes.get("/restablecer_password/:token", authController.validarToken);
+
+  routes.post(
+    "/restablecer_password/:token",
+    authController.actualizarPassword
+  );
+  // Fin correo
   return routes;
 };
