@@ -1,5 +1,10 @@
+// Importar Router de express
 const { Router } = require("express");
 const routes = Router();
+
+// Importar expresss-validator
+// https://express-validator.github.io/docs/sanitization.html
+const { body } = require("express-validator");
 
 // Importamos los controladores
 const usersController = require("../controllers/usersController");
@@ -13,7 +18,14 @@ const homeController = require("../controllers/homeController");
 module.exports = function () {
   // Inicio de Usuario
   routes.get("/registrate", usersController.formularioCrearCuenta);
-  routes.post("/registrate", usersController.CrearCuenta);
+  routes.post(
+    "/registrate",
+    // Sanitizar el contenido del formulario
+    body("firstName").notEmpty().trim().escape(),
+    body("lastName").notEmpty().trim().escape(),
+    body("phone").notEmpty().trim().escape(),
+    usersController.CrearCuenta
+  );
 
   routes.get("/iniciar_sesion", usersController.formularioIniciarSesion);
   routes.post("/iniciar_sesion", authController.autenticarUsuario);
@@ -26,6 +38,10 @@ module.exports = function () {
   );
   routes.post(
     "/actualizar_cuenta",
+    // Sanitizar el contenido del formulario
+    body("firstName").notEmpty().trim().escape(),
+    body("lastName").notEmpty().trim().escape(),
+    body("phone").notEmpty().trim().escape(),
     authController.usuarioAutenticado,
     usersController.actualizarUsuario
   );
