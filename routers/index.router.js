@@ -38,11 +38,11 @@ module.exports = function () {
   );
   routes.post(
     "/actualizar_cuenta",
+    authController.usuarioAutenticado,
     // Sanitizar el contenido del formulario
     body("firstName").notEmpty().trim().escape(),
     body("lastName").notEmpty().trim().escape(),
     body("phone").notEmpty().trim().escape(),
-    authController.usuarioAutenticado,
     usersController.actualizarUsuario
   );
   routes.get(
@@ -51,7 +51,8 @@ module.exports = function () {
     usersController.formularioCuenta
   );
 
-  routes.get("/politicas_cookies", usersController.formularioPoliticas);
+  routes.get("/politicas_de_cookies", usersController.formularioPoliticas);
+  routes.get("/terminos_y_condiciones", usersController.formularioTerminosYCondiciones);
 
   routes.get(
     "/cuenta/pedidos",
@@ -100,6 +101,9 @@ module.exports = function () {
     "/agregar_categoria",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("name").notEmpty().trim().escape(),
+    body("description").notEmpty().trim().escape(),
     categoryController.CrearCategoria
   );
   routes.get(
@@ -112,6 +116,9 @@ module.exports = function () {
     "/actualizar_categoria/:id",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("name").notEmpty().trim().escape(),
+    body("description").notEmpty().trim().escape(),
     categoryController.actualizarCategoria
   );
   routes.delete(
@@ -124,6 +131,8 @@ module.exports = function () {
     "/buscar_categoria",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("search").notEmpty().trim().escape(),
     categoryController.buscarCategoria
   );
   // Fin de categoria
@@ -145,6 +154,10 @@ module.exports = function () {
     "/agregar_producto",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("name").notEmpty().trim().escape(),
+    body("description").notEmpty().trim().escape(),
+    body("unitPrice").notEmpty().trim().escape(),
     productsController.crearProducto
   );
   routes.get(
@@ -157,6 +170,10 @@ module.exports = function () {
     "/actualizar_producto/:id",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("name").notEmpty().trim().escape(),
+    body("description").notEmpty().trim().escape(),
+    body("unitPrice").notEmpty().trim().escape(),
     productsController.actualizarProducto
   );
   routes.delete(
@@ -169,6 +186,8 @@ module.exports = function () {
     "/buscar_producto",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("search").notEmpty().trim().escape(),
     productsController.buscarProducto
   );
   routes.patch(
@@ -186,11 +205,18 @@ module.exports = function () {
 
   // Inicio de Tienda
   routes.get("/tienda", storeController.formularioTiendaHome);
-  routes.post("/tienda/buscar_producto", storeController.buscarProducto);
+  routes.post(
+    "/tienda/buscar_producto",
+    // Sanitizar el contenido del formulario
+    body("search").notEmpty().trim().escape(),
+    storeController.buscarProducto
+  );
   routes.get("/tienda/producto/:url", storeController.obtenerProductoPorUrl);
   routes.post(
     "/tienda/agregar_al_carrito/:id",
     authController.usuarioAutenticado,
+    // Sanitizar el contenido del formulario
+    body("amount").notEmpty().trim().escape(),
     storeController.añadirAlCarrito
   );
   routes.get(
@@ -208,6 +234,8 @@ module.exports = function () {
     "/tienda/terminar_compra",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("address").notEmpty().trim().escape(),
     storeController.terminarCompra
   );
   routes.get("/tienda/terminar_compra", storeController.formularioTiendaHome);
