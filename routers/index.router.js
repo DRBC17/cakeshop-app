@@ -153,6 +153,10 @@ module.exports = function () {
     "/agregar_producto",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("name").notEmpty().trim().escape(),
+    body("description").notEmpty().trim().escape(),
+    body("unitPrice").notEmpty().trim().escape(),
     productsController.crearProducto
   );
   routes.get(
@@ -165,6 +169,10 @@ module.exports = function () {
     "/actualizar_producto/:id",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("name").notEmpty().trim().escape(),
+    body("description").notEmpty().trim().escape(),
+    body("unitPrice").notEmpty().trim().escape(),
     productsController.actualizarProducto
   );
   routes.delete(
@@ -177,6 +185,8 @@ module.exports = function () {
     "/buscar_producto",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("search").notEmpty().trim().escape(),
     productsController.buscarProducto
   );
   routes.patch(
