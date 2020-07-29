@@ -3,6 +3,7 @@ const User = require("../models/user");
 
 // Importar módulos
 const passport = require("passport");
+// Importamos sequelize
 const Sequelize = require("sequelize");
 // Utilizar los operadores de Sequelize
 const Op = Sequelize.Op;
@@ -10,6 +11,8 @@ const Op = Sequelize.Op;
 const crypto = require("crypto");
 // Importar bycrypt
 const bcrypt = require("bcrypt-nodejs");
+// Importar slug
+const slug = require("slug");
 // Importar la configuración de envío de correo electrónico
 const enviarCorreo = require("../helpers/email");
 
@@ -106,13 +109,13 @@ exports.validarToken = async (req, res, next) => {
     if (!usuario) {
       req.flash("error", "¡El enlace que seguiste no es válido!");
       res.redirect("/restablecer_password");
+    } else {
+      // Si el usuario existe, mostrar el formulario de generar nueva contraseña
+      res.render("user/restorePassword", {
+        title: "Restablecer contraseña | GloboFiestaCake's",
+        token,
+      });
     }
-
-    // Si el usuario existe, mostrar el formulario de generar nueva contraseña
-    res.render("user/restorePassword", {
-      title: "Restablecer contraseña | GloboFiestaCake's",
-      token,
-    });
   } catch (error) {
     res.redirect("/iniciar_sesion");
   }
@@ -123,9 +126,10 @@ exports.actualizarPassword = async (req, res, next) => {
   // Obtener el usuario mediante el token y verificar que
   // el token aún no ha expirado. El token vence en una hora.
   // https://sequelize.org/master/manual/model-querying-basics.html
+  const { token } = req.params;
   const usuario = await User.findOne({
     where: {
-      token: req.params.token,
+      token,
       expiration: {
         [Op.gte]: Date.now(),
       },
@@ -140,9 +144,17 @@ exports.actualizarPassword = async (req, res, next) => {
     );
     res.redirect("/restablecer_password");
   }
-
+  if (validarContraseña(req.body.password)) {
+    req.flash(
+      "error",
+      "¡La contraseña debe tener como mínimo 4 caracteres de longitud y tener al menos una letra mayúscula!"
+    );
+    res.redirect(`/restablecer_password/${token}`);
+  }
+  console.log(req.body);
+  console.log(`>:${req.body.password}`);
   // Si el token es correcto y aún no vence
-  usuario.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+  usuario.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(13));
 
   // Limpiar los valores del token y de la expiración
   usuario.token = null;
@@ -155,3 +167,12 @@ exports.actualizarPassword = async (req, res, next) => {
   req.flash("success", "Tu contraseña se ha actualizado correctamente");
   res.redirect("/iniciar_sesion");
 };
+
+function validarContraseña(contraseña) {
+  const verificar = slug(contraseña).toLowerCase();
+  if (contraseña.length >= 4 && contraseña != verificar) {
+    return false;
+  } else {
+    return true;
+  }
+}

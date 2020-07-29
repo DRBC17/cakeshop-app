@@ -33,12 +33,22 @@ exports.CrearCuenta = async (req, res, next) => {
   } = usuario;
   console.log(usuario);
 
-  let messages = "";
+  let messages = [];
   if (validarContraseña(password)) {
     // En caso que las contraseñas no cumpla con los requisitos
     messages = {
       error:
-        "La contraseña debe tener como mínimo 4 caracteres de longitud y tener al menos una letra mayúscula",
+        "¡La contraseña debe tener como mínimo 4 caracteres de longitud y tener al menos una letra mayúscula!",
+    };
+    res.render("user/register", {
+      title: "Regístrate en GloboFiestaCake's",
+      usuario,
+      messages,
+    });
+    // si el numero no es igual
+  } else if (isNaN(phone)) {
+    messages = {
+      error: "¡Debe ingresar un numero de teléfono valido!",
     };
     res.render("user/register", {
       title: "Regístrate en GloboFiestaCake's",
@@ -159,6 +169,13 @@ exports.actualizarUsuario = async (req, res, next) => {
   if (!phone) {
     messages.push({
       error: "¡Debe ingresar un numero de teléfono!",
+      type: "alert-danger",
+    });
+  }
+
+  if (isNaN(phone)) {
+    messages.push({
+      error: "¡Debe ingresar un numero de teléfono valido!",
       type: "alert-danger",
     });
   }

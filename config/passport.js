@@ -21,7 +21,6 @@ passport.use(
         const user = await User.findOne({
           where: { email },
         });
-
         // Si el usuario existe, verificar si su contraseña es correcta
         if (!user.comparePassword(password)) {
           return done(null, false, {

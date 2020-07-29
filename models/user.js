@@ -81,10 +81,6 @@ const User = db.define(
         // https://www.npmjs.com/package/bcrypt
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(13));
       },
-      beforeUpdate(user) {
-        // Realizar el hash del password
-        user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(13));
-      },
     },
   }
 );
