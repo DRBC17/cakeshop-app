@@ -51,7 +51,8 @@ module.exports = function () {
     usersController.formularioCuenta
   );
 
-  routes.get("/politicas_cookies", usersController.formularioPoliticas);
+  routes.get("/politicas_de_cookies", usersController.formularioPoliticas);
+  routes.get("/terminos_y_condiciones", usersController.formularioTerminosYCondiciones);
 
   routes.get(
     "/cuenta/pedidos",

@@ -9,8 +9,14 @@ require("dotenv").config();
 
 // Renderizamos el formulario para las políticas
 exports.formularioPoliticas = (req, res, next) => {
-  res.render("user/cookiePolicies", {
+  res.render("information/cookiePolicies", {
     title: "Políticas de cookies | GloboFiestaCake's",
+  });
+};
+// Renderizamos el formulario para términos y condiciones
+exports.formularioTerminosYCondiciones = (req, res, next) => {
+  res.render("information/terms", {
+    title: "Términos y condiciones | GloboFiestaCake's",
   });
 };
 
