@@ -204,11 +204,18 @@ module.exports = function () {
 
   // Inicio de Tienda
   routes.get("/tienda", storeController.formularioTiendaHome);
-  routes.post("/tienda/buscar_producto", storeController.buscarProducto);
+  routes.post(
+    "/tienda/buscar_producto",
+    // Sanitizar el contenido del formulario
+    body("search").notEmpty().trim().escape(),
+    storeController.buscarProducto
+  );
   routes.get("/tienda/producto/:url", storeController.obtenerProductoPorUrl);
   routes.post(
     "/tienda/agregar_al_carrito/:id",
     authController.usuarioAutenticado,
+    // Sanitizar el contenido del formulario
+    body("amount").notEmpty().trim().escape(),
     storeController.añadirAlCarrito
   );
   routes.get(
@@ -226,6 +233,8 @@ module.exports = function () {
     "/tienda/terminar_compra",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("address").notEmpty().trim().escape(),
     storeController.terminarCompra
   );
   routes.get("/tienda/terminar_compra", storeController.formularioTiendaHome);
