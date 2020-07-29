@@ -99,12 +99,8 @@ exports.CrearCuenta = async (req, res, next) => {
 };
 // Renderizamos el formulario de iniciar sesión
 exports.formularioIniciarSesion = (req, res, next) => {
-  // Verificar si existe algún mensaje
-  // const messages = res.locals.messages;
-  // console.log(messages);
   res.render("user/login", {
     title: "Iniciar sesión en GloboFiestaCake's",
-    // messages,
   });
 };
 
