@@ -38,11 +38,11 @@ module.exports = function () {
   );
   routes.post(
     "/actualizar_cuenta",
+    authController.usuarioAutenticado,
     // Sanitizar el contenido del formulario
     body("firstName").notEmpty().trim().escape(),
     body("lastName").notEmpty().trim().escape(),
     body("phone").notEmpty().trim().escape(),
-    authController.usuarioAutenticado,
     usersController.actualizarUsuario
   );
   routes.get(
@@ -100,6 +100,9 @@ module.exports = function () {
     "/agregar_categoria",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("name").notEmpty().trim().escape(),
+    body("description").notEmpty().trim().escape(),
     categoryController.CrearCategoria
   );
   routes.get(
@@ -112,6 +115,9 @@ module.exports = function () {
     "/actualizar_categoria/:id",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("name").notEmpty().trim().escape(),
+    body("description").notEmpty().trim().escape(),
     categoryController.actualizarCategoria
   );
   routes.delete(
@@ -124,6 +130,8 @@ module.exports = function () {
     "/buscar_categoria",
     authController.usuarioAutenticado,
     authAdminController.adminAutenticado,
+    // Sanitizar el contenido del formulario
+    body("search").notEmpty().trim().escape(),
     categoryController.buscarCategoria
   );
   // Fin de categoria
