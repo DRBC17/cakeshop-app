@@ -122,6 +122,8 @@ app.use(multer({ storage }).single("image"));
 // >Routes
 // Mandamos a llamar las rutas
 app.use("/", router());
+
+
 // >Static files
 
 // Configuración de la carpeta publica

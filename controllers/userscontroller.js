@@ -33,12 +33,22 @@ exports.CrearCuenta = async (req, res, next) => {
   } = usuario;
   console.log(usuario);
 
-  let messages = "";
+  let messages = [];
   if (validarContraseña(password)) {
     // En caso que las contraseñas no cumpla con los requisitos
     messages = {
       error:
-        "La contraseña debe tener como mínimo 4 caracteres de longitud y tener al menos una letra mayúscula",
+        "¡La contraseña debe tener como mínimo 4 caracteres de longitud y tener al menos una letra mayúscula!",
+    };
+    res.render("user/register", {
+      title: "Regístrate en GloboFiestaCake's",
+      usuario,
+      messages,
+    });
+    // si el numero no es igual
+  } else if (isNaN(phone)) {
+    messages = {
+      error: "¡Debe ingresar un numero de teléfono valido!",
     };
     res.render("user/register", {
       title: "Regístrate en GloboFiestaCake's",
@@ -89,12 +99,8 @@ exports.CrearCuenta = async (req, res, next) => {
 };
 // Renderizamos el formulario de iniciar sesión
 exports.formularioIniciarSesion = (req, res, next) => {
-  // Verificar si existe algún mensaje
-  const messages = res.locals.messages;
-
   res.render("user/login", {
     title: "Iniciar sesión en GloboFiestaCake's",
-    messages,
   });
 };
 
@@ -163,6 +169,13 @@ exports.actualizarUsuario = async (req, res, next) => {
     });
   }
 
+  if (isNaN(phone)) {
+    messages.push({
+      error: "¡Debe ingresar un numero de teléfono valido!",
+      type: "alert-danger",
+    });
+  }
+
   // Si la contraseña enviada no es igual a la que esta almacenada no permitirá al programa modificar los datos
   if (verificarContraseña(res, password) === false) {
     messages.push({
@@ -218,3 +231,11 @@ function validarContraseña(contraseña) {
   }
 }
 
+//
+
+// Renderiza formulario para restablecer contraseña
+exports.formularioRestablecerPassword = (req, res, next) => {
+  res.render("user/sendRestorePassword", {
+    title: "Restablecer contraseña | GloboFiestaCake's",
+  });
+};
