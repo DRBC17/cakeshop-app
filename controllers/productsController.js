@@ -330,7 +330,7 @@ exports.actualizarProducto = async (req, res, next) => {
         await Product.update(
           {
             name: actualizarNombre(name),
-            description,
+            description: description.camelCase(),
             categoryId,
             unitPrice,
             url: actualizarUrl(name),
@@ -349,7 +349,7 @@ exports.actualizarProducto = async (req, res, next) => {
         await Product.update(
           {
             name: actualizarNombre(name),
-            description,
+            description: description.camelCase(),
             categoryId,
             unitPrice,
             url: actualizarUrl(name),
