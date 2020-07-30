@@ -26,6 +26,8 @@ exports.autenticarUsuario = passport.authenticate("local", {
 
 // Cerrar la sesión del usuario actual
 exports.cerrarSesion = (req, res, next) => {
+  // Antes Cerrar sesión eliminamos el carrito
+  req.session.carrito = [];
   // Al cerrar sesión redirigimos al usuario al inicio de sesión.
   req.session.destroy(() => {
     res.redirect("/iniciar_sesion");

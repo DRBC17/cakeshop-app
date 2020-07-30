@@ -4,9 +4,10 @@
   "description": "Aplicación web para para la repostería Globo Fiesta Cake's DMA-Programs 2020",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run dev\" \"npm run watch\"",
     "dev": "nodemon ./index.js",
-    "watch": "webpack --w --mode development"
+    "develop": "concurrently \"npm run dev\" \"npm run watch\"",
+    "watch": "webpack --w --mode development",
+    "start": "node ./index.js"
   },
   "repository": {
     "type": "git",
