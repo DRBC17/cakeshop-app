@@ -153,8 +153,6 @@ exports.actualizarPassword = async (req, res, next) => {
     );
     res.redirect(`/restablecer_password/${token}`);
   }
-  console.log(req.body);
-  console.log(`>:${req.body.password}`);
   // Si el token es correcto y aún no vence
   usuario.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(13));
 

@@ -34,7 +34,7 @@ exports.enviarCorreo = async (opciones) => {
 
       // Generar un HTML para el cuerpo del correo electrónico
       const data = {
-        fullname: opciones.usuario.fullname,
+        fullname: `${opciones.usuario.firstName} ${opciones.usuario.lastName}`,
         resetUrl: opciones.resetUrl,
       };
 
