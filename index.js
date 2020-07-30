@@ -30,6 +30,8 @@ require("dotenv").config();
 const router = require("./routers/index.router");
 // Crear la conexión con la base de datos
 const db = require("./config/db");
+// Importar helpers con funciones comunes para todo el sitio
+const helpers = require("./helpers");
 
 // Importamos los modelos modelos
 require("./models/user");
@@ -48,7 +50,8 @@ const app = express();
 
 // >Settings
 // Configuramos el puerto para el servidor
-app.set("port", process.env.SERVERPORT || 3000);
+app.set("port", process.env.PORT || 3000);
+app.set("host", process.env.HOST || "0.0.0.0");
 // Configuramos la ruta de las vistas
 app.set("views", path.join(__dirname, "views"));
 // Configuramos el motor de vista Handlebars
@@ -104,6 +107,8 @@ app.use((req, res, next) => {
   // Pasar el usuario a las variables locales de la petición
   res.locals.usuario = { ...req.user } || null;
   res.locals.messages = req.flash();
+  // Pasar valores de variables por el helper
+  res.locals.vardump = helpers.vardump;
   // Continuar con el camino del middleware
   next();
 });
@@ -123,7 +128,6 @@ app.use(multer({ storage }).single("image"));
 // Mandamos a llamar las rutas
 app.use("/", router());
 
-
 // >Static files
 
 // Configuración de la carpeta publica
@@ -132,6 +136,6 @@ app.use(express.static(path.join(__dirname, "public")));
 // >Global variable
 
 // Inizialiazar el server
-app.listen(app.get("port"), () => {
+app.listen(app.get("port"),app.get("host"), () => {
   console.log(`Server started on port ${app.get("port")}`);
 });
