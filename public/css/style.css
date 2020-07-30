@@ -140,3 +140,9 @@ nav li {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+@media (min-width: 768px) {
+  .btn-search {
+    margin-left: 0.2rem;
+  }
+}
