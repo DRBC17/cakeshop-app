@@ -273,3 +273,23 @@ exports.cambiarContraseña = async (req, res, next) => {
     res.sendStatus(401);
   }
 };
+
+exports.cambiarEmail = async (req, res, next) => {
+  const { email } = req.body;
+  const { id } = res.locals.usuario;
+  try {
+    // Actualizamos los datos del usuario
+    await User.update(
+      { email },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(401);
+  }
+};

@@ -2,6 +2,7 @@
 import Axios from "axios";
 import Swal from "sweetalert2";
 const botonContraseña = document.getElementById("cambiar_password");
+const botonEmail = document.getElementById("cambiar_email");
 
 if (botonContraseña) {
   botonContraseña.addEventListener("click", async (e) => {
@@ -11,8 +12,11 @@ if (botonContraseña) {
         '<input id="swal-input1" type="password" class="swal2-input" placeholder="Contraseña actual">' +
         '<input id="swal-input2" type="password" class="swal2-input" placeholder="Nueva contraseña">',
       icon: "warning",
+      showCancelButton: true,
       confirmButtonText: "Actualizar",
+      cancelButtonText: "Cancelar",
       confirmButtonColor: "#56CC9D",
+      cancelButtonColor: "#FF7851",
       focusConfirm: false,
       preConfirm: () => {
         return [
@@ -66,17 +70,45 @@ if (botonContraseña) {
   });
 }
 
-// const { value: password } = await Swal.fire({
-//     title: 'Enter your password',
-//     input: 'password',
-//     inputPlaceholder: 'Enter your password',
-//     inputAttributes: {
-//       maxlength: 10,
-//       autocapitalize: 'off',
-//       autocorrect: 'off'
-//     }
-//   })
+if (botonEmail) {
+  botonEmail.addEventListener("click", async (e) => {
+    const { value: email } = await Swal.fire({
+      title: "Cambiar correo electrónico",
+      input: "email",
+      validationMessage: "Dirección de correo electrónico invalida",
+      inputPlaceholder: "Nuevo correo electrónico",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Actualizar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#56CC9D",
+      cancelButtonColor: "#FF7851",
+      focusConfirm: false,
+    });
 
-//   if (password) {
-//     Swal.fire(`Entered password: ${password}`)
-//   }
+    if (email) {
+      const url = `${location.origin}/cuenta/cambiar_email`;
+      Axios.post(url, { email })
+        .then((response) => {
+          if (response.status === 200) {
+            Swal.fire(
+              "Se actualizo la contraseña",
+              response.data.message,
+              "success"
+            );
+            //   Redireccionar al carrito
+            setTimeout(() => {
+              window.location.href = "/cerrar_sesion";
+            }, 2000);
+          }
+        })
+        .catch((result) => {
+          Swal.fire(
+            "Error",
+            "Ha ocurrido un error al momento de actualizar el correo electrónico",
+            "error"
+          );
+        });
+    }
+  });
+}

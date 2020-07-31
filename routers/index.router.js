@@ -55,6 +55,11 @@ module.exports = function () {
     authController.usuarioAutenticado,
     usersController.cambiarContraseña
   );
+  routes.post(
+    "/cuenta/cambiar_email",
+    authController.usuarioAutenticado,
+    usersController.cambiarEmail
+  );
 
   routes.get("/politicas_de_cookies", usersController.formularioPoliticas);
   routes.get(
