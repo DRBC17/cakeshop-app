@@ -150,7 +150,7 @@ if (botonEmail) {
                 );
               } else if (response.status === 200) {
                 Swal.fire(
-                  "Se actualizo la contraseña",
+                  "Se actualizo el correo electrónico",
                   response.data.message,
                   "success"
                 );
