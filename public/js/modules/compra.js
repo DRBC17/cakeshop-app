@@ -8,11 +8,10 @@ const boton = document.getElementById("terminar-compra");
 
 if (boton) {
   boton.addEventListener("click", (e) => {
-    // Mostrar una alerta consultando al usuario si quiere eliminar el elemento
+    // Mostrar una alerta consultando
     Swal.fire({
       title: "¿Estás seguro que deseas realizar el pedido?",
-      // text: "¡Si eliminas este producto no lo puedes recuperar!",
-      icon: "warning",
+      icon: "question",
       showCancelButton: true,
       confirmButtonText: "Aceptar",
       cancelButtonText: "Cancelar",
@@ -20,7 +19,7 @@ if (boton) {
       cancelButtonColor: "#FF7851",
     }).then((result) => {
       if (result.value) {
-        // Crear la URL de eliminación
+        // Crear la URL de terminar compra
         const url = `${location.origin}/tienda/terminar_compra`;
         const address = document.getElementById("address").value;
         if (!address) {
@@ -29,7 +28,6 @@ if (boton) {
           Axios.post(url, { address })
             .then((response) => {
               if (response.status === 200) {
-                // Mostrar un mensaje de confirmación de eliminación
                 Swal.fire(
                   "Se realizo el pedido",
                   response.data.message,
@@ -42,7 +40,6 @@ if (boton) {
               }
             })
             .catch((result) => {
-              // Mostrar un mensaje de confirmación de eliminación
               Swal.fire(
                 "Error",
                 "Ha ocurrido un error al momento de realizar el pedido",

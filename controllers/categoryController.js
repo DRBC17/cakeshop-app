@@ -192,7 +192,11 @@ exports.actualizarCategoria = async (req, res, next) => {
     // No existen errores ni mensajes
     try {
       await Category.update(
-        { name: actualizarNombre(name), description, url: actualizarUrl(name) },
+        {
+          name: actualizarNombre(name),
+          description: description.camelCase(),
+          url: actualizarUrl(name),
+        },
         {
           where: {
             id: req.params.id,
@@ -267,11 +271,6 @@ function actualizarNombre(name) {
   return name.camelCase();
 }
 
-// Métodos personalizados
-String.prototype.camelCase = function () {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
-
 exports.buscarCategoria = async (req, res, next) => {
   const { search } = req.body;
   const { auth } = res.locals.usuario;
@@ -345,4 +344,9 @@ exports.buscarCategoria = async (req, res, next) => {
       });
     }
   }
+};
+
+// Métodos personalizados
+String.prototype.camelCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
 };

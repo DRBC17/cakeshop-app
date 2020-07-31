@@ -245,3 +245,51 @@ exports.formularioRestablecerPassword = (req, res, next) => {
     title: "Restablecer contraseña | GloboFiestaCake's",
   });
 };
+
+exports.cambiarContraseña = async (req, res, next) => {
+  const { password, passwordNew } = req.body;
+  const { id } = res.locals.usuario;
+  try {
+    if (verificarContraseña(res, password)) {
+      if (validarContraseña(passwordNew)) {
+        res.send({ error: "contraseña no valida" });
+      } else {
+        // Actualizamos los datos del usuario
+        await User.update(
+          { password: bcrypt.hashSync(passwordNew, bcrypt.genSaltSync(13)) },
+          {
+            where: {
+              id,
+            },
+          }
+        );
+        res.sendStatus(200);
+      }
+    } else {
+      res.send({ error: "contraseña incorrecta" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(401);
+  }
+};
+
+exports.cambiarEmail = async (req, res, next) => {
+  const { email } = req.body;
+  const { id } = res.locals.usuario;
+  try {
+    // Actualizamos los datos del usuario
+    await User.update(
+      { email },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(401);
+  }
+};

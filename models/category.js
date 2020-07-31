@@ -54,6 +54,9 @@ const Category = db.define(
         // Convierte el nombre al formato camelCase
         const name = category.name.camelCase();
         category.name = name;
+        // Convierte la descripción al formato camelCase
+        const description = category.description.camelCase();
+        category.description = description;
       },
     },
   }

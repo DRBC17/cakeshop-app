@@ -26,6 +26,8 @@ exports.autenticarUsuario = passport.authenticate("local", {
 
 // Cerrar la sesión del usuario actual
 exports.cerrarSesion = (req, res, next) => {
+  // Antes Cerrar sesión eliminamos el carrito
+  req.session.carrito = [];
   // Al cerrar sesión redirigimos al usuario al inicio de sesión.
   req.session.destroy(() => {
     res.redirect("/iniciar_sesion");
@@ -151,8 +153,6 @@ exports.actualizarPassword = async (req, res, next) => {
     );
     res.redirect(`/restablecer_password/${token}`);
   }
-  console.log(req.body);
-  console.log(`>:${req.body.password}`);
   // Si el token es correcto y aún no vence
   usuario.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(13));
 

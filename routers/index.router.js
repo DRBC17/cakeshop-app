@@ -50,9 +50,22 @@ module.exports = function () {
     authController.usuarioAutenticado,
     usersController.formularioCuenta
   );
+  routes.post(
+    "/cuenta/cambiar_password",
+    authController.usuarioAutenticado,
+    usersController.cambiarContraseña
+  );
+  routes.post(
+    "/cuenta/cambiar_email",
+    authController.usuarioAutenticado,
+    usersController.cambiarEmail
+  );
 
   routes.get("/politicas_de_cookies", usersController.formularioPoliticas);
-  routes.get("/terminos_y_condiciones", usersController.formularioTerminosYCondiciones);
+  routes.get(
+    "/terminos_y_condiciones",
+    usersController.formularioTerminosYCondiciones
+  );
 
   routes.get(
     "/cuenta/pedidos",
