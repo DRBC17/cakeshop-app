@@ -251,20 +251,16 @@ exports.cambiarContraseña = async (req, res, next) => {
   const { id } = res.locals.usuario;
   try {
     if (verificarContraseña(res, password)) {
-      if (validarContraseña(passwordNew)) {
-        res.send({ error: "contraseña no valida" });
-      } else {
-        // Actualizamos los datos del usuario
-        await User.update(
-          { password: bcrypt.hashSync(passwordNew, bcrypt.genSaltSync(13)) },
-          {
-            where: {
-              id,
-            },
-          }
-        );
-        res.sendStatus(200);
-      }
+      // Actualizamos los datos del usuario
+      await User.update(
+        { password: bcrypt.hashSync(passwordNew, bcrypt.genSaltSync(13)) },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+      res.sendStatus(200);
     } else {
       res.send({ error: "contraseña incorrecta" });
     }
@@ -278,7 +274,6 @@ exports.cambiarEmail = async (req, res, next) => {
   const { password, email } = req.body;
   const { id } = res.locals.usuario;
   try {
-    console.log(req.body);
     if (verificarContraseña(res, password)) {
       // Actualizamos los datos del usuario
       await User.update(

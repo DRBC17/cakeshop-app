@@ -1,72 +1,99 @@
 // Importar los módulos necesarios
 import Axios from "axios";
 import Swal from "sweetalert2";
+import slug from "slug";
 const botonContraseña = document.getElementById("cambiar_password");
 const botonEmail = document.getElementById("cambiar_email");
 
 if (botonContraseña) {
   botonContraseña.addEventListener("click", async (e) => {
-    const { value: formValues } = await Swal.fire({
-      title: "Cambiar contraseña",
-      html:
-        '<input id="swal-input1" type="password" class="swal2-input" placeholder="Contraseña actual">' +
-        '<input id="swal-input2" type="password" class="swal2-input" placeholder="Nueva contraseña">',
-      icon: "warning",
+    Swal.mixin({
       showCancelButton: true,
-      confirmButtonText: "Actualizar",
       cancelButtonText: "Cancelar",
       confirmButtonColor: "#56CC9D",
       cancelButtonColor: "#FF7851",
       focusConfirm: false,
-      preConfirm: () => {
-        return [
-          document.getElementById("swal-input1").value,
-          document.getElementById("swal-input2").value,
-        ];
-      },
-    });
-
-    if (formValues) {
-      if (formValues[0] === "" && formValues[1] === "") {
-        Swal.fire("Error", "Debe rellenar todos los datos", "error");
-      } else if (formValues[0] === "") {
-        Swal.fire("Error", "Debe ingresar su contraseña actual", "error");
-      } else if (formValues[0] === "") {
-        Swal.fire("Error", "Debe ingresar la nueva contraseña", "error");
-      } else {
-        const url = `${location.origin}/cuenta/cambiar_password`;
-        Axios.post(url, { password: formValues[0], passwordNew: formValues[1] })
-          .then((response) => {
-            // Swal.fire(JSON.stringify())
-            if (response["data"].error === "contraseña incorrecta") {
-              Swal.fire("Error", "La contraseña actual es incorrecta", "error");
-            } else if (response["data"].error === "contraseña no valida") {
+      progressSteps: ["1", "2", "3"],
+    })
+      .queue([
+        {
+          title: "Cambiar contraseña",
+          text: "Si desea actualizar su contraseña presione siguiente",
+          icon: "warning",
+          confirmButtonText: "Siguiente &rarr;",
+        },
+        {
+          title: "Contraseña actual",
+          input: "password",
+          confirmButtonText: "Siguiente &rarr;",
+          inputValidator: (value) => {
+            return new Promise((resolve) => {
+              if (value) {
+                resolve();
+              } else {
+                resolve("Debe ingresar su contraseña actual");
+              }
+            });
+          },
+        },
+        {
+          title: "Nueva contraseña",
+          input: "password",
+          confirmButtonText: "Siguiente &rarr;",
+          inputValidator: (value) => {
+            return new Promise((resolve) => {
+              if (!value) {
+                resolve("Debe ingresar la nueva contraseña");
+              } else {
+                const verificar = slug(value).toLowerCase();
+                if (value.length >= 4 && value != verificar) {
+                  resolve();
+                } else {
+                  resolve(
+                    "Debe tener como mínimo 4 caracteres de longitud y tener al menos una letra mayúscula"
+                  );
+                }
+              }
+            });
+          },
+        },
+      ])
+      .then((result) => {
+        if (result.value) {
+          const url = `${location.origin}/cuenta/cambiar_password`;
+          Axios.post(url, {
+            password: result.value[1],
+            passwordNew: result.value[2],
+          })
+            .then((response) => {
+              // Swal.fire(JSON.stringify())
+              if (response["data"].error === "contraseña incorrecta") {
+                Swal.fire(
+                  "Error",
+                  "La contraseña actual es incorrecta",
+                  "error"
+                );
+              } else if (response.status === 200) {
+                Swal.fire(
+                  "Se actualizo la contraseña",
+                  response.data.message,
+                  "success"
+                );
+                //   Redireccionar al carrito
+                setTimeout(() => {
+                  window.location.href = "/cerrar_sesion";
+                }, 2000);
+              }
+            })
+            .catch((result) => {
               Swal.fire(
                 "Error",
-                "¡La contraseña debe tener como mínimo 4 caracteres de longitud y tener al menos una letra mayúscula!",
+                "Ha ocurrido un error al momento de actualizar la contraseña",
                 "error"
               );
-            } else if (response.status === 200) {
-              Swal.fire(
-                "Se actualizo la contraseña",
-                response.data.message,
-                "success"
-              );
-              //   Redireccionar al carrito
-              setTimeout(() => {
-                window.location.href = "/cerrar_sesion";
-              }, 2000);
-            }
-          })
-          .catch((result) => {
-            Swal.fire(
-              "Error",
-              "Ha ocurrido un error al momento de actualizar la contraseña",
-              "error"
-            );
-          });
-      }
-    }
+            });
+        }
+      });
   });
 }
 
@@ -79,9 +106,15 @@ if (botonEmail) {
       confirmButtonColor: "#56CC9D",
       cancelButtonColor: "#FF7851",
       focusConfirm: false,
-      progressSteps: ["1", "2"],
+      progressSteps: ["1", "2", "3"],
     })
       .queue([
+        {
+          title: "Cambiar correo electrónico",
+          text: "Si desea actualizar su correo electrónico presione siguiente",
+          icon: "warning",
+          confirmButtonText: "Siguiente &rarr;",
+        },
         {
           title: "Contraseña actual",
           input: "password",
@@ -107,7 +140,7 @@ if (botonEmail) {
         if (result.value) {
           // console.log(result.value[0]);
           const url = `${location.origin}/cuenta/cambiar_email`;
-          Axios.post(url, { password: result.value[0], email: result.value[1] })
+          Axios.post(url, { password: result.value[1], email: result.value[2] })
             .then((response) => {
               if (response["data"].error === "contraseña incorrecta") {
                 Swal.fire(
