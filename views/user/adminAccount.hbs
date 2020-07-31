@@ -9,7 +9,7 @@
         <h5 class="card-header bg-dark text-white text-center">Administrador</h5>
         <div class="card-body admin-container">
             <div class="form-account form-group">
-                <form action="/actualizar_cuenta" method="POST">
+                <form action="/actualizar_cuenta" method="POST" class="border border-dark rounded p-2">
                     <div class="form-group">
                         <h5>Nombre:</h5>
                         <input type="text" name="firstName" placeholder="Nombre" class="form-control"
@@ -44,16 +44,22 @@
 
                     <div class="form-group text-center btn-custom ">
                         <button type="submit" class="btn btn-success btn-block">
-                            Actualizar
+                            Actualizar cuenta
                         </button>
+
                     </div>
                 </form>
             </div>
             <div class="form-admin form-group p-3">
                 <nav class="nav-account">
                     <ul class="navbar-nav mt-auto">
+                        <li class="nav-item li-cambiar">
+                            <a id="cambiar_password" class="btn btn-primary btn-lg btn-block m-2 text-white">Cambiar
+                                contraseña</a>
+                            <a id="cambiar_email" class="btn btn-primary btn-lg btn-block m-2 text-white">Cambiar
+                                correo electrónico</a>
+                        </li>
                         <li class="nav-item">
-
                             <a href="/productos" class="btn btn-primary btn-lg btn-block m-2">Productos</a>
                         </li>
                         <li class="nav-item">

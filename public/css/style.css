@@ -141,8 +141,16 @@ nav li {
   background-repeat: no-repeat;
 }
 
+.li-cambiar{
+  display: flex;
+  flex-direction: column;
+}
+
 @media (min-width: 768px) {
   .btn-search {
     margin-left: 0.2rem;
+  }
+  .li-cambiar{
+    flex-direction: row;
   }
 }
