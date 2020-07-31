@@ -275,19 +275,24 @@ exports.cambiarContraseña = async (req, res, next) => {
 };
 
 exports.cambiarEmail = async (req, res, next) => {
-  const { email } = req.body;
+  const { password, email } = req.body;
   const { id } = res.locals.usuario;
   try {
-    // Actualizamos los datos del usuario
-    await User.update(
-      { email },
-      {
-        where: {
-          id,
-        },
-      }
-    );
-    res.sendStatus(200);
+    console.log(req.body);
+    if (verificarContraseña(res, password)) {
+      // Actualizamos los datos del usuario
+      await User.update(
+        { email },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+      res.sendStatus(200);
+    } else {
+      res.send({ error: "contraseña incorrecta" });
+    }
   } catch (error) {
     console.log(error);
     res.sendStatus(401);

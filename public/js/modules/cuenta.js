@@ -72,43 +72,69 @@ if (botonContraseña) {
 
 if (botonEmail) {
   botonEmail.addEventListener("click", async (e) => {
-    const { value: email } = await Swal.fire({
+    Swal.mixin({
       title: "Cambiar correo electrónico",
-      input: "email",
-      validationMessage: "Dirección de correo electrónico invalida",
-      inputPlaceholder: "Nuevo correo electrónico",
-      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Actualizar",
       cancelButtonText: "Cancelar",
       confirmButtonColor: "#56CC9D",
       cancelButtonColor: "#FF7851",
       focusConfirm: false,
-    });
-
-    if (email) {
-      const url = `${location.origin}/cuenta/cambiar_email`;
-      Axios.post(url, { email })
-        .then((response) => {
-          if (response.status === 200) {
-            Swal.fire(
-              "Se actualizo la contraseña",
-              response.data.message,
-              "success"
-            );
-            //   Redireccionar al carrito
-            setTimeout(() => {
-              window.location.href = "/cerrar_sesion";
-            }, 2000);
-          }
-        })
-        .catch((result) => {
-          Swal.fire(
-            "Error",
-            "Ha ocurrido un error al momento de actualizar el correo electrónico",
-            "error"
-          );
-        });
-    }
+      progressSteps: ["1", "2"],
+    })
+      .queue([
+        {
+          title: "Contraseña actual",
+          input: "password",
+          confirmButtonText: "Siguiente &rarr;",
+          inputValidator: (value) => {
+            return new Promise((resolve) => {
+              if (value) {
+                resolve();
+              } else {
+                resolve("Debe ingresar su contraseña actual");
+              }
+            });
+          },
+        },
+        {
+          title: "Correo electrónico nuevo",
+          input: "email",
+          validationMessage: "Dirección de correo electrónico invalida",
+          confirmButtonText: "Actualizar",
+        },
+      ])
+      .then((result) => {
+        if (result.value) {
+          // console.log(result.value[0]);
+          const url = `${location.origin}/cuenta/cambiar_email`;
+          Axios.post(url, { password: result.value[0], email: result.value[1] })
+            .then((response) => {
+              if (response["data"].error === "contraseña incorrecta") {
+                Swal.fire(
+                  "Error",
+                  "La contraseña actual es incorrecta",
+                  "error"
+                );
+              } else if (response.status === 200) {
+                Swal.fire(
+                  "Se actualizo la contraseña",
+                  response.data.message,
+                  "success"
+                );
+                //   Redireccionar al carrito
+                setTimeout(() => {
+                  window.location.href = "/cerrar_sesion";
+                }, 2000);
+              }
+            })
+            .catch((result) => {
+              Swal.fire(
+                "Error",
+                "Ha ocurrido un error al momento de actualizar el correo electrónico",
+                "error"
+              );
+            });
+        }
+      });
   });
 }
