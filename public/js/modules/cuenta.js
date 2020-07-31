@@ -39,7 +39,7 @@ if (botonContraseña) {
         {
           title: "Nueva contraseña",
           input: "password",
-          confirmButtonText: "Siguiente &rarr;",
+          confirmButtonText: "Actualizar",
           inputValidator: (value) => {
             return new Promise((resolve) => {
               if (!value) {

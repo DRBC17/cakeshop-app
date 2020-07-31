@@ -154,3 +154,12 @@ nav li {
     flex-direction: row;
   }
 }
+.terms h3{
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .terms h3{
+    text-align: left;
+  }
+
+}
