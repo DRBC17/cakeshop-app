@@ -85,6 +85,9 @@ const Product = db.define(
         // Convierte el nombre al formato camelCase
         const name = product.name.camelCase();
         product.name = name;
+        // Convierte la descripción al formato camelCase
+        const description = product.description.camelCase();
+        product.description = description;
       },
     },
   }
