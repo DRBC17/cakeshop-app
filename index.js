@@ -124,18 +124,26 @@ const storage = multer.diskStorage({
 // Mandamos los parámetros antes definidos y configuramos que recibirá del input llamado image
 app.use(multer({ storage }).single("image"));
 
-// >Routes
-// Mandamos a llamar las rutas
-app.use("/", router());
-
 // >Static files
 
 // Configuración de la carpeta publica
 app.use(express.static(path.join(__dirname, "public")));
 
+// >Routes
+// Mandamos a llamar las rutas
+app.use("/", router());
+
+app.use(function (req, res, next) {
+  res
+    .status(404)
+    .render("information/notFound", {
+      title: "Pagina no encontrada | GloboFiestaCake's",
+    });
+});
+
 // >Global variable
 
 // Inizialiazar el server
-app.listen(app.get("port"),app.get("host"), () => {
+app.listen(app.get("port"), app.get("host"), () => {
   console.log(`Server started on port ${app.get("port")}`);
 });
