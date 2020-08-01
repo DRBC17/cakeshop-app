@@ -1,0 +1,54 @@
+{{!-- Mostrar los mensajes en caso de existir --}}
+{{>ourMessages}}
+<div class="card mt-3 mb-3">
+    <div class="card-header text-center bg-secondary text-white">
+        <h3> Mi carrito de pedidos</br> GloboFiestaCake's</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="listado-compras">
+                    {{#each carritoPersonal}}
+                    <tr>
+                        <th scope="row">{{numero}}</th>
+                        <td>{{name}}</td>
+                        <td>L {{unitPrice}}</td>
+                        <td>{{amount}}</td>
+                        <td>L {{subTotal}}</td>
+                        <td data-compra={{id}}>
+                            <div class="icoChange">
+                                <i class="fas fa-trash fa-lg text-danger p-1"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="form-group">
+            <label class="h4" for="address">Dirección:</label>
+            <textarea name="address" maxlength="250" rows="4" id="address" class="form-control" required
+                placeholder="Ejemplo: Barrio El Carmen, Carretera al Batallón, cuadra y media de la gasolinera Uno, casa color verde.">{{address}}</textarea>
+        </div>
+        <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
+        <div class="form-inline d-flex flex-row-reverse">
+            <button type="submit" id="terminar-compra" class="btn btn-lg btn-success m-1"><i
+                    class="far fa-check-circle p-1"></i>Terminar pedido</button>
+
+            <a href="/tienda/eliminar_carrito" class="btn btn-lg btn-danger m-1"><i
+                    class="far fa-times-circle p-1"></i>Eliminar carrito</a>
+        </div>
+    </div>
+</div>

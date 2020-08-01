@@ -1,0 +1,165 @@
+body {
+  background: #70e1f5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #ffd194,
+    #70e1f5
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ffd194,
+    #70e1f5
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.form-account {
+  width: 50%;
+}
+.form-admin {
+  width: 50%;
+}
+
+.form-small {
+  width: 40%;
+}
+
+.admin-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.btn-div {
+  display: flex;
+  flex-direction: row;
+}
+
+.btn-card {
+  width: 100%;
+}
+
+nav li {
+  margin-left: 0.2rem;
+}
+
+.imageSize {
+  height: 20rem;
+}
+
+.imageSizeStore {
+  height: 16rem;
+}
+
+@media (max-width: 768px) {
+  .form-account {
+    width: 100%;
+  }
+  .form-admin {
+    width: 100%;
+  }
+  .form-small {
+    width: 100%;
+  }
+  nav li {
+    margin-left: 0;
+    margin-top: 0.2rem;
+    text-align: center;
+  }
+  .admin-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media (min-width: 768px) {
+  .btn-custom {
+    padding-left: 30%;
+    padding-right: 30%;
+  }
+
+  .btn-card {
+    width: 50%;
+  }
+}
+.nav-account a {
+  height: 6rem;
+  width: auto;
+  text-align: center;
+}
+
+.form-search {
+  width: 50%;
+}
+
+@media (max-width: 768px) {
+  .barra {
+    width: 100%;
+  }
+
+  .btn-buscar {
+    width: 100%;
+  }
+  .form-search {
+    width: 100%;
+  }
+}
+/* Mostramos parcialmente el texto en la tienda */
+.text-parcial {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.div-top {
+  height: 70%;
+  text-align: center;
+}
+
+.div-bot {
+  height: 30%;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .div-top {
+    height: 15rem;
+    text-align: left;
+  }
+  .div-bot {
+    text-align: left;
+  }
+}
+
+.div-top-category {
+  height: 6.1rem;
+}
+
+.hero {
+  height: 30%;
+  min-height: 20.25rem;
+  background-image: url(../img/logo.jpeg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.li-cambiar{
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .btn-search {
+    margin-left: 0.2rem;
+  }
+  .li-cambiar{
+    flex-direction: row;
+  }
+}
+.terms h3{
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .terms h3{
+    text-align: left;
+  }
+
+}
