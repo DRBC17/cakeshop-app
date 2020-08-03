@@ -253,6 +253,11 @@ module.exports = function () {
   );
   routes.get("/tienda/terminar_compra", storeController.formularioTiendaHome);
   routes.get("/tienda/eliminar_carrito", storeController.eliminarCarrito);
+  routes.get(
+    "/tienda/categoria/:id",
+    authController.usuarioAutenticado,
+    storeController.obtenerCategoriaPorId
+  );
   // Fin de tienda
 
   // Inicio de correo

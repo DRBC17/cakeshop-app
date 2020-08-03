@@ -512,3 +512,32 @@ exports.obtenerPedidoPorId = async (req, res, next) => {
     res.redirect("/cuenta/mis_pedidos");
   }
 };
+
+
+// Busca un categoría por su URL
+exports.obtenerCategoriaPorId = async (req, res, next) => {
+  const { auth } = res.locals.usuario;
+  try {
+    // Obtener la categoría mediante la URL
+    const categories = await Category.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    // Cambiar la visualización de las fechas con Moment.js
+    const created = moment(categories["dataValues"].createdAt).format("LLLL");
+    const updated = moment(categories["dataValues"].updatedAt).fromNow();
+
+    res.render("store/category", {
+      title: "Categoría | GloboFiestaCake's",
+      auth,
+      created,
+      updated,
+      categories: categories,
+    });
+  } catch (error) {
+    // En caso de haber errores volvemos a cargar las categorías.
+    res.redirect("/tienda");
+  }
+};
