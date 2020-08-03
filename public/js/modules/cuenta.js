@@ -69,13 +69,13 @@ if (botonContraseña) {
               // Swal.fire(JSON.stringify())
               if (response["data"].error === "contraseña incorrecta") {
                 Swal.fire(
-                  "Error",
-                  "La contraseña actual es incorrecta",
+                  "ERROR",
+                  "¡La contraseña actual es incorrecta!",
                   "error"
                 );
               } else if (response.status === 200) {
                 Swal.fire(
-                  "Se actualizo la contraseña",
+                  "!Se actualizo la contraseña¡",
                   response.data.message,
                   "success"
                 );
@@ -87,8 +87,8 @@ if (botonContraseña) {
             })
             .catch((result) => {
               Swal.fire(
-                "Error",
-                "Ha ocurrido un error al momento de actualizar la contraseña",
+                "ERROR",
+                "¡Ha ocurrido un error al momento de actualizar la contraseña!",
                 "error"
               );
             });
@@ -144,13 +144,13 @@ if (botonEmail) {
             .then((response) => {
               if (response["data"].error === "contraseña incorrecta") {
                 Swal.fire(
-                  "Error",
-                  "La contraseña actual es incorrecta",
+                  "ERROR",
+                  "¡La contraseña actual es incorrecta!",
                   "error"
                 );
               } else if (response.status === 200) {
                 Swal.fire(
-                  "Se actualizo el correo electrónico",
+                  "¡Se actualizo el correo electrónico!",
                   response.data.message,
                   "success"
                 );
@@ -162,8 +162,8 @@ if (botonEmail) {
             })
             .catch((result) => {
               Swal.fire(
-                "Error",
-                "Ha ocurrido un error al momento de actualizar el correo electrónico",
+                "ERROR",
+                "¡Ha ocurrido un error al momento de actualizar el correo electrónico!",
                 "error"
               );
             });

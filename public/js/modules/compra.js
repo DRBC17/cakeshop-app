@@ -1,7 +1,6 @@
 // Importar los módulos necesarios
 import Axios from "axios";
 import Swal from "sweetalert2";
-import { locale } from "moment";
 
 // Obtener el nombre del botón desde el DOM
 const boton = document.getElementById("terminar-compra");
@@ -23,13 +22,13 @@ if (boton) {
         const url = `${location.origin}/tienda/terminar_compra`;
         const address = document.getElementById("address").value;
         if (!address) {
-          Swal.fire("Error", "Debes ingresar una dirección", "error");
+          Swal.fire("ERROR", "¡Debes ingresar tu dirección!", "error");
         } else {
           Axios.post(url, { address })
             .then((response) => {
               if (response.status === 200) {
                 Swal.fire(
-                  "Se realizo el pedido",
+                  "¡Se realizo el pedido!",
                   response.data.message,
                   "success"
                 );
@@ -41,8 +40,8 @@ if (boton) {
             })
             .catch((result) => {
               Swal.fire(
-                "Error",
-                "Ha ocurrido un error al momento de realizar el pedido",
+                "ERROR",
+                "!Ha ocurrido un error al momento de realizar el pedido¡",
                 "error"
               );
             });

@@ -1,7 +1,6 @@
 // Importar los módulos necesarios
 import axios from "axios";
 import Swal from "sweetalert2";
-import { locale } from "moment";
 
 // Obtener el nombre del botón desde el DOM
 const botonesEliminar = document.querySelectorAll(
@@ -45,8 +44,8 @@ botonesEliminar.forEach((botonEliminar) => {
           .catch(() => {
             Swal.fire({
               icon: "error",
-              title: "¡Error!",
-              text: "No se ha podido eliminar la categoría...",
+              title: "ERROR",
+              text: "¡No se ha podido eliminar la categoría!",
             });
           });
 
