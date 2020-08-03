@@ -3,7 +3,7 @@ import axios from "axios";
 // Seleccionar desde el DOM el objeto que contiene los productos
 const productos = document.querySelector("#listado-productos");
 
-// Verificar si existe el objeto en el sDOM
+// Verificar si existe el objeto en el DOM
 if (productos) {
   // Agregar un evento click sobre los input de cada producto
   productos.addEventListener("click", (e) => {

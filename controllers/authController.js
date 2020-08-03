@@ -20,7 +20,7 @@ const enviarCorreo = require("../helpers/email");
 exports.autenticarUsuario = passport.authenticate("local", {
   successRedirect: "/tienda",
   failureRedirect: "/iniciar_sesion",
-  badRequestMessage: "Debes ingresar tu correo electrónico y tu contraseña",
+  badRequestMessage: "¡Debes ingresar tu correo electrónico y tu contraseña!",
   failureFlash: true,
 });
 
@@ -142,7 +142,7 @@ exports.actualizarPassword = async (req, res, next) => {
   if (!usuario) {
     req.flash(
       "error",
-      "Token no válido o vencida. El token tiene 1 hora de validez"
+      "¡Token no válido o vencida. El token tiene 1 hora de validez!"
     );
     res.redirect("/restablecer_password");
   }

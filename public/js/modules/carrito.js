@@ -34,7 +34,7 @@ if (compras) {
               if (response.status === 200) {
                 // Mostrar un mensaje de confirmación de eliminación
                 Swal.fire(
-                  "Producto eliminado de la lista",
+                  "¡Producto eliminado de la lista!",
                   response.data.message,
                   "success"
                 );
@@ -47,8 +47,8 @@ if (compras) {
             .catch((result) => {
               // Mostrar un mensaje de confirmación de eliminación
               Swal.fire(
-                "Error",
-                "Ha ocurrido un error al momento de eliminar el producto",
+                "ERROR",
+                "¡Ha ocurrido un error al momento de eliminar el producto!",
                 "error"
               );
             });

@@ -28,7 +28,7 @@ exports.enviarCorreo = async (opciones) => {
     "utf8",
     async function (error, source) {
       if (error) {
-        console.log("No se puede cargar el template de correo");
+        console.log("¡No se puede cargar el template de correo!");
         throw error;
       }
 

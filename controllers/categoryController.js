@@ -99,7 +99,7 @@ exports.CrearCategoria = async (req, res, next) => {
       });
 
       // Redireccionar el usuario al formulario de categorías
-      res.redirect("categorias");
+      res.redirect("/categorias");
     } catch (error) {
       // Mensaje personalizado sobre si ya existe el nombre registrado
       if (error["name"] === "SequelizeUniqueConstraintError") {
@@ -277,7 +277,7 @@ exports.buscarCategoria = async (req, res, next) => {
   const messages = [];
 
   if (!search) {
-    res.redirect("categorias");
+    res.redirect("/categorias");
   } else {
     try {
       Category.findAll({

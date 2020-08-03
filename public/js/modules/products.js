@@ -1,7 +1,6 @@
 // Importar los módulos necesarios
 import axios from "axios";
 import Swal from "sweetalert2";
-import { locale } from "moment";
 
 // Obtener el nombre del botón desde el DOM
 const botonesEliminar = document.querySelectorAll(
@@ -25,7 +24,7 @@ botonesEliminar.forEach((botonEliminar) => {
       confirmButtonColor: "#56CC9D",
       cancelButtonColor: "#FF7851",
     }).then((result) => {
-      // Si el usuario confirma la eliminación la categoría al hacer
+      // Si el usuario confirma la eliminación
       // click en el botón eliminar.
       // Nos vamos a conectar mediante axios utilizando AJAX
       if (result.value) {
@@ -45,8 +44,8 @@ botonesEliminar.forEach((botonEliminar) => {
           .catch(() => {
             Swal.fire({
               icon: "error",
-              title: "¡Error!",
-              text: "No se ha podido eliminar el producto...",
+              title: "ERROR",
+              text: "`!No se ha podido eliminar el producto!",
             });
           });
 

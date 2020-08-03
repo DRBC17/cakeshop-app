@@ -4,6 +4,7 @@ const ImageProduct = require("../models/imageProduct");
 const Category = require("../models/category");
 // Importamos unlink de fs-extra
 const { unlink } = require("fs-extra");
+const fs = require("fs-extra");
 // Importamos path
 const path = require("path");
 // Importar Moment.js
@@ -305,8 +306,10 @@ exports.actualizarProducto = async (req, res, next) => {
           },
         });
 
-        // Eliminamos del servidor la imagen antigua.
-        await unlink(path.resolve("./public" + imageOld.dataValues.path));
+        if (fs.existsSync(path.resolve("./public" + imageOld.dataValues.path))) {
+          // Eliminamos del servidor la imagen antigua.
+          await unlink(path.resolve("./public" + imageOld.dataValues.path));
+        }
 
         // Obtenemos los datos de la nueva imagen.
         const { filename, originalname, mimetype, size } = req.file;
@@ -394,8 +397,16 @@ exports.eliminarProducto = async (req, res, next) => {
       },
     });
 
-    // Eliminamos del servidor la imagen antigua.
-    await unlink(path.resolve("./public" + imageOld.dataValues.path));
+    if (fs.existsSync(path.resolve("./public" + imageOld.dataValues.path))) {
+      // Eliminamos del servidor la imagen antigua.
+      await unlink(path.resolve("./public" + imageOld.dataValues.path));
+    }
+
+    await ImageProduct.destroy({
+      where: {
+        id: imageOld.id,
+      },
+    });
 
     await Product.destroy({
       where: {
