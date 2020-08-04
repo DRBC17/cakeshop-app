@@ -3,6 +3,7 @@ const Product = require("../models/product");
 const Category = require("../models/category");
 const Order = require("../models/order");
 const OrderDetail = require("../models/orderDetail");
+const User = require("../models/user");
 
 // Importar Moment.js
 const moment = require("moment");
@@ -305,7 +306,7 @@ exports.eliminarDelCarrito = (req, res, next) => {
 };
 
 exports.terminarCompra = async (req, res, next) => {
-  const { address } = req.body;
+  const { address, atHome } = req.body;
   const { id, email, phone, auth } = res.locals.usuario;
   try {
     let carrito = req.session.carrito;
@@ -313,6 +314,7 @@ exports.terminarCompra = async (req, res, next) => {
     await Order.create({
       userId: id,
       address,
+      atHome,
       phone,
     });
     //Buscamos el id de la ultima orden
@@ -345,18 +347,19 @@ exports.eliminarCarrito = (req, res, next) => {
 
 // Mostrar pedidos
 exports.formularioPedidosAdmin = async (req, res, next) => {
-  const { firstName, lastName, auth } = res.locals.usuario;
-
+  const { auth } = res.locals.usuario;
   try {
     let pedidos = [];
     const orders = await Order.findAll();
     let numero = 1;
     for (let element of orders) {
+      const { firstName, lastName } = await User.findByPk(element.userId);
       pedidos.push({
         numero,
         id: element.id,
         name: `${firstName} ${lastName}`,
         phone: element.phone,
+        atHome: element.atHome,
         updatedAt: moment(element.updatedAt).format("LLLL"),
         status: element.status,
       });
@@ -416,6 +419,11 @@ exports.obtenerPedidoPorIdAdmin = async (req, res, next) => {
     for (let element of carrito) {
       const product = await Product.findByPk(element.productId);
       total = total + element.amount * product["dataValues"].unitPrice;
+      if (numero === carrito.length) {
+        if (pedido["dataValues"].atHome === true) {
+          total = total + 35;
+        }
+      }
       carritoPersonal.push({
         numero: numero++,
         id: element.id,
@@ -425,13 +433,16 @@ exports.obtenerPedidoPorIdAdmin = async (req, res, next) => {
         subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(2),
       });
     }
-
+    const atHomeTotal = 35.0;
     res.render("store/orderDetailAdmin", {
       title: "Detalles del pedido | GloboFiestaCake's",
       auth,
       carritoPersonal,
       address: pedido["dataValues"].address,
       phone: pedido["dataValues"].phone,
+      atHome: pedido["dataValues"].atHome,
+      atHomeTotal: atHomeTotal.toFixed(2),
+      atHomeNum: carritoPersonal.length + 1,
       total: total.toFixed(2),
     });
   } catch (error) {
@@ -456,6 +467,7 @@ exports.formularioPedidos = async (req, res, next) => {
         id: element.id,
         name: `${firstName} ${lastName}`,
         phone: element.phone,
+        atHome: element.atHome,
         updatedAt: moment(element.updatedAt).format("LLLL"),
         status: element.status,
       });
@@ -489,6 +501,11 @@ exports.obtenerPedidoPorId = async (req, res, next) => {
     for (let element of carrito) {
       const product = await Product.findByPk(element.productId);
       total = total + element.amount * product["dataValues"].unitPrice;
+      if (numero === carrito.length) {
+        if (pedido["dataValues"].atHome === true) {
+          total = total + 35;
+        }
+      }
       carritoPersonal.push({
         numero: numero++,
         id: element.id,
@@ -498,13 +515,16 @@ exports.obtenerPedidoPorId = async (req, res, next) => {
         subTotal: (element.amount * product["dataValues"].unitPrice).toFixed(2),
       });
     }
-
+    const atHomeTotal = 35.0;
     res.render("store/orderDetail", {
       title: "Detalles del pedido | GloboFiestaCake's",
       auth,
       carritoPersonal,
       address: pedido["dataValues"].address,
       phone: pedido["dataValues"].phone,
+      atHome: pedido["dataValues"].atHome,
+      atHomeTotal: atHomeTotal.toFixed(2),
+      atHomeNum: carritoPersonal.length + 1,
       total: total.toFixed(2),
     });
   } catch (error) {
@@ -512,7 +532,6 @@ exports.obtenerPedidoPorId = async (req, res, next) => {
     res.redirect("/cuenta/mis_pedidos");
   }
 };
-
 
 // Busca un categoría por su URL
 exports.obtenerCategoriaPorId = async (req, res, next) => {

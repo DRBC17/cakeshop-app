@@ -5,3 +5,4 @@ import carrito from "./modules/carrito";
 import pedidos from "./modules/pedidos";
 import compra from "./modules/compra";
 import cuenta from "./modules/cuenta";
+import domicilio from "./modules/domicilio";

@@ -26,18 +26,28 @@
                         <td>L {{subTotal}}</td>
                     </tr>
                     {{/each}}
+                    {{#if atHome}}
+                    <tr>
+                        <th>{{atHomeNum}}</th>
+                        <td>Pago a domicilio</td>
+                        <td></td>
+                        <td></td>
+                        <td>L {{atHomeTotal}}</td>
+                    </tr>
+                    {{/if}}
                 </tbody>
             </table>
 
         </div>
 
         <div class="form-group">
-            <label class="h4">Numero de telefono: {{phone}}</label>
+            <label class="h4"><strong class="text-dark">Numero de telefono: </strong>{{phone}}</label>
         </div>
         <div class="form-group">
-            <label class="h4">Dirección: {{address}}</label>
+            <label class="h4"><strong class="text-dark">Dirección: </strong> {{address}}</label>
 
         </div>
+
         <h3 class="text-dark text-right m-2"><strong>Total a pagar: L {{total}}</strong></h3>
 
     </div>

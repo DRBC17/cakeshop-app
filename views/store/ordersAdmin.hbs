@@ -12,6 +12,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Numero de teléfono</th>
+                        <th scope="col">Domicilio</th>
                         <th scope="col">Fecha del pedido</th>
                         <th scope="col"></th>
                     </tr>
@@ -22,6 +23,11 @@
                         <th scope="row">{{numero}}</th>
                         <td>{{name}}</td>
                         <td>{{phone}}</td>
+                        <td>{{#if atHome}}
+                            Si
+                            {{else}}
+                            No
+                            {{/if}}</td>
                         <td>{{updatedAt}}</td>
                         <td>
                             <div class="form-group p-0">
