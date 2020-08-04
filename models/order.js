@@ -38,8 +38,11 @@ const Order = db.define("order", {
     type: Sequelize.DECIMAL(10, 2),
     allowNull: true,
   },
-
   status: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: 0,
+  },
+  atHome: {
     type: Sequelize.BOOLEAN,
     defaultValue: 0,
   },

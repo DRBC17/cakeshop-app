@@ -141,7 +141,7 @@ nav li {
   background-repeat: no-repeat;
 }
 
-.li-cambiar{
+.li-cambiar {
   display: flex;
   flex-direction: column;
 }
@@ -150,16 +150,24 @@ nav li {
   .btn-search {
     margin-left: 0.2rem;
   }
-  .li-cambiar{
+  .li-cambiar {
     flex-direction: row;
   }
 }
-.terms h3{
+.terms h3 {
+  text-align: center;
+}
+.home h2 {
   text-align: center;
 }
 @media (min-width: 768px) {
-  .terms h3{
+  .btn-map{
+    width: 30%;
+  }
+  .terms h3 {
     text-align: left;
   }
-
+  .home h2 {
+    text-align: left;
+  }
 }

@@ -1,5 +1,11 @@
 {{!-- Mostrar los mensajes en caso de existir --}}
 {{>ourMessages}}
+<div class="alert alert-info alert-dismissible fade show mt-2" role="alert">
+    Para dar mas detalles sobre su pedido puede llamar al <strong>+504 8819-9735</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
 <div class="card mt-3 mb-3">
     <div class="card-header text-center bg-secondary text-white">
         <h3> Mi carrito de pedidos</br> GloboFiestaCake's</h3>
@@ -42,7 +48,12 @@
             <textarea name="address" maxlength="250" rows="4" id="address" class="form-control" required
                 placeholder="Ejemplo: Barrio El Carmen, Carretera al Batallón, cuadra y media de la gasolinera Uno, casa color verde.">{{address}}</textarea>
         </div>
-        <h3 class="text-dark text-right m-2"><strong>Total: L {{total}}</strong></h3>
+        <div class="custom-control custom-checkbox text-right">
+            <input type="checkbox" class="custom-control-input" name="atHome" id="customCheck_domicilio">
+            <label class="custom-control-label" id="atHomeLabel" for="customCheck_domicilio">Entrega a domicilio</label>
+        </div>
+        <input type="hidden" id="oldTotal" value="{{total}}">
+        <h3 class="text-dark text-right m-2"><strong>Total: <label class="h3" id="total_">{{total}}</label></strong></h3>
         <div class="form-inline d-flex flex-row-reverse">
             <button type="submit" id="terminar-compra" class="btn btn-lg btn-success m-1"><i
                     class="far fa-check-circle p-1"></i>Terminar pedido</button>

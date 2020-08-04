@@ -21,10 +21,11 @@ if (boton) {
         // Crear la URL de terminar compra
         const url = `${location.origin}/tienda/terminar_compra`;
         const address = document.getElementById("address").value;
+        const atHome = document.getElementById("customCheck_domicilio").checked;
         if (!address) {
           Swal.fire("ERROR", "¡Debes ingresar tu dirección!", "error");
         } else {
-          Axios.post(url, { address })
+          Axios.post(url, { address, atHome })
             .then((response) => {
               if (response.status === 200) {
                 Swal.fire(

@@ -52,7 +52,7 @@ botonesEliminar.forEach((botonEliminar) => {
         //   Redireccionar a /
         setTimeout(() => {
           window.location.href = "/productos";
-        }, 2000);
+        }, 3000);
       }
     });
   });
