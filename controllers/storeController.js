@@ -3,6 +3,7 @@ const Product = require("../models/product");
 const Category = require("../models/category");
 const Order = require("../models/order");
 const OrderDetail = require("../models/orderDetail");
+const User = require("../models/user");
 
 // Importar Moment.js
 const moment = require("moment");
@@ -346,13 +347,13 @@ exports.eliminarCarrito = (req, res, next) => {
 
 // Mostrar pedidos
 exports.formularioPedidosAdmin = async (req, res, next) => {
-  const { firstName, lastName, auth } = res.locals.usuario;
-
+  const { auth } = res.locals.usuario;
   try {
     let pedidos = [];
     const orders = await Order.findAll();
     let numero = 1;
     for (let element of orders) {
+      const { firstName, lastName } = await User.findByPk(element.userId);
       pedidos.push({
         numero,
         id: element.id,
