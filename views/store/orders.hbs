@@ -11,7 +11,8 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Numero de teléfono</th>
-                         <th scope="col">Estado</th>
+                        <th scope="col">Domicilio</th>
+                        <th scope="col">Estado</th>
                         <th scope="col">Fecha del pedido</th>
                         <th scope="col"></th>
                     </tr>
@@ -21,11 +22,16 @@
                     <tr>
                         <th scope="row">{{numero}}</th>
                         <td>{{phone}}</td>
+                        <td>{{#if atHome}}
+                            Si
+                            {{else}}
+                            No
+                            {{/if}}</td>
                         <td>{{#if status}}
-                        Entregado
-                        {{else}}
-                        Pendiente
-                        {{/if}}</td>
+                            Entregado
+                            {{else}}
+                            Pendiente
+                            {{/if}}</td>
                         <td>{{updatedAt}}</td>
                         <td>
                             <a href="/cuenta/mi_pedido/{{id}}" class="btn btn-primary btn-sm btn-block">Ver pedido</a>

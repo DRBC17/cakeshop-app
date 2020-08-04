@@ -252,13 +252,20 @@ module.exports = function () {
   routes.post(
     "/tienda/terminar_compra",
     authController.usuarioAutenticado,
-    authAdminController.adminAutenticado,
     // Sanitizar el contenido del formulario
     body("address").notEmpty().trim().escape(),
     storeController.terminarCompra
   );
-  routes.get("/tienda/terminar_compra", storeController.formularioTiendaHome);
-  routes.get("/tienda/eliminar_carrito", storeController.eliminarCarrito);
+  routes.get(
+    "/tienda/terminar_compra",
+    authController.usuarioAutenticado,
+    storeController.formularioTiendaHome
+  );
+  routes.get(
+    "/tienda/eliminar_carrito",
+    authController.usuarioAutenticado,
+    storeController.eliminarCarrito
+  );
   routes.get(
     "/tienda/categoria/:id",
     authController.usuarioAutenticado,

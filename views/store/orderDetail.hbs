@@ -26,6 +26,15 @@
                         <td>L {{subTotal}}</td>
                     </tr>
                     {{/each}}
+                    {{#if atHome}}
+                    <tr>
+                        <th>{{atHomeNum}}</th>
+                        <td>Pago a domicilio</td>
+                        <td></td>
+                        <td></td>
+                        <td>L {{atHomeTotal}}</td>
+                    </tr>
+                    {{/if}}
                 </tbody>
             </table>
 
