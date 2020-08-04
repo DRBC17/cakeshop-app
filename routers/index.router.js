@@ -28,7 +28,13 @@ module.exports = function () {
   );
 
   routes.get("/iniciar_sesion", usersController.formularioIniciarSesion);
-  routes.post("/iniciar_sesion", authController.autenticarUsuario);
+  routes.post(
+    "/iniciar_sesion",
+    // Sanitizar el contenido del formulario
+    body("email").notEmpty().trim(),
+    body("password").notEmpty().trim(),
+    authController.autenticarUsuario
+  );
   routes.get("/cerrar_sesion", authController.cerrarSesion);
 
   routes.get(
@@ -270,7 +276,12 @@ module.exports = function () {
 
   routes.post("/restablecer_password", authController.enviarToken);
 
-  routes.get("/restablecer_password/:token", authController.validarToken);
+  routes.get(
+    "/restablecer_password/:token",
+    // // Sanitizar el contenido del formulario
+    // body("password").notEmpty().trim(),
+    authController.validarToken
+  );
 
   routes.post(
     "/restablecer_password/:token",
