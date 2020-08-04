@@ -1,0 +1,67 @@
+{{!-- Mensajes de error --}}
+{{>ourMessages}}
+
+<div class="form-inline">
+  <form action="/buscar_producto" method="POST" class="form-search">
+    <input class="form-control mt-1" type="search" name="search" value="{{search}}">
+    <button class="btn btn-success mt-1 btn-buscar" type="submit">Buscar</button>
+    {{#if search}}
+    <a href="/productos" class="form-control mt-1 btn btn-warning btn-search" title="Restablecer pagina"><i
+        class="fas fa-redo"></i></a>
+    {{/if}}
+  </form>
+  <a href="/agregar_producto" class="btn btn-success btn-lg m-2 ml-auto">Agregar producto</a>
+</div>
+{{!-- card-columns --}}
+{{#if products }}
+<div class="pb-4" id="listado-productos">
+  {{#each products}}
+  <div class="card mb-3  animate__animated animate__fadeInDown" id="{{id}}">
+    <div class="row no-gutters">
+      <div class="col-md-4 p-1">
+        <img src="{{urlImage}}" class="card-img border border-dark rounded imageSize" alt="{{name}}">
+        <div class="text-left ml-1">
+          <p class="card-text mb-0"><small class="text-muted">Creado: {{createdAt}}</small></p>
+          <p class="card-text"><small class="text-muted">Ultima modificación: {{updatedAt}}</small></p>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <div class="div-top">
+            <h4 class="card-title text-secondary"><strong>{{name}}</strong></h4>
+            <p class="card-text">{{description}}</p>
+
+          </div>
+          <div class="div-bot">
+            <div class="form-inline">
+              <h2 class="text-dark  m-2 mt-2 mr-auto"><strong>L {{unitPrice}}</strong></h2>
+              <div class="custom-control custom-switch" data-producto={{id}} id="boton-estado">
+                {{#if available}}
+                <input type="checkbox" class="custom-control-input" id="customSwitch_{{id}}" checked>
+                <label class="custom-control-label" for="customSwitch_{{id}}" id="label_{{id}}">Disponible</label>
+                {{else}}
+                <input type="checkbox" class="custom-control-input" id="customSwitch_{{id}}">
+                <label class="custom-control-label" for="customSwitch_{{id}}" id="label_{{id}}">No disponible</label>
+                {{/if}}
+              </div>
+            </div>
+
+            <div class=" btn-div mt-2">
+              <a href="/actualizar_producto/{{url}}" class="btn btn-primary btn-lg btn-card">Actualizar</a>
+              <button name="eliminar-producto" data-producto-url={{url}} type="button"
+                class="btn btn-danger btn-lg btn-card ml-1">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {{/each}}
+</div>
+{{else}}
+<div class="alert alert-info animate__animated animate__pulse" role="alert">
+  <h5>¡Aún no tienes ningúna producto. ¡Anímate a crear uno!</h5>
+</div>
+{{/if}}

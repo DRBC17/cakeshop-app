@@ -1,0 +1,78 @@
+{{!-- Formulario de cuenta de admin --}}
+
+{{!-- Mostrar los mensajes en caso de existir --}}
+{{>ourMessages}}
+
+
+<div class="m-4">
+    <div class="card animate__animated animate__pulse">
+        <h5 class="card-header bg-dark text-white text-center">Administrador</h5>
+        <div class="card-body admin-container">
+            <div class="form-account form-group">
+                <form action="/actualizar_cuenta" method="POST" class="border border-dark rounded p-2">
+                    <div class="form-group">
+                        <h5>Nombre:</h5>
+                        <input type="text" name="firstName" placeholder="Nombre" class="form-control"
+                            value="{{usuario.firstName}}" />
+                    </div>
+                    <div class="form-group">
+                        <h5>Apellido:</h5>
+                        <input type="text" name="lastName" placeholder="Apellido" class="form-control"
+                            value="{{usuario.lastName}}" />
+                    </div>
+                    <div class="form-group">
+                        <h5>Numero de teléfono:</h5>
+                        <input type="tel" name="phone" autocomplete="off" placeholder="Numero de teléfono"
+                            class="form-control" value="{{usuario.phone}}" />
+
+                    </div>
+                    <div class="form-group">
+                        <h5>Correo electrónico:</h5>
+                        <input type="email" name="email" placeholder="Correo electrónico" class="form-control"
+                            value="{{usuario.email}}" disabled />
+
+                    </div>
+                    <div class="form-group">
+                        <h5>Contraseña:</h5>
+                        <input type="password" name="password" placeholder="**************" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        {{!-- <h5>Nueva contraseña:</h5>
+                        <input type="password" name="passwordConfirm" placeholder="**************"
+                            class="form-control" /> --}}
+                    </div>
+
+                    <div class="form-group text-center btn-custom ">
+                        <button type="submit" class="btn btn-success btn-block">
+                            Actualizar cuenta
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+            <div class="form-admin form-group p-3">
+                <nav class="nav-account">
+                    <ul class="navbar-nav mt-auto">
+                        <li class="nav-item li-cambiar">
+                            <a id="cambiar_password" class="btn btn-primary btn-lg btn-block m-2 text-white">Cambiar
+                                contraseña</a>
+                            <a id="cambiar_email" class="btn btn-primary btn-lg btn-block m-2 text-white">Cambiar
+                                correo electrónico</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/productos" class="btn btn-primary btn-lg btn-block m-2">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/categorias" class="btn btn-primary btn-lg btn-block m-2">Categorías</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/cuenta/pedidos" class="btn btn-primary btn-lg btn-block m-2">Pedidos</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>

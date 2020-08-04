@@ -1,0 +1,45 @@
+{{!-- Formulario para realizar orden --}}
+
+{{!-- Mostrar los mensajes en caso de existir --}}
+{{>ourMessages}}
+<form action="/tienda/agregar_al_carrito/{{products.id}}" method="post">
+    <div class="container pt-4 pb-2 pl-0 pr-0">
+        <div class="card mb-3  animate__animated animate__fadeInDown">
+            <h5 class="card-header bg-dark text-white text-center">Realizar pedido</h5>
+            <div class="row no-gutters">
+                <div class="col-md-4 p-1">
+                    <img src="{{products.urlImage}}" class="card-img imageSize border border-dark rounded"
+                        alt="{{products.name}}">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <h3><strong>{{products.name}}</strong></h3>
+                        </div>
+                        <div class="form-group">
+                            <p><span>{{products.description}}</span></p>
+                        </div>
+
+                        <h5 class="text-dark pt-2">Categoría: <a href="/tienda/categoria/{{products.categoryId}}">{{category}}</a></h5>
+                        <h3 class="text-dark m-2 mt-2 mb-2"><strong>L {{products.unitPrice}}</strong></h3>
+                        <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input type="number" name="amount" min="1" max="5" required class="form-control"
+                                {{#if amount}} value="{{amount}}" {{else}} value="1" {{/if}} />
+                        </div>
+                        <div>
+                            <p class="card-text"><small class="text-muted">Publicado: {{updated}}</small>
+                            </p>
+                        </div>
+                        <div class="form-group p-2">
+                            <button type="submit" class="btn btn-success btn-block ">
+                                Añadir al carrito <i class="ml-2 fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
